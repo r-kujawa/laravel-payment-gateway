@@ -1,0 +1,14 @@
+{
+    "name": "r-kujawa/laravel-payment-gateway",
+    "description": "A robust gateway that integrates with any payment procesor and Laravel.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Robert Kujawa",
+            "email": "bobkujawa@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "orchestra/testbench": "^6.21"
+    }
+}
