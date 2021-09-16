@@ -10,5 +10,15 @@
     ],
     "require-dev": {
         "orchestra/testbench": "^6.21"
+    },
+    "autoload": {
+        "psr-4": {
+            "r-kujawa\\laravel-payment-gateway\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "r-kujawa\\laravel-payment-gateway\\": "tests/"
+        }
     }
 }
