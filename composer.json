@@ -13,12 +13,12 @@
     },
     "autoload": {
         "psr-4": {
-            "r-kujawa\\laravel-payment-gateway\\": "src/"
+            "rkujawa\\LaravelPaymentGateway\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "r-kujawa\\laravel-payment-gateway\\": "tests/"
+            "rkujawa\\LaravelPaymentGateway\\Tests\\": "tests/"
         }
     }
 }
