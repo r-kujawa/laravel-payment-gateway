@@ -1,8 +1,6 @@
 <?php
 
-namespace RKujawa\LaravelPaymentGateway\Tests;
-
-use Orchestra\Testbench\TestCase;
+namespace rkujawa\LaravelPaymentGateway\Tests;
 
 class ExampleTest extends TestCase
 {
