@@ -20,5 +20,12 @@
         "psr-4": {
             "rkujawa\\LaravelPaymentGateway\\Tests\\": "tests/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "rkujawa\\LaravelPaymentGateway\\PaymentServiceProvider"
+            ]
+        }
     }
 }
