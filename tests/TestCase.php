@@ -21,4 +21,14 @@ class TestCase extends \Orchestra\Testbench\TestCase
             'database' => ':memory:',
         ]);
     }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+    }
+
+    protected function defineDatabaseMigrations()
+    {
+        $this->loadLaravelMigrations(['--database' => 'payments_test']);
+    }
 }
