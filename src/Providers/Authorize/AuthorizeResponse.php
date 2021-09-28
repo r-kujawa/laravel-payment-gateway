@@ -2,8 +2,8 @@
 
 namespace rkujawa\LaravelPaymentGateway\Providers\Authorize;
 
+use Authnetjson\AuthnetJsonResponse;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayResponse;
-use JohnConde\Authnet\AuthnetJsonResponse;
 
 class AuthorizeResponse implements GatewayResponse
 {
@@ -89,7 +89,7 @@ class AuthorizeResponse implements GatewayResponse
         return $this->response;
     }
 
-    public function isDeclined()
+    public function isDeclined(): bool
     {
         return $this->response->isDeclined();
     }

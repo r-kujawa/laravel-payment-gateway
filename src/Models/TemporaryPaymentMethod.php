@@ -3,6 +3,7 @@
 namespace rkujawa\LaravelPaymentGateway\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use rkujawa\LaravelPaymentGateway\Contracts\Buyer;
 
 class TemporaryPaymentMethod extends Model
 {
@@ -73,6 +74,6 @@ class TemporaryPaymentMethod extends Model
 
     public function owners()
     {
-        return $this->belongsToMany(Client::class, 'temporary_payment_method_relations', 'payment_profile_token', 'owner_id', 'payment_profile_token', 'id');
+        return $this->belongsToMany(Buyer::class, 'temporary_payment_method_relations', 'payment_profile_token', 'owner_id', 'payment_profile_token', 'id');
     }
 }

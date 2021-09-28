@@ -4,6 +4,7 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 
 //use App\Models\Order\Client; maybe we can replace this with a contract
 use Illuminate\Database\Eloquent\Model;
+use rkujawa\LaravelPaymentGateway\Contracts\Buyer;
 
 class PaymentCustomer extends Model
 {
@@ -14,7 +15,7 @@ class PaymentCustomer extends Model
      * Get the client that owns the current PaymentCustomer.
      * Note: If this were a package it would be polimorphic instead of harcoding the Client model.
      *
-     * @return App\Models\Order\Client
+     * @return Buyer
      */
     /*public function client()
     {
@@ -22,7 +23,7 @@ class PaymentCustomer extends Model
     }*/
 
     protected $client = [
-        'model' => Client::class,// substitution contract
+        'model' => Buyer::class,// substitution contract
         'id' => 'id'
     ];
 

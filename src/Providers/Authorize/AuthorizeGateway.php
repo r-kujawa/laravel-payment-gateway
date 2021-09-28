@@ -2,6 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Providers\Authorize;
 
+use rkujawa\LaravelPaymentGateway\Contracts\Buyer;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayRequest;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayResponse;
 use rkujawa\LaravelPaymentGateway\Contracts\PaymentType;
@@ -21,7 +22,7 @@ final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
         return AuthnetApiFactory::getJsonApiHandler($args['id'], $args['secret'], $args['server']);
     }
 
-    public function createCustomerProfile(Client $client): GatewayResponse
+    public function createCustomerProfile(Buyer $client): GatewayResponse
     {
         $params = [
             'profile' => [
