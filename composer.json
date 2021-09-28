@@ -9,7 +9,12 @@
         }
     ],
     "require-dev": {
+        "roave/security-advisories": "dev-latest"
+        ,
         "orchestra/testbench": "^6.21"
+    },
+    "require": {
+        "stymiee/authnetjson": "~4.1"
     },
     "autoload": {
         "psr-4": {
