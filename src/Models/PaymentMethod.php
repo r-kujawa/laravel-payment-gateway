@@ -2,16 +2,40 @@
 
 namespace rkujawa\LaravelPaymentGateway\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentMethodFactory;
 
 class PaymentMethod extends Model
 {
     use SoftDeletes;
+    use HasFactory;
 
-    protected $fillable = ['payment_customer_id', 'fallback_id', 'token', 'first_name', 'last_name', 'last_digits', 'exp_month', 'exp_year', 'type', 'created_at'];
+    protected $fillable = [
+        'payment_customer_id',
+        'fallback_id',
+        'token',
+        'first_name',
+        'last_name',
+        'last_digits',
+        'exp_month',
+        'exp_year',
+        'type',
+        'created_at',
+    ];
 
     protected $hidden = ['token'];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return PaymentMethodFactory::new();
+    }
 
     public function getCardholderAttribute()
     {
@@ -45,14 +69,6 @@ class PaymentMethod extends Model
     public function paymentCustomer()
     {
         return $this->belongsTo(PaymentCustomer::class);
-    }
-
-    public function companies()
-    {
-        return $this->belongsToMany(Data::class, 'company_payment_method', 'payment_method_id', 'company_id')
-            ->using(CompanyPaymentMethod::class)
-            ->withPivot('is_primary')
-            ->withTimestamps();
     }
 
     public function fallback()

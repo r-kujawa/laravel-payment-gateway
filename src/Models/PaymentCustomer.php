@@ -2,30 +2,32 @@
 
 namespace rkujawa\LaravelPaymentGateway\Models;
 
-//use App\Models\Order\Client; maybe we can replace this with a contract
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentCustomerFactory;
 use rkujawa\LaravelPaymentGateway\Contracts\Buyer;
 
 class PaymentCustomer extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['client_id', 'payment_provider_id', 'token'];
-
-
-    /**
-     * Get the client that owns the current PaymentCustomer.
-     * Note: If this were a package it would be polimorphic instead of harcoding the Client model.
-     *
-     * @return Buyer
-     */
-    /*public function client()
-    {
-        return $this->belongsTo(Client::class);
-    }*/
+    protected $hidden = ['token'];
 
     protected $client = [
         'model' => Buyer::class,// substitution contract
         'id' => 'id'
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return PaymentCustomerFactory::new();
+    }
 
     public function client()
     {

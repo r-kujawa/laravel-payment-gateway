@@ -4,20 +4,15 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentProviderFactory;
+use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentTypeFactory;
 
-class PaymentProvider extends Model
+class PaymentType extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
         'slug',
-    ];
-
-    const ID = [
-        'authorize' => 1,
-        'braintree' => 2
     ];
 
     /**
@@ -27,10 +22,10 @@ class PaymentProvider extends Model
      */
     protected static function newFactory()
     {
-        return PaymentProviderFactory::new();
+        return PaymentTypeFactory::new();
     }
 
-    public function customers()
+    public function paymentCustomers()
     {
         return $this->hasMany(PaymentCustomer::class, 'provider_id');
     }
