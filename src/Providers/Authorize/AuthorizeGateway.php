@@ -2,6 +2,8 @@
 
 namespace rkujawa\LaravelPaymentGateway\Providers\Authorize;
 
+use Authnetjson\AuthnetApiFactory;
+use Authnetjson\AuthnetJsonRequest;
 use rkujawa\LaravelPaymentGateway\Contracts\Buyer;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayRequest;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayResponse;
@@ -9,13 +11,10 @@ use rkujawa\LaravelPaymentGateway\Contracts\PaymentType;
 use rkujawa\LaravelPaymentGateway\Models\PaymentCustomer;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
 use rkujawa\LaravelPaymentGateway\PaymentGateway;
-use App\Traits\AuthorizeSanitize;
-use JohnConde\Authnet\AuthnetApiFactory;
-use JohnConde\Authnet\AuthnetJsonRequest;
 
 final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
 {
-    use AuthorizeSanitize, ChargeRequest;
+    use ChargeRequest;
 
     protected function merchantRequest(array $args): AuthnetJsonRequest
     {

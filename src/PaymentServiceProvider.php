@@ -11,12 +11,15 @@ class PaymentServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->registerPublishing();
         }
+
         $this->registerResources();
     }
 
     public function register()
     {
-        //maybe this is better to initiate on boot method
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/payment.php', 'payment'
+        );
         $this->app->bind(PaymentGatewayService::class, function ($app, $config = null) {
             if ($config) {
                 $paymentGateway = PaymentGatewayFactory::create(
@@ -30,11 +33,10 @@ class PaymentServiceProvider extends ServiceProvider
 
             return new PaymentGatewayService(PaymentGatewayFactory::create());
         });
-    }
 
-    public function provides()
-    {
-        return [PaymentGatewayService::class];
+        $this->app->bind('PaymentService', function ($app) {
+            return new PaymentGatewayService(PaymentGatewayFactory::create());
+        });
     }
 
     private function registerResources()
