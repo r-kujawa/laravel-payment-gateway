@@ -21,7 +21,24 @@ class PaymentTypeFactory extends Factory
      */
     public function definition()
     {
-        $type = $this->faker->unique()->randomElement([
+        $type = $this->faker->randomElement(static::getDefaults());
+
+        if (PaymentType::where('slug', $type['slug'])->exists()) {
+            $name = $this->faker->unique()->lexify('????');
+
+            $type = [
+                'name' => ucfirst($name),
+                'display_name' => strtoupper($name),
+                'slug' => static::getSlug($name),
+            ];
+        }
+
+        return $type;
+    }
+
+    public static function getDefaults()
+    {
+        $types = [
             [
                 'name' => 'Visa',
                 'display_name' => 'VISA',
@@ -62,24 +79,14 @@ class PaymentTypeFactory extends Factory
                 'name' => 'Paypal',
                 'display_name' => 'PayPal',
             ],
-        ]);
+        ];
 
-        $type['slug'] = $this->getSlug($type['name']);
+        return array_map(function ($type) {
+            return array_merge($type, ['slug' => static::getSlug($type['name'])]);
+        }, $types);
+    } 
 
-        if (PaymentType::where('slug', $type['slug'])->exists()) {
-            $name = $this->faker->unique()->lexify('????');
-
-            $type = [
-                'name' => ucfirst($name),
-                'display_name' => strtoupper($name),
-                'slug' => $this->getSlug($name),
-            ];
-        }
-
-        return $type;
-    }
-
-    private function getSlug($name)
+    private static function getSlug($name)
     {
         return preg_replace('/[^a-z]+/i', '_', trim(strtolower($name)));
     }
