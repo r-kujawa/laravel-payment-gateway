@@ -1,0 +1,25 @@
+<?php
+
+namespace rkujawa\LaravelPaymentGateway\Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentTypeFactory;
+use rkujawa\LaravelPaymentGateway\Models\PaymentType;
+
+class PaymentTypeSeeder extends Seeder
+{
+    public function run()
+    {
+        foreach (PaymentTypeFactory::getDefaults() as $paymentType) {
+            PaymentType::firstOrCreate(
+                [
+                    'slug' => $paymentType['slug']
+                ],
+                [
+                    'name' => $paymentType['name'],
+                    'display_name' => $paymentType['display_name'],
+                ]
+            );
+        }
+    }
+}
