@@ -3,12 +3,15 @@
 namespace rkujawa\LaravelPaymentGateway\Tests\Unit;
 
 use rkujawa\LaravelPaymentGateway\Facades\PaymentService;
+use rkujawa\LaravelPaymentGateway\Models\PaymentCustomer;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 use rkujawa\LaravelPaymentGateway\PaymentGatewayFactory;
 use rkujawa\LaravelPaymentGateway\Tests\TestCase;
-
+//should we create tests for model and verify the data is being stored as expected.
 class FacadeTest extends TestCase
 {
+    private $paymentCustomer;
+
     public function test_get_provider_method()
     {
         $paymentGatewayProvider = PaymentService::getProvider();
@@ -64,12 +67,13 @@ class FacadeTest extends TestCase
     {
         $response = PaymentService::createPaymentCustomer($this->buyer);
         $this->assertTrue($response->isSuccessful());
-        \Log::debug($response);
+        $this->paymentCustomer = PaymentCustomer::findByToken($response->getCustomerProfileId());
+        $this->assertNotNull($this->paymentCustomer);
     }
 
     public function test_create_payment_method()
     {
-
+        $response = PaymentService::createPaymentMethod($this->paymentCustomer->token, );
     }
 
     public function test_get_payment_method()

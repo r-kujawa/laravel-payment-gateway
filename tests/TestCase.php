@@ -3,6 +3,7 @@
 namespace rkujawa\LaravelPaymentGateway\Tests;
 
 use Orchestra\Testbench\Factories\UserFactory;
+use rkujawa\LaravelPaymentGateway\Database\Seeders\PaymentTypeSeeder;
 use rkujawa\LaravelPaymentGateway\PaymentServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
@@ -33,7 +34,12 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
     protected function defineDatabaseMigrations()
     {
-        $this->loadMigrationsFrom(__DIR__.'/../src/database/migrations');
         $this->loadLaravelMigrations(['--database' => 'payments_test']);
+        $this->loadMigrationsFrom(__DIR__.'/../src/database/migrations');
+    }
+
+    protected function defineDatabaseSeeders(): void
+    {
+        $this->seed(PaymentTypeSeeder::class);
     }
 }

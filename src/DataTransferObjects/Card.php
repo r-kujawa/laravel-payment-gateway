@@ -2,10 +2,19 @@
 
 namespace rkujawa\LaravelPaymentGateway\DataTransferObjects;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use rkujawa\LaravelPaymentGateway\database\Factories\CardDtoFactory;
 use rkujawa\LaravelPaymentGateway\Helpers\Sanitizer;
 
 class Card extends DataTransferObject
 {
+    use HasFactory;
+
+    public static function newFactory()
+    {
+        return CardDtoFactory::new();
+    }
+
     protected function properties(): array
     {
         return [

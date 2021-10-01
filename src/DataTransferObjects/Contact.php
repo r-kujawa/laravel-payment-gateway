@@ -2,10 +2,19 @@
 
 namespace rkujawa\LaravelPaymentGateway\DataTransferObjects;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use rkujawa\LaravelPaymentGateway\database\Factories\ContactDtoFactory;
 use rkujawa\LaravelPaymentGateway\Helpers\Sanitizer;
 
 class Contact extends DataTransferObject
 {
+    use HasFactory;
+
+    public static function newFactory()
+    {
+        return ContactDtoFactory::new();
+    }
+
     protected function properties(): array
     {
         return [

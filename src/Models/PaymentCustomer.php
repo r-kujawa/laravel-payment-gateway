@@ -4,14 +4,15 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentCustomerFactory;
 use rkujawa\LaravelPaymentGateway\Contracts\Buyer;
 
 class PaymentCustomer extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['client_id', 'payment_provider_id', 'token'];
+    protected $fillable = ['provider_id', 'token'];
     protected $hidden = ['token'];
 
     protected $client = [

@@ -2,10 +2,19 @@
 
 namespace rkujawa\LaravelPaymentGateway\DataTransferObjects;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use rkujawa\LaravelPaymentGateway\database\Factories\AddressDtoFactory;
 use rkujawa\LaravelPaymentGateway\Helpers\Sanitizer;
 
 class Address extends DataTransferObject
 {
+    use HasFactory;
+
+    public static function newFactory()
+    {
+        return AddressDtoFactory::new();
+    }
+
     protected function properties(): array
     {
         return [

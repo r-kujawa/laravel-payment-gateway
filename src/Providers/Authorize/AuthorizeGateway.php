@@ -44,7 +44,7 @@ final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
             $customerData['provider_id'] = $this->getProviderId();
             $this->storePaymentCustomer($customerData);
         }
-        \Log::debug($response->getRawResponse());
+        dump($response->getRawResponse());
         //log response
         return $response;
     }
