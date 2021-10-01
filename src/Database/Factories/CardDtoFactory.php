@@ -13,11 +13,11 @@ class CardDtoFactory extends Factory
     public function definition()
     {
         return [
-            'number' => $faker->creditCardNumber,
-            'expMonth' => $faker->month,
-            'expYear' => (string) $faker->numberBetween(now()->year + 1, now()->year + 11),
-            'code' => $faker->numerify('###'),
-            'type' => $faker->creditCardType
+            'number' => $this->faker->creditCardNumber,
+            'expMonth' => $this->faker->month,
+            'expYear' => (string) $this->faker->numberBetween(now()->year + 1, now()->year + 11),
+            'code' => $this->faker->numerify('###'),
+            'type' => $this->faker->creditCardType
         ];
     }
 }

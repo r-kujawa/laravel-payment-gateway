@@ -12,11 +12,11 @@ class ContactDtoFactory extends Factory
     public function definition()
     {
         return [
-            'firstName' => $faker->firstName,
-            'lastName' => $faker->lastName,
-            'company' => $faker->company . ' ' . $faker->randomElement(['LLC', 'INC', 'CORP']),
-            'email' => $faker->email,
-            'phone' => $faker->phoneNumber,
+            'firstName' => $this->faker->firstName,
+            'lastName' => $this->faker->lastName,
+            'company' => $this->faker->company . ' ' . $faker->randomElement(['LLC', 'INC', 'CORP']),
+            'email' => $this->faker->email,
+            'phone' => $this->faker->phoneNumber,
         ];
     }
 }
