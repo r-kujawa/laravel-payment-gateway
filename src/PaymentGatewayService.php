@@ -3,6 +3,7 @@
 namespace rkujawa\LaravelPaymentGateway;
 
 use App\Models\Order\Client;
+use rkujawa\LaravelPaymentGateway\Contracts\Buyer;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayRequest;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayResponse;
 use rkujawa\LaravelPaymentGateway\Contracts\PaymentType;
@@ -49,7 +50,7 @@ class PaymentGatewayService
         return $this->paymentGateway->charge($payment, $amount, $description, $ordernum);
     }
 
-    public function createPaymentCustomer(Client $client)
+    public function createPaymentCustomer(Buyer $client)
     {
         return $this->paymentGateway->createCustomerProfile($client);
     }

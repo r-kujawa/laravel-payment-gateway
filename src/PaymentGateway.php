@@ -30,7 +30,7 @@ abstract class PaymentGateway
         return $this->attributes['provider'];
     }
 
-    protected function getProviderId()
+    protected function getProviderId(): int
     {
         return PaymentProvider::ID[$this->provider];
     }
@@ -108,12 +108,14 @@ abstract class PaymentGateway
         $this->attributes['client'] = $client;
     }
 
-    public function charge(PaymentType $payment, int $amount, string $description, int $order): GatewayResponse
+    public function charge(PaymentType $payment, int $amount, string $description): GatewayResponse
     {
         $charge = 'charge' . \Str::studly($payment->getPaymentType());
 
         if (!method_exists($this, $charge)) {
-            throw new \Exception('the requested payment method is not supported by the ' . $this->provider . ' provider.');
+            throw new \Exception(
+                'the requested payment method is not supported by the ' . $this->provider . ' provider.'
+            );
         }
 
         return $this->$charge($payment, $amount, $description, $order);
@@ -137,13 +139,8 @@ abstract class PaymentGateway
         return PaymentCustomer::create($data);
     }
 
-    protected function storePaymentMethod(array $data, ?int $transnum = null): PaymentMethod
+    protected function storePaymentMethod(array $data): PaymentMethod
     {
-        $paymentMethod =  PaymentMethod::findByToken($data['token']) ?: PaymentMethod::create($data);
-        if ($transnum && $paymentMethod) {
-            $paymentMethod->companies()->attach($transnum);
-        }
-
-        return $paymentMethod;
+        return PaymentMethod::findByToken($data['token']) ?: PaymentMethod::create($data);
     }
 }

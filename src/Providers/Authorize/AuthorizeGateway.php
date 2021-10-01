@@ -8,6 +8,7 @@ use rkujawa\LaravelPaymentGateway\Contracts\Buyer;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayRequest;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayResponse;
 use rkujawa\LaravelPaymentGateway\Contracts\PaymentType;
+use rkujawa\LaravelPaymentGateway\Helpers\Sanitizer;
 use rkujawa\LaravelPaymentGateway\Models\PaymentCustomer;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
 use rkujawa\LaravelPaymentGateway\PaymentGateway;
@@ -18,30 +19,32 @@ final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
 
     protected function merchantRequest(array $args): AuthnetJsonRequest
     {
-        return AuthnetApiFactory::getJsonApiHandler($args['id'], $args['secret'], $args['server']);
+        return AuthnetApiFactory::getJsonApiHandler(
+            $args['id'],
+            $args['secret'],
+            $args['server']
+        );
     }
 
     public function createCustomerProfile(Buyer $client): GatewayResponse
     {
         $params = [
             'profile' => [
-                'merchantCustomerId' => $client->id,
-                'description' => $client->getFullName(),
-                'email' => $client->email,
+                'merchantCustomerId' => Sanitizer::shorten($client->getId(), 20),
+                'description' => Sanitizer::tighten($client->getFullName()),
+                'email' => Sanitizer::run($client->getEmail(), ['compress', 'shorten' => [255]]),
             ],
         ];
 
-        $this->sanitize('createCustomerProfileRequest', $params);
-        $response = $this->getClient()->createCustomerProfileRequest($params);
-        $response = new AuthorizeResponse($response);
+        $response = new AuthorizeResponse($this->getClient()->createCustomerProfileRequest($params));
 
         if ($response->isSuccessful() || $response->isDuplicateProfile()) {
             $customerData['token'] = $response->getCustomerProfileId();
-            $customerData['client_id'] = $client->id;
-            $customerData['payment_provider_id'] = $this->getProviderId();
+            //$customerData['client_id'] = $client->getId();
+            $customerData['provider_id'] = $this->getProviderId();
             $this->storePaymentCustomer($customerData);
         }
-
+        \Log::debug($response->getRawResponse());
         //log response
         return $response;
     }
@@ -52,17 +55,7 @@ final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
             'customerProfileId' => $customerToken,
             'paymentProfile' => [
                 'customerType' => 'individual',
-                'billTo' => [
-                    'firstName' => $paymentMethod->contact->firstName,
-                    'lastName' => $paymentMethod->contact->lastName,
-                    'company' => $paymentMethod->contact->company ?? '',
-                    'address' => $paymentMethod->address->street1 . ' ' . $paymentMethod->address->street2,
-                    'city' => $paymentMethod->address->city,
-                    'state' => $paymentMethod->address->state,
-                    'zip' => $paymentMethod->address->zip,
-                    'country' => $paymentMethod->address->country ?? 'USA',
-                    'phoneNumber' => $paymentMethod->contact->phone ?? '000-000-0000',
-                ],
+                'billTo' => $this->buildBillToParams($paymentMethod),
                 'payment' => [
                     'creditCard' => [
                         'cardNumber' => str_replace(' ', '', $paymentMethod->details->number),
@@ -175,17 +168,7 @@ final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
             'customerProfileId' => $customerToken,
             'paymentProfile' => [
                 'customerType' => 'individual',
-                'billTo' => [
-                    'firstName' => $paymentType->contact->firstName,
-                    'lastName' => $paymentType->contact->lastName,
-                    'company' => $paymentType->contact->company ?? '',
-                    'address' => $paymentType->address->street1 . ' ' . $paymentType->address->street2,
-                    'city' => $paymentType->address->city,
-                    'state' => $paymentType->address->state,
-                    'zip' => $paymentType->address->zip,
-                    'country' => $paymentType->address->country ?? 'USA',
-                    'phoneNumber' => $paymentType->contact->phone ?? '000-000-0000',
-                ],
+                'billTo' => $this->buildBillToParams($paymentType),
                 'payment' => [
                     'creditCard' => [
                         'cardNumber' => str_replace(' ', '', $paymentType->details->number),
@@ -202,6 +185,21 @@ final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
         $response = $this->getClient()->updateCustomerPaymentProfileRequest($params);
 
         return new AuthorizeResponse($response);
+    }
+
+    private function buildBillToParams(PaymentType $paymentType): array
+    {
+        return [
+            'firstName' => $paymentType->contact->firstName,
+            'lastName' => $paymentType->contact->lastName,
+            'company' => $paymentType->contact->company ?? '',
+            'address' => $paymentType->address->street1 . ' ' . $paymentType->address->street2,
+            'city' => $paymentType->address->city,
+            'state' => $paymentType->address->state,
+            'zip' => $paymentType->address->zip,
+            'country' => $paymentType->address->country ?? 'USA',
+            'phoneNumber' => $paymentType->contact->phone ?? '000-000-0000',
+        ];
     }
 
     public function void(): GatewayResponse

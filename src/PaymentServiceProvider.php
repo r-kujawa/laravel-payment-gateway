@@ -34,7 +34,7 @@ class PaymentServiceProvider extends ServiceProvider
             return new PaymentGatewayService(PaymentGatewayFactory::create());
         });
 
-        $this->app->bind('PaymentService', function ($app) {
+        $this->app->singleton('PaymentService', function ($app) {
             return new PaymentGatewayService(PaymentGatewayFactory::create());
         });
     }
