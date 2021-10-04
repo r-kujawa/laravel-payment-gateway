@@ -3,6 +3,7 @@
 namespace rkujawa\LaravelPaymentGateway;
 
 use Illuminate\Support\ServiceProvider;
+use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentType;
 
 class PaymentServiceProvider extends ServiceProvider
 {
@@ -10,6 +11,9 @@ class PaymentServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->registerPublishing();
+            $this->commands([
+                AddPaymentType::class,
+            ]);
         }
 
         $this->registerResources();

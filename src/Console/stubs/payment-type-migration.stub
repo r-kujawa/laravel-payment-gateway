@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use rkujawa\LaravelPaymentGateway\Models\PaymentType;
+
+class {{ class }} extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        PaymentType::create([
+            'name' => '{{ name }}',
+            'display_name' => '{{ displayName }}',
+            'slug' => '{{ slug }}',
+        ]);
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        PaymentType::where('slug', '{{ slug }}')->delete();
+    }
+}

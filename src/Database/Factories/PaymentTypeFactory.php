@@ -29,7 +29,7 @@ class PaymentTypeFactory extends Factory
             $type = [
                 'name' => ucfirst($name),
                 'display_name' => strtoupper($name),
-                'slug' => static::getSlug($name),
+                'slug' => PaymentType::getSlug($name),
             ];
         }
 
@@ -82,12 +82,7 @@ class PaymentTypeFactory extends Factory
         ];
 
         return array_map(function ($type) {
-            return array_merge($type, ['slug' => static::getSlug($type['name'])]);
+            return array_merge($type, ['slug' => PaymentType::getSlug($type['name'])]);
         }, $types);
-    } 
-
-    private static function getSlug($name)
-    {
-        return preg_replace('/[^a-z]+/i', '_', trim(strtolower($name)));
     }
 }
