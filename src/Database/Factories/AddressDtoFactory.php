@@ -20,7 +20,7 @@ class AddressDtoFactory extends Factory
             'city' => $this->faker->city,
             'county' => $this->faker->word,
             'street1' => $this->faker->streetAddress,
-            'street2' => $this->faker->randomElement([$faker->secondaryAddress, null]),
+            'street2' => $this->faker->randomElement([$this->faker->secondaryAddress, null]),
             'zip' => $this->faker->postcode
         ];
     }

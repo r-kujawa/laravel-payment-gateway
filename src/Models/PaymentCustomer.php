@@ -10,7 +10,7 @@ use rkujawa\LaravelPaymentGateway\Contracts\Buyer;
 
 class PaymentCustomer extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = ['provider_id', 'token'];
     protected $hidden = ['token'];

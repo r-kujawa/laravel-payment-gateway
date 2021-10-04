@@ -5,15 +5,11 @@ namespace rkujawa\LaravelPaymentGateway\DataTransferObjects;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use rkujawa\LaravelPaymentGateway\database\Factories\CardDtoFactory;
 use rkujawa\LaravelPaymentGateway\Helpers\Sanitizer;
+use rkujawa\LaravelPaymentGateway\Models\PaymentType;
 
 class Card extends DataTransferObject
 {
     use HasFactory;
-
-    public static function newFactory()
-    {
-        return CardDtoFactory::new();
-    }
 
     protected function properties(): array
     {
@@ -80,5 +76,15 @@ class Card extends DataTransferObject
     public function getExpirationDate(string $seperator = '')
     {
         return $this->expMonth . $seperator .  $this->expYear;
+    }
+
+    public static function newFactory()
+    {
+        return CardDtoFactory::new();
+    }
+
+    public function getPaymentTypeId()
+    {
+        return PaymentType::select('id')->where('name', ucfirst($this->type))->first()->pluck('id');
     }
 }

@@ -2,7 +2,6 @@
 
 namespace rkujawa\LaravelPaymentGateway\Tests;
 
-use Orchestra\Testbench\Factories\UserFactory;
 use rkujawa\LaravelPaymentGateway\Database\Seeders\PaymentTypeSeeder;
 use rkujawa\LaravelPaymentGateway\PaymentServiceProvider;
 
@@ -12,9 +11,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
     protected function getPackageProviders($app)
     {
-        return [
-            PaymentServiceProvider::class,
-        ];
+        return [PaymentServiceProvider::class];
     }
 
     protected function getEnvironmentSetUp($app)

@@ -9,12 +9,12 @@ class ContactDtoFactory extends Factory
 {
     protected $model = Contact::class;
 
-    public function definition()
+    public function definition(): array
     {
         return [
             'firstName' => $this->faker->firstName,
             'lastName' => $this->faker->lastName,
-            'company' => $this->faker->company . ' ' . $faker->randomElement(['LLC', 'INC', 'CORP']),
+            'company' => $this->faker->company . ' ' . $this->faker->randomElement(['LLC', 'INC', 'CORP']),
             'email' => $this->faker->email,
             'phone' => $this->faker->phoneNumber,
         ];

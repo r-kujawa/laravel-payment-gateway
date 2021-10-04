@@ -2,11 +2,19 @@
 
 namespace rkujawa\LaravelPaymentGateway\Tests\Unit;
 
+use rkujawa\LaravelPaymentGateway\database\Factories\AddressDtoFactory;
+use rkujawa\LaravelPaymentGateway\database\Factories\CardDtoFactory;
+use rkujawa\LaravelPaymentGateway\database\Factories\CardPaymentTypeFactory;
+use rkujawa\LaravelPaymentGateway\database\Factories\ContactDtoFactory;
 use rkujawa\LaravelPaymentGateway\Facades\PaymentService;
 use rkujawa\LaravelPaymentGateway\Models\PaymentCustomer;
+use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
+use rkujawa\LaravelPaymentGateway\Models\PaymentType;
 use rkujawa\LaravelPaymentGateway\PaymentGatewayFactory;
 use rkujawa\LaravelPaymentGateway\Tests\TestCase;
+use rkujawa\LaravelPaymentGateway\Types\CardPayment;
+
 //should we create tests for model and verify the data is being stored as expected.
 class FacadeTest extends TestCase
 {
@@ -73,7 +81,16 @@ class FacadeTest extends TestCase
 
     public function test_create_payment_method()
     {
-        $response = PaymentService::createPaymentMethod($this->paymentCustomer->token, );
+        if (! $this->paymentCustomer) {
+             $customerId = PaymentService::createPaymentCustomer($this->buyer)->getCustomerProfileId();
+             $this->paymentCustomer = PaymentCustomer::findByToken($customerId);
+        }
+
+        $cardPaymentType = CardPaymentTypeFactory::getInstance();
+        $response = PaymentService::createPaymentMethod($this->paymentCustomer->token, $cardPaymentType);
+        $this->assertNotNull($response);
+        $this->assertTrue($response->isSuccessful());
+        $this->assertNotNull(PaymentMethod::findByToken($response->getPaymentProfileId()));
     }
 
     public function test_get_payment_method()

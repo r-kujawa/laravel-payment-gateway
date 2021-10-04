@@ -44,12 +44,11 @@ final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
             $customerData['provider_id'] = $this->getProviderId();
             $this->storePaymentCustomer($customerData);
         }
-        dump($response->getRawResponse());
         //log response
         return $response;
     }
 
-    public function createPaymentMethod(int $customerToken, PaymentType $paymentMethod, ?int $transnum = null): GatewayResponse
+    public function createPaymentMethod(int $customerToken, PaymentType $paymentMethod): GatewayResponse
     {
         $params = [
             'customerProfileId' => $customerToken,
@@ -75,21 +74,24 @@ final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
         if ($response->isSuccessful() || $response->isDuplicateProfile()) {
             $paymentData = [
                 'token' => $response->getPaymentProfileId(),
-                'payment_customer_id' => PaymentCustomer::findByToken($customerToken)->id,
+                'customer_id' => PaymentCustomer::findByToken($customerToken)->id,
                 'first_name' => $paymentMethod->contact->firstName,
                 'last_name' => $paymentMethod->contact->lastName,
                 'last_digits' => $paymentMethod->details->last4Digits,
                 'exp_month' => $paymentMethod->details->expMonth,
                 'exp_year' => $paymentMethod->details->expYear,
-                'type' => $paymentMethod->details->type,
+                'type_id' => $paymentMethod->details->getPaymentTypeId(),
             ];
 
-            $this->storePaymentMethod($paymentData, $transnum);
+            $this->storePaymentMethod($paymentData);
         }
 
         return $response;
     }
 
+    /** $ordernum is a invoiceNumber
+     * @throws \Throwable
+     */
     public function chargeCard(PaymentType $card, int $amount, string $description, int $ordernum): GatewayResponse
     {
         throw_unless($card, new \Exception('Card not provided'));
@@ -101,6 +103,7 @@ final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
         return $this->processCharge($transactionData);
     }
 
+    // $ordernum is a invoiceNumber
     public function chargeToken(PaymentMethod $paymentMethod, int $amount, string $description, int $ordernum): GatewayResponse
     {
         $data = $this->makeChargeArguments($paymentMethod->getTokens(), $amount, $description, $ordernum);
