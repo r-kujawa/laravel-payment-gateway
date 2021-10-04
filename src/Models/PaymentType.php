@@ -12,6 +12,7 @@ class PaymentType extends Model
 
     protected $fillable = [
         'name',
+        'display_name',
         'slug',
     ];
 
@@ -23,6 +24,11 @@ class PaymentType extends Model
     protected static function newFactory()
     {
         return PaymentTypeFactory::new();
+    }
+
+    public static function getSlug($name)
+    {
+        return preg_replace('/[^a-z0-9]+/i', '_', trim(strtolower($name)));
     }
 
     public function paymentCustomers()
