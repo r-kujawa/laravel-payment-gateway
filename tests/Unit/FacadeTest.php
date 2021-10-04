@@ -93,14 +93,18 @@ class FacadeTest extends TestCase
         $this->assertNotNull(PaymentMethod::findByToken($response->getPaymentProfileId()));
     }
 
-    public function test_get_payment_method()
+    public function test_successful_get_customer_profile()
     {
-
+        $customerToken = \config('payment.defaults.paymentCustomer');
+        $response = PaymentService::getCustomerProfile($customerToken);
+        $this->assertTrue($response->isSuccessful());
     }
 
-    public function test_get_customer_profile()
+    public function test_get_payment_method()
     {
-
+        [$customerToken, $paymentToken] = $this->getTestingTokens();
+        $response = PaymentService::getPaymentMethod($customerToken, $paymentToken);
+        $this->assertTrue($response->isSuccessful());
     }
 
     public function test_delete_customer_profile()
@@ -121,5 +125,13 @@ class FacadeTest extends TestCase
     public function test_update_customer_profile()
     {
 
+    }
+
+    private function getTestingTokens(): array
+    {
+        return [
+            \config('payment.defaults.paymentCustomer'),
+            \config('payment.defaults.paymentMethod')
+        ];
     }
 }
