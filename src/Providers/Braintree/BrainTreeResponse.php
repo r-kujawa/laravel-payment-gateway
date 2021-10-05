@@ -37,4 +37,24 @@ class BraintreeResponse implements GatewayResponse
     {
         // TODO: Implement getErrorCode() method.
     }
+
+    public function isApproved(): bool
+    {
+        // TODO: Implement isApproved() method.
+    }
+
+    public function isDuplicateProfile(): bool
+    {
+        // TODO: Implement isDuplicateProfile() method.
+    }
+
+    public function getTransactionId()
+    {
+        // TODO: Implement getTransactionId() method.
+    }
+
+    public function getAvsCode(): string
+    {
+        // TODO: Implement getAvsCode() method.
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Providers\Braintree;
 
-use App\Models\Order\Client;
+use rkujawa\LaravelPaymentGateway\Contracts\Buyer;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayRequest;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayResponse;
 use rkujawa\LaravelPaymentGateway\Contracts\PaymentType;
@@ -16,7 +16,7 @@ class BrainTreeGateway extends PaymentGateway implements GatewayRequest
         // TODO: Implement merchantRequest() method.
     }
 
-    public function createCustomerProfile(Client $client): GatewayResponse
+    public function createCustomerProfile(Buyer $client): GatewayResponse
     {
         // TODO: Implement createCustomerProfile() method.
     }
@@ -31,7 +31,7 @@ class BrainTreeGateway extends PaymentGateway implements GatewayRequest
         // TODO: Implement chargeProfile() method.
     }
 
-    public function chargeCard(PaymentType $payWith, int $amount, string $description, int $ordernum): GatewayResponse
+    public function chargeCard(PaymentType $payWith, int $amount, string $description): GatewayResponse
     {
         // TODO: Implement chargeCard() method.
     }

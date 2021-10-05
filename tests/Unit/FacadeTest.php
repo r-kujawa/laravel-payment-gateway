@@ -2,18 +2,13 @@
 
 namespace rkujawa\LaravelPaymentGateway\Tests\Unit;
 
-use rkujawa\LaravelPaymentGateway\database\Factories\AddressDtoFactory;
-use rkujawa\LaravelPaymentGateway\database\Factories\CardDtoFactory;
-use rkujawa\LaravelPaymentGateway\database\Factories\CardPaymentTypeFactory;
-use rkujawa\LaravelPaymentGateway\database\Factories\ContactDtoFactory;
+use rkujawa\LaravelPaymentGateway\Database\Factories\CardPaymentTypeFactory;
 use rkujawa\LaravelPaymentGateway\Facades\PaymentService;
 use rkujawa\LaravelPaymentGateway\Models\PaymentCustomer;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
-use rkujawa\LaravelPaymentGateway\Models\PaymentType;
 use rkujawa\LaravelPaymentGateway\PaymentGatewayFactory;
 use rkujawa\LaravelPaymentGateway\Tests\TestCase;
-use rkujawa\LaravelPaymentGateway\Types\CardPayment;
 
 //should we create tests for model and verify the data is being stored as expected.
 class FacadeTest extends TestCase
@@ -27,7 +22,7 @@ class FacadeTest extends TestCase
         $this->assertEquals(config('payment.defaults.provider'), $paymentGatewayProvider);
     }
 
-    public function test_get_provider_id()
+/*    public function test_get_provider_id()
     {
         $paymentGatewayProviderId = PaymentService::getProviderId();
         $this->assertNotNull($paymentGatewayProviderId);
@@ -35,7 +30,7 @@ class FacadeTest extends TestCase
             PaymentProvider::ID[config('payment.defaults.provider')],
             $paymentGatewayProviderId
         );
-    }
+    }*/
 
     public function test_get_merchant_method()
     {
@@ -48,17 +43,18 @@ class FacadeTest extends TestCase
         $defaultMerchant = config('payment.providers.' . PaymentService::getProvider() . '.defaults.merchant');
         $possibleMerchants = config('payment.providers.' . PaymentService::getProvider() . '.merchants');
         unset($possibleMerchants[$defaultMerchant]);
-        PaymentService::setMerchant(array_shift($possibleMerchants));
+        PaymentService::setMerchant(array_key_first($possibleMerchants));
+        $this->assertNotEquals($defaultMerchant, PaymentService::getMerchant());
     }
 
     public function test_successful_set_provider()
     {
         $allowedProvider = PaymentGatewayFactory::allowedProviders();
-        $initMerchant = PaymentService::getProvider();
-        unset($allowedProvider[$initMerchant]);
-        $newMerchant = array_shift($allowedProvider);
-        PaymentService::setProvider($newMerchant);
-        $this->assertNotEquals($initMerchant, PaymentService::getMerchant());
+        $initProvider = PaymentService::getProvider();
+        unset($allowedProvider[$initProvider]);
+        $newProvider = array_key_first($allowedProvider);
+        PaymentService::setProvider($newProvider);
+        $this->assertNotEquals($initProvider, PaymentService::getProvider());
     }
 
     public function test_fail_set_merchant()
@@ -107,7 +103,7 @@ class FacadeTest extends TestCase
         $this->assertTrue($response->isSuccessful());
     }
 
-    public function test_delete_customer_profile()
+    /*public function test_delete_customer_profile()
     {
 
     }
@@ -125,7 +121,7 @@ class FacadeTest extends TestCase
     public function test_update_customer_profile()
     {
 
-    }
+    }*/
 
     private function getTestingTokens(): array
     {

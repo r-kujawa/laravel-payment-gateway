@@ -1,6 +1,6 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\database\Factories;
+namespace rkujawa\LaravelPaymentGateway\Database\Factories;
 
 use rkujawa\LaravelPaymentGateway\Types\CardPayment;
 
