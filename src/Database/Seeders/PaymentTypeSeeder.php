@@ -10,7 +10,7 @@ class PaymentTypeSeeder extends Seeder
 {
     public function run()
     {
-        foreach (PaymentTypeFactory::getDefaults() as $paymentType) {
+        foreach (PaymentTypeFactory::DEFAULTS as $paymentType) {
             PaymentType::firstOrCreate(
                 [
                     'slug' => $paymentType['slug']

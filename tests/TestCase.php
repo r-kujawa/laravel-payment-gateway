@@ -7,7 +7,20 @@ use rkujawa\LaravelPaymentGateway\PaymentServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
+
     public $buyer;
+    /**
+     * Setup the test environment.
+     *
+     * @return void
+     */
+    /*protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->artisan('migrate');
+    }*/
+
 
     protected function getPackageProviders($app)
     {
