@@ -67,67 +67,92 @@ class FacadeTest extends TestCase
         PaymentService::setMerchant($newMerchant);
     }
 
-    public function test_create_payment_customer()
+    public function test_crud_payment_customer()
     {
-        $response = PaymentService::createPaymentCustomer($this->buyer);
-        $this->assertTrue($response->isSuccessful());
-        $this->paymentCustomer = PaymentCustomer::findByToken($response->getCustomerProfileId());
+        //create
+        $responseCreate = PaymentService::createPaymentCustomer($this->buyer);
+        $this->assertTrue($responseCreate->isSuccessful());
+        $this->paymentCustomer = PaymentCustomer::findByToken($responseCreate->getCustomerProfileId());
         $this->assertNotNull($this->paymentCustomer);
+        //update
+        $responseUpdate = PaymentService::updateCustomerProfile(
+            $this->buyer->getId(),
+            $this->paymentCustomer->token,
+            $this->buyer->getEmail(),
+            $this->buyer->getFullName() . ' updated'
+        );
+        $this->assertTrue($responseUpdate->isSuccessful());
+        //read
+        $responseRead = PaymentService::getCustomerProfile($this->paymentCustomer->token);
+        $this->assertTrue($responseRead->isSuccessful());
+        $responseObj = json_decode($responseRead->getRawResponse());
+        $this->assertTrue(str_contains($responseObj->profile->description, 'updated'));
+        //delete
+        $responseDelete = PaymentService::deleteCustomerProfile($this->paymentCustomer->token);
+        $this->assertTrue($responseDelete->isSuccessful());
+        $this->assertNull(PaymentCustomer::find($this->paymentCustomer->token));
+        unset($this->paymentCustomer);
     }
 
-    public function test_create_payment_method()
+    public function test_crud_payment_method()
     {
-        if (! $this->paymentCustomer) {
-             $customerId = PaymentService::createPaymentCustomer($this->buyer)->getCustomerProfileId();
-             $this->paymentCustomer = PaymentCustomer::findByToken($customerId);
-        }
-
+        [$customerToken, $_] = $this->getSandboxTokens();
+        PaymentCustomer::create(
+            [
+                'token' => $customerToken,
+                'provider_id' => PaymentProvider::ID['authorize']
+            ]
+        );
+        //create
         $cardPaymentType = CardPaymentTypeFactory::getInstance();
-        $response = PaymentService::createPaymentMethod($this->paymentCustomer->token, $cardPaymentType);
-        $this->assertNotNull($response);
-        $this->assertTrue($response->isSuccessful());
-        $this->assertNotNull(PaymentMethod::findByToken($response->getPaymentProfileId()));
+        $responseCreate = PaymentService::createPaymentMethod($customerToken, $cardPaymentType);
+        $this->assertTrue($responseCreate->isSuccessful());
+
+        $paymentMethodModel = PaymentMethod::findByToken($responseCreate->getPaymentProfileId());
+        $this->assertNotNull($responseCreate);
+        $this->assertNotNull($paymentMethodModel);
+        //update
+        $cardPaymentType->address->city .= ' Modified';
+        $responseUpdate = PaymentService::updatePaymentMethod($customerToken, $paymentMethodModel->token, $cardPaymentType);
+        $this->assertTrue($responseUpdate->isSuccessful());
+        //read
+        $responseGet = PaymentService::getPaymentMethod($customerToken, $paymentMethodModel->token);
+        $this->assertTrue($responseGet->isSuccessful());
+        $updatedPaymentMethod = json_decode($responseGet->getRawResponse());
+        $this->assertTrue(str_contains($updatedPaymentMethod->paymentProfile->billTo->city, 'Modified'));
+        //delete
+        $responseDelete = PaymentService::deletePaymentMethod($customerToken, $paymentMethodModel->token);
+        $this->assertTrue($responseDelete->isSuccessful());
+        $this->assertNull(PaymentMethod::findByToken($paymentMethodModel->token));
     }
 
-    public function test_successful_get_customer_profile()
-    {
-        $customerToken = \config('payment.defaults.paymentCustomer');
-        $response = PaymentService::getCustomerProfile($customerToken);
-        $this->assertTrue($response->isSuccessful());
-    }
-
-    public function test_get_payment_method()
-    {
-        [$customerToken, $paymentToken] = $this->getTestingTokens();
-        $response = PaymentService::getPaymentMethod($customerToken, $paymentToken);
-        $this->assertTrue($response->isSuccessful());
-    }
-
-    /*public function test_delete_customer_profile()
-    {
-
-    }
-
-    public function test_delete_payment_method()
+    public function test_charge_non_existing_payment_method()
     {
 
     }
 
-    public function test_charge_method()
+    public function test_charge_existing_payment_method()
     {
 
     }
 
-    public function test_update_customer_profile()
+    private function getSandboxTokens(): array
     {
-
-    }*/
-
-    private function getTestingTokens(): array
-    {
+        /*Those reached 10 payment profiles, can be used to test that exception
+         * 'paymentCustomer' => '501833167',
+        'paymentMethod' => '503085944'
+         * */
         return [
             \config('payment.defaults.paymentCustomer'),
             \config('payment.defaults.paymentMethod')
         ];
+    }
+
+    private function checkCustomer(): void
+    {
+        if (! $this->paymentCustomer) {
+            $customerId = PaymentService::createPaymentCustomer($this->buyer)->getCustomerProfileId();
+            $this->paymentCustomer = PaymentCustomer::findByToken($customerId);
+        }
     }
 }

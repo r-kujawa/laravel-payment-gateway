@@ -26,7 +26,7 @@ class BrainTreeGateway extends PaymentGateway implements GatewayRequest
         // TODO: Implement createPaymentProfile() method.
     }
 
-    public function chargeProfile(PaymentMethod $paymentMethod, int $amount, string $description, int $ordernum): GatewayResponse
+    public function chargeProfile(PaymentMethod $paymentMethod, int $amount, string $description): GatewayResponse
     {
         // TODO: Implement chargeProfile() method.
     }

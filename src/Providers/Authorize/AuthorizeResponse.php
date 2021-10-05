@@ -18,6 +18,7 @@ class AuthorizeResponse implements GatewayResponse
 
     public function __construct(AuthnetJsonResponse $response)
     {
+        //log responses
         $this->response = $response;
     }
 

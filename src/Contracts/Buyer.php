@@ -4,7 +4,7 @@ namespace rkujawa\LaravelPaymentGateway\Contracts;
 
 interface Buyer
 {
-    public function getId();
-    public function getFullName(): string;
+    public function getId(): string;
     public function getEmail(): string;
+    public function getFullName(): string;
 }

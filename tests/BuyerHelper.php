@@ -17,7 +17,7 @@ class BuyerHelper implements Buyer
         $this->buyer = (new UserFactory())->create();
     }
 
-    public function getId()
+    public function getId(): string
     {
         return $this->buyer->id;
     }

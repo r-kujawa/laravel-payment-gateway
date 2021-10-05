@@ -186,6 +186,7 @@ final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
         ];
         //check $params sanitization
         $response = $this->getClient()->updateCustomerPaymentProfileRequest($params);
+        //here we should update the local record
 
         return new AuthorizeResponse($response);
     }

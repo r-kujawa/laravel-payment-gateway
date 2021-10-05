@@ -2,6 +2,8 @@
 
 namespace rkujawa\LaravelPaymentGateway\Traits;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use rkujawa\LaravelPaymentGateway\Models\PaymentCustomer;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
 
@@ -20,7 +22,7 @@ trait HasPayments
      *
      * @return Illuminate\Database\Eloquent\Collection
      */
-    public function paymentCustomers()
+    public function paymentCustomers(): HasMany
     {
         return $this->hasMany(PaymentCustomer::class);
     }
@@ -30,7 +32,7 @@ trait HasPayments
      *
      * @return Illuminate\Database\Eloquent\Collection
      */
-    public function paymentMethods()
+    public function paymentMethods(): HasManyThrough
     {
         return $this->hasManyThrough(PaymentMethod::class, PaymentCustomer::class);
     }
