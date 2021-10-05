@@ -14,6 +14,59 @@ class PaymentTypeFactory extends Factory
      */
     protected $model = PaymentType::class;
 
+    public const DEFAULTS = [
+        [
+            'name' => 'Visa',
+            'display_name' => 'VISA',
+            'slug' => 'visa',
+        ],
+        [
+            'name' => 'Mastercard',
+            'display_name' => 'MasterCard',
+            'slug' => 'visa',
+        ],
+        [
+            'name' => 'American Express',
+            'display_name' => 'AMEX',
+            'slug' => 'amex',
+        ],
+        [
+            'name' => 'Alipay',
+            'display_name' => 'Alipay',
+            'slug' => 'alipay',
+        ],
+        [
+            'name' => 'Apple Pay',
+            'display_name' => 'Apple Pay',
+            'slug' => 'apple_pay',
+        ],
+        [
+            'name' => 'Google Pay',
+            'display_name' => 'Google Pay',
+            'slug' => 'google_pay',
+        ],
+        [
+            'name' => 'JCB',
+            'display_name' => 'JCB',
+            'slug' => 'jcb',
+        ],
+        [
+            'name' => 'Diners Club',
+            'display_name' => 'Diners Club',
+            'slug' => 'diners_club',
+        ],
+        [
+            'name' => 'Discover',
+            'display_name' => 'Discover',
+            'slug' => 'discover',
+        ],
+        [
+            'name' => 'Paypal',
+            'display_name' => 'PayPal',
+            'slug' => 'paypal',
+        ],
+    ];
+
     /**
      * Define the model's default state.
      *
@@ -21,68 +74,26 @@ class PaymentTypeFactory extends Factory
      */
     public function definition()
     {
-        $type = $this->faker->randomElement(static::getDefaults());
+        $name = $this->faker->unique()->lexify('????');
 
-        if (PaymentType::where('slug', $type['slug'])->exists()) {
-            $name = $this->faker->unique()->lexify('????');
-
-            $type = [
-                'name' => ucfirst($name),
-                'display_name' => strtoupper($name),
-                'slug' => PaymentType::getSlug($name),
-            ];
-        }
-
-        return $type;
+        return [
+            'name' => ucfirst($name),
+            'display_name' => strtoupper($name),
+            'slug' => PaymentType::getSlug($name),
+        ];
     }
 
-    public static function getDefaults()
+    public function real()
     {
-        $types = [
-            [
-                'name' => 'Visa',
-                'display_name' => 'VISA',
-            ],
-            [
-                'name' => 'Mastercard',
-                'display_name' => 'MasterCard',
-            ],
-            [
-                'name' => 'American Express',
-                'display_name' => 'AMEX',
-            ],
-            [
-                'name' => 'Alipay',
-                'display_name' => 'Alipay',
-            ],
-            [
-                'name' => 'Apple Pay',
-                'display_name' => 'Apple Pay',
-            ],
-            [
-                'name' => 'Google Pay',
-                'display_name' => 'Google Pay',
-            ],
-            [
-                'name' => 'JCB',
-                'display_name' => 'JCB',
-            ],
-            [
-                'name' => 'Diners Club',
-                'display_name' => 'Diners Club',
-            ],
-            [
-                'name' => 'Discover',
-                'display_name' => 'Discover',
-            ],
-            [
-                'name' => 'Paypal',
-                'display_name' => 'PayPal',
-            ],
-        ];
+        return $this->state(function () {
+            $type = collect(static::DEFAULTS)->whereNotIn('slug', PaymentType::all()->pluck('slug'))->first();
 
-        return array_map(function ($type) {
-            return array_merge($type, ['slug' => PaymentType::getSlug($type['name'])]);
-        }, $types);
+            if (is_null($type))
+            {
+                return [];
+            }
+
+            return $type;
+        });
     }
 }
