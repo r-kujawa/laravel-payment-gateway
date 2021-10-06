@@ -108,7 +108,7 @@ abstract class PaymentGateway
         $this->attributes['client'] = $client;
     }
 
-    public function charge(PaymentType $payment, int $amount, string $description): GatewayResponse
+    public function charge(PaymentType $payment, int $amount, string $description, string $invoiceNumber): GatewayResponse
     {
         $charge = 'charge' . \Str::studly($payment->getPaymentType());
 
@@ -118,7 +118,7 @@ abstract class PaymentGateway
             );
         }
 
-        return $this->$charge($payment, $amount, $description, $order);
+        return $this->$charge($payment, $amount, $description, $invoiceNumber);
     }
 
     /**

@@ -44,9 +44,9 @@ class PaymentGatewayService
         $this->paymentGateway->merchant = (strtolower($merchant));
     }
 
-    public function charge(PaymentType $payment, int $amount, string $description, $ordernum): GatewayResponse
+    public function charge(PaymentType $payment, int $amount, string $description, string $invoiceNumber): GatewayResponse
     {
-        return $this->paymentGateway->charge($payment, $amount, $description, $ordernum);
+        return $this->paymentGateway->charge($payment, $amount, $description, $invoiceNumber);
     }
 
     public function createPaymentCustomer(Buyer $client)

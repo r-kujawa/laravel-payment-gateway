@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \rkujawa\LaravelPaymentGateway\Contracts\GatewayResponse updatePaymentMethod(string $customerToken, string $token, \rkujawa\LaravelPaymentGateway\Types\CardPayment $cardPaymentType)
  * @method static \rkujawa\LaravelPaymentGateway\Contracts\GatewayResponse deletePaymentMethod(string $customerToken, string $token)
  * @method static \rkujawa\LaravelPaymentGateway\Contracts\GatewayResponse updateCustomerProfile(string $getId, string $token, string $getEmail, string $description)
+ * @method static \rkujawa\LaravelPaymentGateway\Contracts\GatewayResponse charge(\rkujawa\LaravelPaymentGateway\Types\CardPayment $cardPayment, int $amount, string $string, string $invoiceNumber)
  */
 class PaymentService extends Facade
 {

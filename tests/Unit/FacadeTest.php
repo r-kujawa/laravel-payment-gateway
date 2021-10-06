@@ -3,6 +3,7 @@
 namespace rkujawa\LaravelPaymentGateway\Tests\Unit;
 
 use rkujawa\LaravelPaymentGateway\Database\Factories\CardPaymentTypeFactory;
+use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentMethodFactory;
 use rkujawa\LaravelPaymentGateway\Facades\PaymentService;
 use rkujawa\LaravelPaymentGateway\Models\PaymentCustomer;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
@@ -126,19 +127,26 @@ class FacadeTest extends TestCase
         $this->assertNull(PaymentMethod::findByToken($paymentMethodModel->token));
     }
 
-    public function test_charge_non_existing_payment_method()
+    public function test_successful_charge_non_existing_payment_method()
     {
 
     }
 
-    public function test_charge_existing_payment_method()
+    public function test_successful_charge_existing_payment_method()
     {
-
+        $cardPayment = CardPaymentTypeFactory::getInstance();
+        $cardPayment->details->number = '4111111111111111';
+        $cardPayment->details->type = 'Visa';
+        $invoiceNumber = date('Ymd') . random_int(1000, 9999);
+        $amount = 100;
+        $chargeResponse = PaymentService::charge($cardPayment, $amount, 'PHP unit payment', $invoiceNumber);
+        $this->assertTrue($chargeResponse->isSuccessful());
+        $this->assertTrue($chargeResponse->isApproved());
     }
 
     private function getSandboxTokens(): array
     {
-        /*Those reached 10 payment profiles, can be used to test that exception
+        /*This customer profile reached 10 payment profiles, can be used to test that exception
          * 'paymentCustomer' => '501833167',
         'paymentMethod' => '503085944'
          * */

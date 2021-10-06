@@ -2,20 +2,19 @@
 
 namespace rkujawa\LaravelPaymentGateway\Providers\Authorize;
 
+use rkujawa\LaravelPaymentGateway\Helpers\Sanitizer;
+
 trait ChargeRequest
 {
     private function processCharge(array $transactionData)
     {
-        // sanitize parameters
-        $this->sanitize('createTransactionRequest', $transactionData);
-
         $response = $this->getClient()->createTransactionRequest($transactionData);
 
         $response = new AuthorizeResponse($response);
         $response->status = $response->isApproved();
         $response->transId = $response->isApproved() ? $response->getTransactionId() : null;
         $response->errorMessage = ($response->isDeclined() || $response->isError()) ? $response->getErrorMessage() : '';
-        //check this line, need to check if not is an error.
+        //check this line, need to check if is not an error. ???
         $response->avsCode = optional($response->objResponse())->avsResultCode ?? null;
 
         return $response;
@@ -25,7 +24,7 @@ trait ChargeRequest
     {
         $payment['creditCard'] = [
             'cardNumber' => str_replace(' ', '', $billTo['details']['number']),
-            'expirationDate' => $billTo['expirationDate'], //'122016',
+            'expirationDate' => $billTo['expirationDate'], //'122016', MMYYYY
             'cardCode' => $billTo['details']['code'],
         ];
 
@@ -86,8 +85,8 @@ trait ChargeRequest
         ];
 
         $args['transactionRequest']['order'] = [
-            'invoiceNumber' => $ordernum,
-            'description' => $description,
+            'invoiceNumber' => Sanitizer::shorten($ordernum, 20),
+            'description' => Sanitizer::shorten($description, 255),
         ];
         // restrict transaction emails
         $args['transactionRequest']['transactionSettings'] = [

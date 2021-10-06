@@ -92,21 +92,21 @@ final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
     /** $ordernum is a invoiceNumber
      * @throws \Throwable
      */
-    public function chargeCard(PaymentType $card, int $amount, string $description, int $ordernum): GatewayResponse
+    public function chargeCard(PaymentType $card, int $amount, string $description, int $invoiceNumber): GatewayResponse
     {
         throw_unless($card, new \Exception('Card not provided'));
         $cardData = $card->toArray();
 
         $cardData['expirationDate'] = $card->details->getExpirationDate();
-        $transactionData = $this->makeChargeNoProfileArguments($cardData, $amount, $description, $ordernum);
+        $transactionData = $this->makeChargeNoProfileArguments($cardData, $amount, $description, $invoiceNumber);
 
         return $this->processCharge($transactionData);
     }
 
     // $ordernum is a invoiceNumber
-    public function chargeToken(PaymentMethod $paymentMethod, int $amount, string $description, int $ordernum): GatewayResponse
+    public function chargeToken(PaymentMethod $paymentMethod, int $amount, string $description, int $invoiceNumber): GatewayResponse
     {
-        $data = $this->makeChargeArguments($paymentMethod->getTokens(), $amount, $description, $ordernum);
+        $data = $this->makeChargeArguments($paymentMethod->getTokens(), $amount, $description, $invoiceNumber);
         return $this->processCharge($data);
     }
 
@@ -193,16 +193,17 @@ final class AuthorizeGateway extends PaymentGateway implements GatewayRequest
 
     private function buildBillToParams(PaymentType $paymentType): array
     {
+        $address = $paymentType->address->street1 . ' ' . $paymentType->address->street2;
         return [
-            'firstName' => $paymentType->contact->firstName,
-            'lastName' => $paymentType->contact->lastName,
-            'company' => $paymentType->contact->company ?? '',
-            'address' => $paymentType->address->street1 . ' ' . $paymentType->address->street2,
-            'city' => $paymentType->address->city,
-            'state' => $paymentType->address->state,
-            'zip' => $paymentType->address->zip,
-            'country' => $paymentType->address->country ?? 'USA',
-            'phoneNumber' => $paymentType->contact->phone ?? '000-000-0000',
+            'firstName' => Sanitizer::shorten($paymentType->contact->firstName, 50),
+            'lastName' => Sanitizer::shorten($paymentType->contact->lastName, 50),
+            'company' => Sanitizer::shorten($paymentType->contact->company ?? '', 50),
+            'address' => Sanitizer::shorten($address, 60),
+            'city' => Sanitizer::shorten($paymentType->address->city, 40),
+            'state' => Sanitizer::shorten($paymentType->address->state, 40),
+            'zip' => Sanitizer::shorten($paymentType->address->zip, 20),
+            'country' => Sanitizer::shorten($paymentType->address->country ?? 'USA', 60),
+            'phoneNumber' => Sanitizer::shorten($paymentType->contact->phone ?? '000-000-0000', 25),
         ];
     }
 

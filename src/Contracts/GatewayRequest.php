@@ -26,7 +26,7 @@ interface GatewayRequest
         PaymentType $paymentType
     ): GatewayResponse;
 
-    public function charge(PaymentType $payment, int $amount, string $description): GatewayResponse;
+    public function charge(PaymentType $payment, int $amount, string $description, string $invoiceNumber): GatewayResponse;
     public function void(): GatewayResponse;
     public function refund(): GatewayResponse;
 }
