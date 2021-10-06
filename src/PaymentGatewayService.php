@@ -2,7 +2,6 @@
 
 namespace rkujawa\LaravelPaymentGateway;
 
-use App\Models\Order\Client;
 use rkujawa\LaravelPaymentGateway\Contracts\Buyer;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayRequest;
 use rkujawa\LaravelPaymentGateway\Contracts\GatewayResponse;
