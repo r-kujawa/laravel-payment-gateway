@@ -4,7 +4,17 @@ namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
 interface BillableContract
 {
-    public function getId(): string;
-    public function getEmail(): string;
-    public function getFullName(): string;
+    /**
+     * Get the billable's identifier.
+     *
+     * @return string
+     */
+    public function getBillableId();
+
+    /**
+     * Get the billable's email address.
+     *
+     * @return string
+     */
+    public function getBillableEmail();
 }
