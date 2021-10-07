@@ -1,10 +1,10 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\Contracts;
+namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
 interface GatewayRequest
 {
-    public function createCustomerProfile(Buyer $client): GatewayResponse;
+    public function createCustomerProfile(BillableContract $client): GatewayResponse;
     public function deleteCustomerProfile(string $customerToken): GatewayResponse;
     public function getCustomerProfile(string $customerToken): GatewayResponse;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\Contracts;
+namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
-interface Buyer
+interface BillableContract
 {
     public function getId(): string;
     public function getEmail(): string;

@@ -1,6 +1,6 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\Contracts;
+namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
 interface PaymentType
 {
