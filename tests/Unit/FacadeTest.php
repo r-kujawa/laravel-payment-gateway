@@ -3,7 +3,6 @@
 namespace rkujawa\LaravelPaymentGateway\Tests\Unit;
 
 use rkujawa\LaravelPaymentGateway\Database\Factories\CardPaymentTypeFactory;
-use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentMethodFactory;
 use rkujawa\LaravelPaymentGateway\Facades\PaymentService;
 use rkujawa\LaravelPaymentGateway\Models\PaymentCustomer;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
@@ -105,7 +104,7 @@ class FacadeTest extends TestCase
             ]
         );
         //create
-        $cardPaymentType = CardPaymentTypeFactory::getInstance();
+        $cardPaymentType = CardPaymentTypeFactory::getCard();
         $responseCreate = PaymentService::createPaymentMethod($customerToken, $cardPaymentType);
         $this->assertTrue($responseCreate->isSuccessful());
 
@@ -129,12 +128,7 @@ class FacadeTest extends TestCase
 
     public function test_successful_charge_non_existing_payment_method()
     {
-
-    }
-
-    public function test_successful_charge_existing_payment_method()
-    {
-        $cardPayment = CardPaymentTypeFactory::getInstance();
+        $cardPayment = CardPaymentTypeFactory::getCard();
         $cardPayment->details->number = '4111111111111111';
         $cardPayment->details->type = 'Visa';
         $invoiceNumber = date('Ymd') . random_int(1000, 9999);
@@ -142,6 +136,25 @@ class FacadeTest extends TestCase
         $chargeResponse = PaymentService::charge($cardPayment, $amount, 'PHP unit payment', $invoiceNumber);
         $this->assertTrue($chargeResponse->isSuccessful());
         $this->assertTrue($chargeResponse->isApproved());
+    }
+
+    public function test_successful_charge_existing_payment_method()
+    {
+        $paymentCustomer = PaymentCustomer::firstOrCreate(
+            [
+                'token' => 501833167,
+                'provider' => PaymentService::getProviderId()
+            ]
+        );
+        $paymentMethod = PaymentMethod::firstOrCreate(
+            ['token' => 503085944],
+            [
+                'customer_id' => $paymentCustomer->id,
+                'exp_month' => 07,
+                'exp_year' => 2024
+            ]
+        );
+        $chargeResponse = PaymentService::charge();
     }
 
     private function getSandboxTokens(): array

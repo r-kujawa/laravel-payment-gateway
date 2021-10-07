@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentMethodFactory;
 
-class PaymentMethod extends Model
+class PaymentMethod extends Model implements \rkujawa\LaravelPaymentGateway\Contracts\PaymentType
 {
     use SoftDeletes;
     use HasFactory;
@@ -87,5 +87,10 @@ class PaymentMethod extends Model
             'firstName' => $this->firstName,
             'lastName' => $this->lastName,
         ];
+    }
+
+    public function getPaymentType(): string
+    {
+        return static::TOKEN;
     }
 }
