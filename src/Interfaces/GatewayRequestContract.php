@@ -2,7 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
-interface GatewayRequest
+interface GatewayRequestContract
 {
     public function createCustomerProfile(BillableContract $client): GatewayResponse;
     public function deleteCustomerProfile(string $customerToken): GatewayResponse;
@@ -15,17 +15,17 @@ interface GatewayRequest
         string $description
     ): GatewayResponse;
 
-    public function createPaymentMethod(int $paymentCustomerId, PaymentType $paymentMethod): GatewayResponse;
+    public function createPaymentMethod(int $paymentCustomerId, PaymentTypeContract $paymentMethod): GatewayResponse;
     public function deletePaymentMethod(string $customerToken, string $paymentToken): GatewayResponse;
     public function getPaymentMethod(string $customerToken, string $paymentToken): GatewayResponse;
 
     public function updatePaymentMethod(
         string $customerToken,
         string $paymentToken,
-        PaymentType $paymentType
+        PaymentTypeContract $paymentType
     ): GatewayResponse;
 
-    public function charge(PaymentType $payment, int $amount, string $description): GatewayResponse;
+    public function charge(PaymentTypeContract $payment, int $amount, string $description): GatewayResponse;
     public function void(): GatewayResponse;
     public function refund(): GatewayResponse;
 }

@@ -2,7 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
-interface GatewayResponse
+interface GatewayResponseContract
 {
     public function isSuccessful(): bool;
 

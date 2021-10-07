@@ -2,7 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
-interface PaymentType
+interface PaymentTypeContract
 {
     public const TOKEN = 'token';
     public const CARD = 'card';
