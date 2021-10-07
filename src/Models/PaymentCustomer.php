@@ -11,7 +11,7 @@ class PaymentCustomer extends Model
     use HasFactory;
 
     protected $fillable = [
-        'payment_provider_id',
+        'provider_id',
         'token',
     ];
     
