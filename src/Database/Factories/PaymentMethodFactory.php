@@ -3,7 +3,7 @@
 namespace rkujawa\LaravelPaymentGateway\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use rkujawa\LaravelPaymentGateway\Models\PaymentCustomer;
+use rkujawa\LaravelPaymentGateway\Models\Wallet;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
 use rkujawa\LaravelPaymentGateway\Models\PaymentType;
 
@@ -23,8 +23,8 @@ class PaymentMethodFactory extends Factory
      */
     public function definition()
     {
-        $customer = PaymentCustomer::inRandomOrder()->firstOr(function () {
-            return PaymentCustomer::factory()->create();
+        $customer = Wallet::inRandomOrder()->firstOr(function () {
+            return Wallet::factory()->create();
         });
 
         $type = PaymentType::inRandomOrder()->firstOr(function () {

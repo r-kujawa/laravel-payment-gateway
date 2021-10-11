@@ -66,9 +66,9 @@ class PaymentMethod extends Model
         return $this->exp_month . $seperator . $this->exp_year;
     }
 
-    public function paymentCustomer()
+    public function wallet()
     {
-        return $this->belongsTo(PaymentCustomer::class);
+        return $this->belongsTo(Wallet::class);
     }
 
     public function fallback()

@@ -31,13 +31,13 @@ class PaymentType extends Model
         return preg_replace('/[^a-z0-9]+/i', '_', trim(strtolower($name)));
     }
 
-    public function paymentCustomers()
+    public function wallets()
     {
-        return $this->hasMany(PaymentCustomer::class, 'provider_id');
+        return $this->hasMany(Wallet::class, 'provider_id');
     }
 
     public function paymentMethods()
     {
-        return $this->hasManyThrough(PaymentMethod::class, PaymentCustomer::class);
+        return $this->hasManyThrough(PaymentMethod::class, Wallet::class);
     }
 }
