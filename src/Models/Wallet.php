@@ -11,6 +11,8 @@ class Wallet extends Model
     use HasFactory;
 
     protected $fillable = [
+        'billable_type',
+        'billable_id',
         'payment_provider_id',
         'token',
     ];
@@ -25,6 +27,11 @@ class Wallet extends Model
     protected static function newFactory()
     {
         return WalletFactory::new();
+    }
+
+    public function billable()
+    {
+        return $this->morphTo();
     }
 
     public function paymentProvider()

@@ -13,7 +13,7 @@ class PaymentMethod extends Model
     use HasFactory;
 
     protected $fillable = [
-        'payment_customer_id',
+        'wallet_id',
         'fallback_id',
         'token',
         'first_name',

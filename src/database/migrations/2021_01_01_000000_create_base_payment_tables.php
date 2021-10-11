@@ -30,7 +30,8 @@ class CreateBasePaymentTables extends Migration
 
         Schema::create('wallets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->morphs('billable');
+            $table->unsignedBigInteger('billable_id')->nullable();
+            $table->string('billable_type')->nullable();
             $table->unsignedSmallInteger('provider_id');
             $table->string('token', 255);
             $table->timestamps();
