@@ -4,9 +4,9 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentCustomerFactory;
+use rkujawa\LaravelPaymentGateway\Database\Factories\WalletFactory;
 
-class PaymentCustomer extends Model
+class Wallet extends Model
 {
     use HasFactory;
 
@@ -24,7 +24,7 @@ class PaymentCustomer extends Model
      */
     protected static function newFactory()
     {
-        return PaymentCustomerFactory::new();
+        return WalletFactory::new();
     }
 
     public function paymentProvider()
