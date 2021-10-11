@@ -23,7 +23,7 @@ class PaymentMethodFactory extends Factory
      */
     public function definition()
     {
-        $customer = Wallet::inRandomOrder()->firstOr(function () {
+        $wallet = Wallet::inRandomOrder()->firstOr(function () {
             return Wallet::factory()->create();
         });
 
@@ -35,7 +35,7 @@ class PaymentMethodFactory extends Factory
         $exp['month'] = (string) $this->faker->numberBetween($exp['year'] === now()->year ? now()->month : 1, 12);
 
         return [
-            'customer_id' => $customer->id,
+            'wallet_id' => $wallet->id,
             'token' => $this->faker->uuid(),
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
