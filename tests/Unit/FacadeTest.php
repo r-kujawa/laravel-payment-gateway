@@ -154,7 +154,12 @@ class FacadeTest extends TestCase
                 'exp_year' => 2024
             ]
         );
-        $chargeResponse = PaymentService::charge();
+        $invoiceNumber = date('Ymd') . random_int(1000, 9999);
+        $amount = 100;
+        $description = 'PHP unit payment';
+        $chargeResponse = PaymentService::charge($paymentMethod, $amount, $description, $invoiceNumber );
+        $this->assertTrue($chargeResponse->isApproved());
+        $this->assertTrue($chargeResponse->isSuccessful());
     }
 
     private function getSandboxTokens(): array
