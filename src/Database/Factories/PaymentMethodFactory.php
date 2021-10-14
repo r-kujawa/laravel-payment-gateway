@@ -3,7 +3,7 @@
 namespace rkujawa\LaravelPaymentGateway\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use rkujawa\LaravelPaymentGateway\Models\PaymentCustomer;
+use rkujawa\LaravelPaymentGateway\Models\Wallet;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
 use rkujawa\LaravelPaymentGateway\Models\PaymentType;
 
@@ -23,8 +23,8 @@ class PaymentMethodFactory extends Factory
      */
     public function definition()
     {
-        $customer = PaymentCustomer::inRandomOrder()->firstOr(function () {
-            return PaymentCustomer::factory()->create();
+        $wallet = Wallet::inRandomOrder()->firstOr(function () {
+            return Wallet::factory()->create();
         });
 
         $type = PaymentType::inRandomOrder()->firstOr(function () {
@@ -35,7 +35,7 @@ class PaymentMethodFactory extends Factory
         $exp['month'] = (string) $this->faker->numberBetween($exp['year'] === now()->year ? now()->month : 1, 12);
 
         return [
-            'customer_id' => $customer->id,
+            'wallet_id' => $wallet->id,
             'token' => $this->faker->uuid(),
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),

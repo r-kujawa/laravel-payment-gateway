@@ -4,13 +4,15 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentCustomerFactory;
+use rkujawa\LaravelPaymentGateway\Database\Factories\WalletFactory;
 
-class PaymentCustomer extends Model
+class Wallet extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'billable_type',
+        'billable_id',
         'payment_provider_id',
         'token',
     ];
@@ -24,7 +26,12 @@ class PaymentCustomer extends Model
      */
     protected static function newFactory()
     {
-        return PaymentCustomerFactory::new();
+        return WalletFactory::new();
+    }
+
+    public function billable()
+    {
+        return $this->morphTo();
     }
 
     public function paymentProvider()
