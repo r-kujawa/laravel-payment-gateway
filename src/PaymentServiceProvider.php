@@ -27,7 +27,7 @@ class PaymentServiceProvider extends ServiceProvider
     protected function registerPublishing()
     {
         $this->publishes([
-            __DIR__ . '/../config/paymentToPublish.php' => config_path('payment.php')
-        ], 'payments-config');
+            __DIR__ . '/config/payment.php' => config_path('payment.php'),
+        ], 'payment-config');
     }
 }
