@@ -2,7 +2,20 @@
 
 namespace rkujawa\LaravelPaymentGateway\Interfaces\Response;
 
-interface PaymentTransactionContract
+interface PaymentTransactionContract extends PaymentGatewayContract
 {
-    // TODO: Define the methods.
+    /**
+     * @return string
+     */
+    public function transactionId();
+
+    /**
+     * @return float
+     */
+    public function transactionAmount();
+
+    /**
+     * @return string
+     */
+    public function avsCode();
 }
