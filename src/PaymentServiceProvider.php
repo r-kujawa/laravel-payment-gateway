@@ -12,6 +12,7 @@ class PaymentServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/Database/Migrations');
 
         if ($this->app->runningInConsole()) {
+            $this->registerPublishing();
             $this->commands([
                 AddPaymentType::class,
             ]);
@@ -20,6 +21,13 @@ class PaymentServiceProvider extends ServiceProvider
 
     public function register()
     {
-        
+
+    }
+
+    protected function registerPublishing()
+    {
+        $this->publishes([
+            __DIR__ . '/../config/paymentToPublish.php' => config_path('payment.php')
+        ], 'payments-config');
     }
 }
