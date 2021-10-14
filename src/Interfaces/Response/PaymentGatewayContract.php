@@ -2,7 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Interfaces\Response;
 
-Interface GatewayContract
+interface PaymentGatewayContract
 {
     /**
      * @return bool
