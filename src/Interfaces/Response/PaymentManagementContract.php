@@ -7,10 +7,10 @@ interface PaymentManagementContract
     /**
      * @return string
      */
-    public function getWalletToken();
+    public function walletToken();
 
     /**
      * @return string
      */
-    public function getPaymentMethodToken();
+    public function paymentMethodToken();
 }
