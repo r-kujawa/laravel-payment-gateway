@@ -2,27 +2,16 @@
 
 return [
     'defaults' => [
-        'provider' => 'authorize',
+        'provider' => '',
     ],
 
     'providers' => [
-        'authorize' => [
+        '' => [
             'class' => '',
             'merchants' => [
-                'merchant1' => [
-                    'id' => '',
+                '' => [
+                    'api_token' => '',
                     'secret' => '',
-                    'server' => '',
-                ],
-                'merchant2' => [
-                    'id' => '',
-                    'secret' => '',
-                    'server' => '',
-                ],
-                'merchantN' => [
-                    'id' => '',
-                    'secret' => '',
-                    'server' => '',
                 ],
             ],
             'sandbox' => [
@@ -31,24 +20,7 @@ return [
                 'server' => '',
             ],
             'defaults' => [
-                'merchant' => 'merchantN',
-            ]
-        ],
-
-        'braintree' => [
-            'class' => '',
-            'merchants' => [
-                'incfile' => [
-                    'id' => '',
-                    'secret' => '',
-                ],
-            ],
-            'sandbox' => [
-                'id' => '',
-                'secret' => '',
-            ],
-            'defaults' => [
-                'merchant' => 'merchantN',
+                'merchant' => '',
             ]
         ],
     ],
