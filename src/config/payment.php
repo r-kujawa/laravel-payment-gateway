@@ -14,11 +14,6 @@ return [
                     'secret' => '',
                 ],
             ],
-            'sandbox' => [
-                'id' => '',
-                'secret' => '',
-                'server' => '',
-            ],
             'defaults' => [
                 'merchant' => '',
             ]
