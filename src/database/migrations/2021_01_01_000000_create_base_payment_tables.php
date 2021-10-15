@@ -55,6 +55,30 @@ class CreateBasePaymentTables extends Migration
             $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('cascade');
             $table->foreign('type_id')->references('id')->on('payment_types')->onDelete('cascade');
         });
+
+        Schema::create('payment_transaction', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('gateway_transaction_id');
+            $table->string('order_id');
+            $table->unsignedInteger('amount');
+            $table->unsignedInteger('payment_method_id');
+            $table->unsignedSmallInteger('provider_id');
+            $table->json('payload');
+            $table->timestamp('created_at')->useCurrent();
+
+            $table->foreign('provider_id')->references('id')->on('payment_providers');
+        });
+
+        Schema::create('payment_refunds', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('gateway_refund_id');
+            $table->unsignedBigInteger('transaction_id');
+            $table->unsignedInteger('amount');
+            $table->json('payload');
+            $table->timestamp('created_at')->useCurrent();
+
+            $table->foreign('transaction_id')->references('id')->on('payment_transaction');
+        });
     }
 
     /**
