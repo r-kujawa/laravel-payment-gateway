@@ -11,9 +11,18 @@ class PaymentTransaction extends Model
         'payload',
         'order_id',
         'created_at',
-        'provider_id',
         'payment_method_id',
+        'payment_provider_id',
         'gateway_transaction_id',
     ];
 
+    public function paymentMethod()
+    {
+        return $this->belongsTo(PaymentMethod::class);
+    }
+
+    public function provider()
+    {
+        return $this->belongsTo(PaymentProvider::class);
+    }
 }

@@ -56,13 +56,14 @@ class CreateBasePaymentTables extends Migration
             $table->foreign('type_id')->references('id')->on('payment_types')->onDelete('cascade');
         });
 
-        Schema::create('payment_transaction', function (Blueprint $table) {
+        Schema::create('payment_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('gateway_transaction_id');
             $table->string('order_id');
             $table->unsignedInteger('amount');
             $table->unsignedInteger('payment_method_id');
             $table->unsignedSmallInteger('provider_id');
+            $table->integer('status');
             $table->json('payload');
             $table->timestamp('created_at')->useCurrent();
 
@@ -72,12 +73,12 @@ class CreateBasePaymentTables extends Migration
         Schema::create('payment_refunds', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('gateway_refund_id');
-            $table->unsignedBigInteger('transaction_id');
+            $table->unsignedBigInteger('payment_transaction_id');
             $table->unsignedInteger('amount');
             $table->json('payload');
             $table->timestamp('created_at')->useCurrent();
 
-            $table->foreign('transaction_id')->references('id')->on('payment_transaction');
+            $table->foreign('payment_transaction_id')->references('id')->on('payment_transactions');
         });
     }
 
