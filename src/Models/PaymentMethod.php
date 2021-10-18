@@ -76,6 +76,11 @@ class PaymentMethod extends Model
         return $this->belongsTo(self::class);
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(PaymentTransaction::class);
+    }
+
     public static function findByToken(string $token)
     {
         return self::where('token', $token)->first();
