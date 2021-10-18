@@ -100,5 +100,7 @@ class CreateBasePaymentTables extends Migration
         Schema::dropIfExists('payment_types');
         Schema::dropIfExists('wallets');
         Schema::dropIfExists('payment_providers');
+        Schema::dropIfExists('payment_transactions');
+        Schema::dropIfExists('payment_refunds');
     }
 }
