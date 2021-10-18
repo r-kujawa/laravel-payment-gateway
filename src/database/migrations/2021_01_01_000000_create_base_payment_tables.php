@@ -62,12 +62,13 @@ class CreateBasePaymentTables extends Migration
             $table->string('order_id');
             $table->unsignedInteger('amount');
             $table->unsignedInteger('payment_method_id');
-            $table->unsignedSmallInteger('provider_id');
+            $table->unsignedSmallInteger('payment_provider_id');
             $table->integer('status');
             $table->json('payload');
             $table->timestamp('created_at')->useCurrent();
 
-            $table->foreign('provider_id')->references('id')->on('payment_providers');
+            $table->foreign('payment_provider_id')->references('id')->on('payment_providers');
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods');
         });
 
         Schema::create('payment_refunds', function (Blueprint $table) {

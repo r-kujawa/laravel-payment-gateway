@@ -21,7 +21,7 @@ class PaymentTransaction extends Model
         return $this->belongsTo(PaymentMethod::class);
     }
 
-    public function provider()
+    public function paymentProvider()
     {
         return $this->belongsTo(PaymentProvider::class);
     }
