@@ -28,8 +28,10 @@ class CreateBasePaymentTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('payment_customers', function (Blueprint $table) {
+        Schema::create('wallets', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('billable_id')->nullable();
+            $table->string('billable_type')->nullable();
             $table->unsignedSmallInteger('provider_id');
             $table->string('token', 255);
             $table->timestamps();
@@ -39,7 +41,7 @@ class CreateBasePaymentTables extends Migration
 
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('wallet_id');
             $table->string('token', 255);
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
@@ -50,7 +52,7 @@ class CreateBasePaymentTables extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('customer_id')->references('id')->on('payment_customers')->onDelete('cascade');
+            $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('cascade');
             $table->foreign('type_id')->references('id')->on('payment_types')->onDelete('cascade');
         });
     }
@@ -64,7 +66,7 @@ class CreateBasePaymentTables extends Migration
     {
         Schema::dropIfExists('payment_methods');
         Schema::dropIfExists('payment_types');
-        Schema::dropIfExists('payment_customers');
+        Schema::dropIfExists('wallets');
         Schema::dropIfExists('payment_providers');
     }
 }

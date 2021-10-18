@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentMethodFactory;
 
-class PaymentMethod extends Model implements \rkujawa\LaravelPaymentGateway\Contracts\PaymentType
+class PaymentMethod extends Model
 {
     use SoftDeletes;
     use HasFactory;
 
     protected $fillable = [
-        'customer_id',
+        'wallet_id',
         'fallback_id',
         'token',
         'first_name',
@@ -21,7 +21,7 @@ class PaymentMethod extends Model implements \rkujawa\LaravelPaymentGateway\Cont
         'last_digits',
         'exp_month',
         'exp_year',
-        'type_id',
+        'type',
         'created_at',
     ];
 
@@ -66,9 +66,9 @@ class PaymentMethod extends Model implements \rkujawa\LaravelPaymentGateway\Cont
         return $this->exp_month . $seperator . $this->exp_year;
     }
 
-    public function paymentCustomer()
+    public function wallet()
     {
-        return $this->belongsTo(PaymentCustomer::class);
+        return $this->belongsTo(Wallet::class);
     }
 
     public function fallback()
@@ -87,10 +87,5 @@ class PaymentMethod extends Model implements \rkujawa\LaravelPaymentGateway\Cont
             'firstName' => $this->firstName,
             'lastName' => $this->lastName,
         ];
-    }
-
-    public function getPaymentType(): string
-    {
-        return static::TOKEN;
     }
 }

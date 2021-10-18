@@ -4,21 +4,20 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentCustomerFactory;
-use rkujawa\LaravelPaymentGateway\Contracts\Buyer;
+use rkujawa\LaravelPaymentGateway\Database\Factories\WalletFactory;
 
-class PaymentCustomer extends Model
+class Wallet extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['provider_id', 'token'];
-    protected $hidden = ['token'];
-
-    protected $client = [
-        'model' => Buyer::class,// substitution contract
-        'id' => 'id'
+    protected $fillable = [
+        'billable_type',
+        'billable_id',
+        'payment_provider_id',
+        'token',
     ];
+    
+    protected $hidden = ['token'];
 
     /**
      * Create a new factory instance for the model.
@@ -27,12 +26,12 @@ class PaymentCustomer extends Model
      */
     protected static function newFactory()
     {
-        return PaymentCustomerFactory::new();
+        return WalletFactory::new();
     }
 
-    public function client()
+    public function billable()
     {
-        return $this->belongsTo($this->client['model'], 'client_id', $this->client['id']);
+        return $this->morphTo();
     }
 
     public function paymentProvider()

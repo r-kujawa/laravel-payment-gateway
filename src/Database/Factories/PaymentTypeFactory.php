@@ -23,7 +23,7 @@ class PaymentTypeFactory extends Factory
         [
             'name' => 'Mastercard',
             'display_name' => 'MasterCard',
-            'slug' => 'visa',
+            'slug' => 'mastercard',
         ],
         [
             'name' => 'American Express',

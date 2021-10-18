@@ -3,17 +3,17 @@
 namespace rkujawa\LaravelPaymentGateway\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use rkujawa\LaravelPaymentGateway\Models\PaymentCustomer;
+use rkujawa\LaravelPaymentGateway\Models\Wallet;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 
-class PaymentCustomerFactory extends Factory
+class WalletFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = PaymentCustomer::class;
+    protected $model = Wallet::class;
 
     /**
      * Define the model's default state.

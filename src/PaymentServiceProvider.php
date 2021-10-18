@@ -10,17 +10,24 @@ class PaymentServiceProvider extends ServiceProvider
     public function boot()
     {
         if ($this->app->runningInConsole()) {
+            $this->vendorPublish();
             $this->registerPublishing();
             $this->commands([
                 AddPaymentType::class,
             ]);
         }
-
-        $this->registerResources();
     }
 
     public function register()
     {
+
+    }
+
+    protected function vendorPublish()
+    {
+        $this->publishes([
+            __DIR__ . '/config/payment.php' => config_path('payment.php'),
+        ], 'payment-config');
         $this->mergeConfigFrom(
             __DIR__.'/../config/payment.php', 'payment'
         );
