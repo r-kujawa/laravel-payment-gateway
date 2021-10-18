@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaymentRefund extends Model
 {
-    protected $fillable = ['gateway_refund_id', 'payment_transaction_id', 'amount', 'payload', 'created_at'];
+    protected $fillable = ['provider_refund_id', 'payment_transaction_id', 'amount', 'payload', 'created_at'];
 
     public function paymentTransactions()
     {

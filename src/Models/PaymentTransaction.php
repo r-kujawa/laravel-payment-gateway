@@ -13,7 +13,7 @@ class PaymentTransaction extends Model
         'created_at',
         'payment_method_id',
         'payment_provider_id',
-        'gateway_transaction_id',
+        'provider_transaction_id',
     ];
 
     public function paymentMethod()
