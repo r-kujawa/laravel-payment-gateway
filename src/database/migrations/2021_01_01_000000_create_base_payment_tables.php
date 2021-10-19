@@ -60,9 +60,9 @@ class CreateBasePaymentTables extends Migration
             $table->bigIncrements('id');
             $table->string('provider_transaction_id');
             $table->string('order_id');
-            $table->unsignedInteger('amount');
+            $table->unsignedBigInteger('amount_cents');
             $table->unsignedBigInteger('payment_method_id');
-            $table->unsignedSmallInteger('payment_provider_id');
+            //$table->unsignedSmallInteger('payment_provider_id'); this can be obtained from the payment method
             $table->integer('status');
             $table->json('payload');
             $table->timestamp('created_at')->useCurrent();
@@ -76,9 +76,10 @@ class CreateBasePaymentTables extends Migration
 
         Schema::create('payment_refunds', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('provider_refund_id');
+            $table->string('provider_refund_id');
             $table->unsignedBigInteger('payment_transaction_id');
-            $table->unsignedInteger('amount');
+            $table->unsignedBigInteger('amount_cents');
+            $table->enum('type', ['void', 'refund']);
             $table->json('payload');
             $table->timestamp('created_at')->useCurrent();
 
