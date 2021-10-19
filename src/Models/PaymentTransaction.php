@@ -25,4 +25,9 @@ class PaymentTransaction extends Model
     {
         return $this->belongsTo(PaymentProvider::class);
     }
+
+    public function getAmountAttribute()
+    {
+        return $this->amount_cents / 100; //this can be determined by config depending on currency
+    }
 }
