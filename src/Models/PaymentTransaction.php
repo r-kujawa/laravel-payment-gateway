@@ -2,19 +2,28 @@
 
 namespace rkujawa\LaravelPaymentGateway\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use rkujawa\LaravelPaymentGateway\database\Factories\PaymentTransactionFactory;
 
 class PaymentTransaction extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'amount',
         'payload',
         'order_id',
         'created_at',
+        'amount_cents',
         'payment_method_id',
-        'payment_provider_id',
+        //'payment_provider_id',
         'provider_transaction_id',
     ];
+
+    public static function newFactory()
+    {
+        return PaymentTransactionFactory::new();
+    }
 
     public function paymentMethod()
     {
@@ -28,6 +37,6 @@ class PaymentTransaction extends Model
 
     public function getAmountAttribute()
     {
-        return $this->amount_cents / 100; //this can be determined by config depending on currency
+        return $this->amount_cents / 100; //this can be determined by config depending on a currency
     }
 }
