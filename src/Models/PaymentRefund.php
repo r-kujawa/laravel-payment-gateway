@@ -2,10 +2,14 @@
 
 namespace rkujawa\LaravelPaymentGateway\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use rkujawa\LaravelPaymentGateway\database\Factories\PaymentRefundFactory;
 
 class PaymentRefund extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'payment_transaction_id',
         'provider_refund_id',
@@ -14,6 +18,11 @@ class PaymentRefund extends Model
         'payload',
         'type'
     ];
+
+    public static function newFactory()
+    {
+        return PaymentRefundFactory::new();
+    }
 
     public function paymentTransactions()
     {

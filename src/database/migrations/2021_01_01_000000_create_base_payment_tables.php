@@ -67,7 +67,7 @@ class CreateBasePaymentTables extends Migration
             $table->json('payload');
             $table->timestamp('created_at')->useCurrent();
 
-            $table->foreign('payment_provider_id')->references('id')->on('payment_providers');
+            //$table->foreign('payment_provider_id')->references('id')->on('payment_providers');
             $table->foreign('payment_method_id')
                 ->references('id')
                 ->on('payment_methods')
