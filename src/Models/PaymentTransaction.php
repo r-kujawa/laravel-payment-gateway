@@ -14,11 +14,13 @@ class PaymentTransaction extends Model
         'payload',
         'order_id',
         'created_at',
+        'status_code',
         'amount_cents',
         'payment_method_id',
         //'payment_provider_id',
         'provider_transaction_id',
     ];
+    public $timestamps = false;
 
     public static function newFactory()
     {
@@ -30,13 +32,18 @@ class PaymentTransaction extends Model
         return $this->belongsTo(PaymentMethod::class);
     }
 
-    public function paymentProvider()
+    /*public function paymentProvider()
     {
         return $this->belongsTo(PaymentProvider::class);
-    }
+    }*/
 
     public function getAmountAttribute()
     {
         return $this->amount_cents / 100; //this can be determined by config depending on a currency
+    }
+
+    public function setAmountAttribute($value)
+    {
+        $this->attributes['amount_cents'] = $value * 100;
     }
 }
