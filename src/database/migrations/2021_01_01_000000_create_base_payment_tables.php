@@ -63,7 +63,7 @@ class CreateBasePaymentTables extends Migration
             $table->unsignedBigInteger('amount_cents');
             $table->unsignedBigInteger('payment_method_id');
             //$table->unsignedSmallInteger('payment_provider_id'); this can be obtained from the payment method
-            $table->integer('status');
+            $table->integer('status_code');
             $table->json('payload');
             $table->timestamp('created_at')->useCurrent();
 
@@ -80,6 +80,7 @@ class CreateBasePaymentTables extends Migration
             $table->unsignedBigInteger('payment_transaction_id');
             $table->unsignedBigInteger('amount_cents');
             $table->enum('type', ['void', 'refund']);
+            $table->integer('status_code');
             $table->json('payload');
             $table->timestamp('created_at')->useCurrent();
 

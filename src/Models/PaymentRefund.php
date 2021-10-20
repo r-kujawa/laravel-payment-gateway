@@ -11,12 +11,13 @@ class PaymentRefund extends Model
     use HasFactory;
 
     protected $fillable = [
-        'payment_transaction_id',
-        'provider_refund_id',
-        'amount_cents',
-        'created_at',
+        'type',
         'payload',
-        'type'
+        'created_at',
+        'status_code',
+        'amount_cents',
+        'provider_refund_id',
+        'payment_transaction_id',
     ];
 
     public static function newFactory()
@@ -24,7 +25,7 @@ class PaymentRefund extends Model
         return PaymentRefundFactory::new();
     }
 
-    public function paymentTransactions()
+    public function paymentTransaction()
     {
         return $this->belongsTo(PaymentTransaction::class);
     }
@@ -32,5 +33,10 @@ class PaymentRefund extends Model
     public function getAmountAttribute()
     {
         return $this->amount_cents / 100;//this can be determined by config depending on currency
+    }
+
+    public function setAmountAttribute($value)
+    {
+        $this->attributes['amount_cents'] = $value * 100;
     }
 }
