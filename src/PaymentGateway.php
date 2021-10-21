@@ -80,7 +80,7 @@ abstract class PaymentGateway
     protected function getProvider()
     {
         if (! isset($this->config['provider'])) {
-            return strtolower(
+            $this->config['provider'] = strtolower(
                 str_replace(
                     'PaymentGateway',
                     '',
@@ -118,9 +118,11 @@ abstract class PaymentGateway
             throw new \Exception('Unsupported merchant; ' . $merchant . ' for ' . $this->provider . '.');
         }
 
-        if (! isset($this->config['merchant']) || $this->config['merchant'] !== $merchant) {
-            $this->config['merchant'] = $merchant;
+        $resetRequest = isset($this->config['merchant']);
 
+        $this->config['merchant'] = $merchant;
+
+        if ($resetRequest) {
             $this->setRequest();
         }
     }
