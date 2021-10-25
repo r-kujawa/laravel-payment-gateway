@@ -33,6 +33,27 @@ class PaymentRefundTest extends TestCase
     }
 
     /** @test */
+    public function a_refund_can_be_created_from_model_instance()
+    {
+        $transaction = PaymentTransaction::inRandomOrder()->firstOr(function () {
+            return PaymentTransaction::factory()->create();
+        });
+
+        $refund = new PaymentRefund();
+        $refund->type = PaymentRefund::TYPE_VOID;
+        $refund->payload = '{}';
+        $refund->status_code = 69; //tbd;
+        $refund->amount_cents = 9900;
+        $refund->provider_refund_id = 'test_' . random_int(1, 9999) ;
+        $refund->payment_transaction_id = $transaction->id;
+
+        $this->assertTrue($refund->save());
+        $savedRefund = PaymentRefund::find($refund->id);
+        $this->assertNotNull($savedRefund);
+        $this->assertNotNull($savedRefund->created_at);
+    }
+
+    /** @test */
     public function a_refund_belongs_to_a_transaction()
     {
         $refund = PaymentRefund::factory()->make();

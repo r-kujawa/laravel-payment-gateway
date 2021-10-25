@@ -5,10 +5,11 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use rkujawa\LaravelPaymentGateway\database\Factories\PaymentTransactionFactory;
+use rkujawa\LaravelPaymentGateway\Traits\AmountConverter;
 
 class PaymentTransaction extends Model
 {
-    use HasFactory;
+    use HasFactory, AmountConverter;
 
     protected $fillable = [
         'payload',
@@ -36,14 +37,4 @@ class PaymentTransaction extends Model
     {
         return $this->belongsTo(PaymentProvider::class);
     }*/
-
-    public function getAmountAttribute()
-    {
-        return $this->amount_cents / 100; //this can be determined by config depending on a currency
-    }
-
-    public function setAmountAttribute($value)
-    {
-        $this->attributes['amount_cents'] = $value * 100;
-    }
 }

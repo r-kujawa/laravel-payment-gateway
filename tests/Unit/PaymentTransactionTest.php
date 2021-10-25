@@ -33,6 +33,27 @@ class PaymentTransactionTest extends TestCase
     }
 
     /** @test */
+    public function a_transaction_can_be_created_from_model_instance()
+    {
+        $paymentMethod = PaymentMethod::factory()->create();
+        $transaction = new PaymentTransaction();
+        $transaction->amount = 99;
+        $transaction->payload = '{}';
+        $transaction->payment_method_id = $paymentMethod->id;
+        $transaction->status_code = 69; //tbd
+        $transaction->provider_transaction_id = 'test_' . random_int(0, 99999);
+        $transaction->save();
+
+        $this->assertNotNull($transaction->id);
+        $this->assertNotNull($transaction->amount_cents);
+        $this->assertEquals(99 * 100, $transaction->amount_cents);
+
+        $transactionSaved = PaymentTransaction::find($transaction->id);
+        $this->assertNotNull($transactionSaved);
+        $this->assertNotNull($transactionSaved->created_at);
+    }
+
+    /** @test */
     public function a_transaction_has_one_payment_method()
     {
         $transaction = PaymentTransaction::factory()->make();

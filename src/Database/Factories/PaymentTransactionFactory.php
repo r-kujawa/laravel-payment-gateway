@@ -25,7 +25,7 @@ class PaymentTransactionFactory extends Factory
      */
     public function definition()
     {
-        $paymentMethod = PaymentMethod::firstOr(function () {
+        $paymentMethod = PaymentMethod::inRandomOrder()->firstOr(function () {
             return PaymentMethod::factory()->create();
         });
 
