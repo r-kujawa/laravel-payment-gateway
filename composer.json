@@ -15,7 +15,8 @@
       "ext-json": "*"
     },
     "require": {
-        "stymiee/authnetjson": "~4.1"
+        "stymiee/authnetjson": "~4.1",
+      "ext-curl": "*"
     },
     "autoload": {
         "psr-4": {
