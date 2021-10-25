@@ -5,16 +5,18 @@ namespace rkujawa\LaravelPaymentGateway;
 use Illuminate\Support\Facades\App;
 use rkujawa\LaravelPaymentGateway\Traits\SimulateAttributes;
 
+use function PHPUnit\Framework\isNull;
+
 abstract class PaymentGateway
 {
     use SimulateAttributes;
 
     /**
-     * The http request client.
+     * The http client.
      *
      * @var mixed
      */
-    protected $request;
+    protected $client;
 
     /**
      * The payment gateway configuration variables.
@@ -31,7 +33,7 @@ abstract class PaymentGateway
             return;
         }
 
-        $this->request = $this->setRequest();
+        $this->setClient();
     }
 
     /**
@@ -45,13 +47,13 @@ abstract class PaymentGateway
     }
 
     /**
-     * Excecutes the provider specific merchantRequest function by injecting the arguments of the current provider.
+     * Set the http client for future requests.
      *
-     * @return mixed Provider specific request.
+     * @return void
      */
-    protected function setRequest()
+    protected function setClient()
     {
-        return $this->merchantRequest($this->merchantArgs());
+        $this->client = $this->clientConfig($this->clientArgs());
     }
 
     /**
@@ -60,14 +62,14 @@ abstract class PaymentGateway
      * @param array|mixed $args
      * @return mixed Provider specific request.
      */
-    abstract protected function merchantRequest($args);
+    abstract protected function clientConfig($args);
 
     /**
      * Defines the default arguments to be passed into the merchantRequest function based on the 'payments' config file.
      *
      * @return array All necesary merchant specific arguments to build the request.
      */
-    protected function merchantArgs()
+    protected function clientArgs()
     {
         return config('payment.providers.' . $this->provider . '.merchants.' . $this->merchant);
     }
@@ -80,7 +82,22 @@ abstract class PaymentGateway
     protected function getProvider()
     {
         if (! isset($this->config['provider'])) {
-            $this->config['provider'] = strtolower(
+            $this->setProvider();
+        }
+
+        return $this->config['provider'];
+    }
+
+    /**
+     * Set the specified provider.
+     *
+     * @param string|null $provider
+     * @return void
+     */
+    protected function setProvider($provider = null)
+    {
+        if (is_null($provider)) {
+            $provider = strtolower(
                 str_replace(
                     'PaymentGateway',
                     '',
@@ -89,7 +106,7 @@ abstract class PaymentGateway
             );
         }
 
-        return $this->config['provider'];
+        $this->config['provider'] = $provider;
     }
 
     /**
@@ -100,7 +117,7 @@ abstract class PaymentGateway
     protected function getMerchant()
     {
         if (! isset($this->config['merchant'])) {
-            $this->setMerchant(config('payment.providers.' . $this->provider . '.defaults.merchant'));
+            $this->setMerchant();
         }
 
         return $this->config['merchant'];
@@ -109,11 +126,15 @@ abstract class PaymentGateway
     /**
      * Set the specified merchant.
      *
-     * @param string $merchant
+     * @param string|null $merchant
      * @return void
      */
-    protected function setMerchant($merchant)
+    protected function setMerchant($merchant = null)
     {
+        if (is_null($merchant)) {
+            $merchant = config('payment.providers.' . $this->provider . '.defaults.merchant');
+        }
+
         if (! $this->verifyMerchant($merchant)) {
             throw new \Exception('Unsupported merchant; ' . $merchant . ' for ' . $this->provider . '.');
         }
@@ -123,7 +144,7 @@ abstract class PaymentGateway
         $this->config['merchant'] = $merchant;
 
         if ($resetRequest) {
-            $this->setRequest();
+            $this->setClient();
         }
     }
 
