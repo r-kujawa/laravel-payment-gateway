@@ -5,10 +5,16 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use rkujawa\LaravelPaymentGateway\database\Factories\PaymentRefundFactory;
+use rkujawa\LaravelPaymentGateway\Traits\AmountConverter;
 
 class PaymentRefund extends Model
 {
-    use HasFactory;
+    use HasFactory, AmountConverter;
+
+    public const TYPE_VOID = 'void';
+    public const TYPE_REFUND = 'refund';
+
+    public $timestamps = false;
 
     protected $fillable = [
         'type',
@@ -28,15 +34,5 @@ class PaymentRefund extends Model
     public function paymentTransaction()
     {
         return $this->belongsTo(PaymentTransaction::class);
-    }
-
-    public function getAmountAttribute()
-    {
-        return $this->amount_cents / 100;//this can be determined by config depending on currency
-    }
-
-    public function setAmountAttribute($value)
-    {
-        $this->attributes['amount_cents'] = $value * 100;
     }
 }

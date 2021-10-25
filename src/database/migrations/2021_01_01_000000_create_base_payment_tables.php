@@ -59,12 +59,13 @@ class CreateBasePaymentTables extends Migration
         Schema::create('payment_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('provider_transaction_id');
-            $table->string('order_id');
             $table->unsignedBigInteger('amount_cents');
             $table->unsignedBigInteger('payment_method_id');
             //$table->unsignedSmallInteger('payment_provider_id'); this can be obtained from the payment method
             $table->integer('status_code');
             $table->json('payload');
+            $table->string('order_id')->nullable();
+            $table->json('references')->nullable();
             $table->timestamp('created_at')->useCurrent();
 
             //$table->foreign('payment_provider_id')->references('id')->on('payment_providers');
@@ -98,11 +99,11 @@ class CreateBasePaymentTables extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('payment_refunds');
+        Schema::dropIfExists('payment_transactions');
         Schema::dropIfExists('payment_methods');
         Schema::dropIfExists('payment_types');
         Schema::dropIfExists('wallets');
         Schema::dropIfExists('payment_providers');
-        Schema::dropIfExists('payment_transactions');
-        Schema::dropIfExists('payment_refunds');
     }
 }
