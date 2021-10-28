@@ -1,8 +1,8 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\Interfaces\Response;
+namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
-interface PaymentTransactionContract extends PaymentGatewayContract
+interface PaymentProcessorResponse extends PaymentResponse
 {
     /**
      * @return string
@@ -10,7 +10,7 @@ interface PaymentTransactionContract extends PaymentGatewayContract
     public function transactionId();
 
     /**
-     * @return float
+     * @return int
      */
     public function transactionAmount();
 

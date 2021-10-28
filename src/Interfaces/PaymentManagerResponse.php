@@ -1,8 +1,8 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\Interfaces\Response;
+namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
-interface PaymentManagementContract extends PaymentGatewayContract
+interface PaymentManagerResponse extends PaymentResponse
 {
     /**
      * @return string
