@@ -12,16 +12,20 @@ class PaymentTransaction extends Model
     use HasFactory, AmountConverter;
 
     protected $fillable = [
-        'payload',
-        'order_id',
-        'created_at',
-        'status_code',
+        'provider_id',
+        'reference_id',
         'amount_cents',
+        'currency',
         'payment_method_id',
-        //'payment_provider_id',
-        'provider_transaction_id',
+        'status_code',
+        'payload',
+        'references',
     ];
-    public $timestamps = false;
+
+    protected $casts = [
+        'payload' => 'array',
+        'references' => 'array',
+    ];
 
     public static function newFactory()
     {
@@ -33,8 +37,8 @@ class PaymentTransaction extends Model
         return $this->belongsTo(PaymentMethod::class);
     }
 
-    /*public function paymentProvider()
+    public function provider()
     {
         return $this->belongsTo(PaymentProvider::class);
-    }*/
+    }
 }

@@ -11,19 +11,21 @@ class PaymentRefund extends Model
 {
     use HasFactory, AmountConverter;
 
-    public const TYPE_VOID = 'void';
-    public const TYPE_REFUND = 'refund';
-
-    public $timestamps = false;
+    const VOID = 'void';
+    const REFUND = 'refund';
 
     protected $fillable = [
-        'type',
-        'payload',
-        'created_at',
-        'status_code',
+        'reference_id',
+        'transaction_id',
         'amount_cents',
-        'provider_refund_id',
-        'payment_transaction_id',
+        'currency',
+        'type',
+        'status_code',
+        'payload',
+    ];
+
+    protected $casts = [
+        'payload' => 'array',
     ];
 
     public static function newFactory()
@@ -31,7 +33,7 @@ class PaymentRefund extends Model
         return PaymentRefundFactory::new();
     }
 
-    public function paymentTransaction()
+    public function transaction()
     {
         return $this->belongsTo(PaymentTransaction::class);
     }
