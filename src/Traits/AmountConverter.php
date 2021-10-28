@@ -6,7 +6,7 @@ trait AmountConverter
 {
     public function getAmountAttribute()
     {
-        return $this->amount_cents / 100; //this can be determined by config depending on a currency
+        return ($this->attributes['amount_cents'] ?? 0) / 100;
     }
 
     public function setAmountAttribute($value)

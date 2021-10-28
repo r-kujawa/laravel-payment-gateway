@@ -1,6 +1,6 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\database\Factories;
+namespace rkujawa\LaravelPaymentGateway\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use rkujawa\LaravelPaymentGateway\Models\PaymentRefund;
@@ -8,9 +8,6 @@ use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction;
 
 class PaymentRefundFactory extends Factory
 {
-    public const DEFAULT_AMOUNT_CENTS = 9900;
-    public const DEFAULT_AMOUNT_DLLS = 99;
-
     /**
      * The name of the factory's corresponding model.
      *
@@ -19,18 +16,25 @@ class PaymentRefundFactory extends Factory
     protected $model = PaymentRefund::class;
 
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
     public function definition()
     {
-        $paymentTransaction = PaymentTransaction::factory()->create();
+        $paymentTransaction = PaymentTransaction::inRandomOrder()->firstOr(function () {
+            return PaymentTransaction::factory()->create();
+        });
 
         return [
-            'payment_transaction_id' => $paymentTransaction->id,
-            'provider_refund_id' => $this->faker->uuid(),
-            'amount_cents' => self::DEFAULT_AMOUNT_CENTS, //99 dlls
-            'status_code' => 69, //tbd
-            'created_at' => now(),
-            'payload' => '{}',
-            'type' => 'refund'
+            'reference_id' => $this->faker->uuid(),
+            'transaction_id' => $paymentTransaction->id,
+            'amount_cents' => $this->faker->numberBetween(1, 999) * 100,
+            'currency' => $this->faker->currencyCode(),
+            'type' => $this->faker->randomElement([PaymentRefund::VOID, PaymentRefund::REFUND]),
+            'status_code' => 69, // TODO: Determine the status codes.
+            'payload' => [],
         ];
     }
 }
