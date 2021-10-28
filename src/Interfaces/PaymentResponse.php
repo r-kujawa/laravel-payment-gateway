@@ -1,8 +1,8 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\Interfaces\Response;
+namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
-interface PaymentGatewayContract
+interface PaymentResponse
 {
     /**
      * @return bool
