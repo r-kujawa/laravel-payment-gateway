@@ -10,7 +10,7 @@ interface PaymentResponse
     public function isSuccessful();
 
     /**
-     * @return string
+     * @return array
      */
     public function raw();
 
