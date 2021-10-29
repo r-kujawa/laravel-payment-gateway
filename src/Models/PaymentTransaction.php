@@ -14,6 +14,7 @@ class PaymentTransaction extends Model
     protected $fillable = [
         'provider_id',
         'reference_id',
+        'amount',
         'amount_cents',
         'currency',
         'payment_method_id',
