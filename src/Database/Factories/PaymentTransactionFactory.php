@@ -23,16 +23,12 @@ class PaymentTransactionFactory extends Factory
      */
     public function definition()
     {
-        $paymentProvider = PaymentProvider::inRandomOrder()->firstOr(function () {
-            return PaymentProvider::factory()->create();
-        });
-
         $paymentMethod = PaymentMethod::inRandomOrder()->firstOr(function () {
             return PaymentMethod::factory()->create();
         });
 
         return [
-            'provider_id' => $paymentProvider->id,
+            'provider_id' => $paymentMethod->provider->id,
             'reference_id' => $this->faker->uuid(),
             'amount_cents' => $this->faker->numberBetween(1, 999) * 100,
             'currency' => $this->faker->currencyCode(),
