@@ -17,6 +17,7 @@ class PaymentRefund extends Model
     protected $fillable = [
         'reference_id',
         'transaction_id',
+        'amount',
         'amount_cents',
         'currency',
         'type',
