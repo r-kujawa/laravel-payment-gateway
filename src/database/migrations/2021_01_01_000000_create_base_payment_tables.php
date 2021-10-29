@@ -70,7 +70,7 @@ class CreateBasePaymentTables extends Migration
             $table->json('references')->nullable();
             $table->timestamps();
 
-            $table->foreign('payment_provider_id')->references('id')->on('payment_providers');
+            $table->foreign('provider_id')->references('id')->on('payment_providers');
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('set null');
         });
 
@@ -85,7 +85,7 @@ class CreateBasePaymentTables extends Migration
             $table->json('payload');
             $table->timestamps();
 
-            $table->foreign('payment_transaction_id')->references('id')->on('payment_transactions')->onDelete('cascade');
+            $table->foreign('transaction_id')->references('id')->on('payment_transactions')->onDelete('cascade');
         });
     }
 
