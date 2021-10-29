@@ -66,14 +66,14 @@ class PaymentMethod extends Model
         return $this->exp_month . $seperator . $this->exp_year;
     }
 
+    public function getProviderAttribute()
+    {
+        return $this->wallet->provider;
+    }
+
     public function wallet()
     {
         return $this->belongsTo(Wallet::class);
-    }
-
-    public function fallback()
-    {
-        return $this->belongsTo(self::class);
     }
 
     public function transactions()
@@ -84,13 +84,5 @@ class PaymentMethod extends Model
     public static function findByToken(string $token)
     {
         return self::where('token', $token)->first();
-    }
-
-    public function getContactData(): array
-    {
-        return [
-            'firstName' => $this->firstName,
-            'lastName' => $this->lastName,
-        ];
     }
 }

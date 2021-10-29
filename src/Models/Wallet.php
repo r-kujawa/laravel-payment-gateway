@@ -34,7 +34,7 @@ class Wallet extends Model
         return $this->morphTo();
     }
 
-    public function paymentProvider()
+    public function provider()
     {
         return $this->belongsTo(PaymentProvider::class);
     }
