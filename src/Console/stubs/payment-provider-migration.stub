@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
+
+class {{ class }} extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        PaymentProvider::create([
+            'name' => '{{ name }}',
+            'slug' => '{{ slug }}',
+        ]);
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        PaymentProvider::where('slug', '{{ slug }}')->delete();
+    }
+}

@@ -25,6 +25,11 @@ class PaymentProvider extends Model
         return PaymentProviderFactory::new();
     }
 
+    public static function getSlug($name)
+    {
+        return preg_replace('/[^a-z0-9]+/i', '_', trim(strtolower($name)));
+    }
+
     public function wallets()
     {
         return $this->hasMany(Wallet::class, 'provider_id');
