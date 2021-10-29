@@ -8,7 +8,8 @@ use rkujawa\LaravelPaymentGateway\Models\PaymentType;
 
 class PaymentTypeCommandTest extends TestCase
 {
-    public function test_add_payment_type_command_makes_migration()
+    /** @test */
+    public function add_payment_type_command_makes_migration()
     {
         $paymentType = PaymentType::factory()->make();
 
@@ -24,7 +25,8 @@ class PaymentTypeCommandTest extends TestCase
         $this->assertDatabaseHas('payment_types', ['slug' => $paymentType->slug]);
     }
 
-    public function test_add_payment_type_command_runs_migration_when_prompted()
+    /** @test */
+    public function add_payment_type_command_runs_migration_when_prompted()
     {
         $paymentType = PaymentType::factory()->make();
 
@@ -35,7 +37,8 @@ class PaymentTypeCommandTest extends TestCase
         $this->assertDatabaseHas('payment_types', ['slug' => $paymentType->slug]);
     }
 
-    public function test_add_payment_type_command_fails_if_migration_already_exists()
+    /** @test */
+    public function add_payment_type_command_fails_if_migration_already_exists()
     {
         $paymentType = PaymentType::factory()->make();
 
