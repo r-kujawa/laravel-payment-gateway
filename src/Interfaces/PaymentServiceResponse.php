@@ -2,7 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
-interface PaymentResponse
+interface PaymentServiceResponse
 {
     /**
      * @return bool

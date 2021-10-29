@@ -20,7 +20,7 @@ class PaymentService
     private $gateway;
 
     /**
-     * Get or set the payment provider.
+     * Fluent provider setter.
      *
      * @param string $provider
      * @return \rkujawa\LaravelPaymentGateway\PaymentService
@@ -91,7 +91,7 @@ class PaymentService
     }
 
     /**
-     * Get or set the merchant.
+     * Fluent merchant setter.
      *
      * @param string $merchant
      * @return \rkujawa\LaravelPaymentGateway\PaymentService
