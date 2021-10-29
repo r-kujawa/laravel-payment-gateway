@@ -39,6 +39,7 @@ class CreateBasePaymentTables extends Migration
             $table->foreign('provider_id')->references('id')->on('payment_providers')->onDelete('cascade');
         });
 
+        // TODO: Add support for payment methods other than cards.
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('wallet_id');
@@ -53,42 +54,38 @@ class CreateBasePaymentTables extends Migration
             $table->softDeletes();
 
             $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('cascade');
-            $table->foreign('type_id')->references('id')->on('payment_types')->onDelete('cascade');
+            $table->foreign('type_id')->references('id')->on('payment_types');
         });
 
+        // TODO: Choose between linking payment provider direclty vs through payment_methods.
         Schema::create('payment_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('provider_transaction_id');
-            $table->unsignedBigInteger('amount_cents');
-            $table->unsignedBigInteger('payment_method_id');
-            //$table->unsignedSmallInteger('payment_provider_id'); this can be obtained from the payment method
-            $table->integer('status_code');
+            $table->unsignedSmallInteger('provider_id');
+            $table->string('reference_id');
+            $table->unsignedInteger('amount_cents');
+            $table->char('currency', 3)->default('USD');
+            $table->unsignedBigInteger('payment_method_id')->nullable();
+            $table->smallInteger('status_code');
             $table->json('payload');
-            $table->string('order_id')->nullable();
             $table->json('references')->nullable();
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
 
-            //$table->foreign('payment_provider_id')->references('id')->on('payment_providers');
-            $table->foreign('payment_method_id')
-                ->references('id')
-                ->on('payment_methods')
-                ->onDelete('set null');
+            $table->foreign('provider_id')->references('id')->on('payment_providers');
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('set null');
         });
 
         Schema::create('payment_refunds', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('provider_refund_id');
-            $table->unsignedBigInteger('payment_transaction_id');
+            $table->string('reference_id');
+            $table->unsignedBigInteger('transaction_id');
             $table->unsignedBigInteger('amount_cents');
-            $table->enum('type', ['void', 'refund']);
-            $table->integer('status_code');
+            $table->char('currency', 3)->default('USD');
+            $table->string('type'); // void|refund
+            $table->smallInteger('status_code');
             $table->json('payload');
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
 
-            $table->foreign('payment_transaction_id')
-                ->references('id')
-                ->on('payment_transactions')
-                ->onDelete('cascade');
+            $table->foreign('transaction_id')->references('id')->on('payment_transactions')->onDelete('cascade');
         });
     }
 
