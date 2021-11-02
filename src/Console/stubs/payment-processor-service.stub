@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Services\Payment;
+
+use rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcessing;
+
+class {{ name }}PaymentProcessor implements PaymentProcessing
+{
+    public $client;
+
+    public function __construct($config)
+    {
+        //
+    }
+
+    /**
+     * @param array|mixed $data
+     * @param int $amount
+     * @return \rkujawa\LaravelPaymentGateway\Interfaces\Response\PaymentTransactionContract
+     */
+    public function charge($data, $amount)
+    {
+        //
+    }
+
+    /**
+     * TODO: Define the transaction tables and models.
+     * 
+     * @param mixed $paymentTransaction
+     * @return \rkujawa\LaravelPaymentGateway\Interfaces\Response\PaymentTransactionContract
+     */
+    public function void($paymentTransaction)
+    {
+        //
+    }
+
+    /**
+     * TODO: Define the transaction tables and models.
+     * 
+     * @param mixed $paymentTransaction
+     * @param int $amount
+     * @return \rkujawa\LaravelPaymentGateway\Interfaces\Response\PaymentTransactionContract
+     */
+    public function refund($paymentTransaction, $amount)
+    {
+        //
+    }
+}

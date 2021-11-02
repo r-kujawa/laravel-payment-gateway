@@ -5,7 +5,6 @@ namespace rkujawa\LaravelPaymentGateway\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 
 class AddPaymentProvider extends Command
@@ -16,8 +15,11 @@ class AddPaymentProvider extends Command
      * @var string
      */
     protected $signature = 'payment:add-provider
-                            {type : The payment provider name}
-                            {--slug= : The payment provider dev name}';
+                            {provider : The payment provider name}
+                            {--slug= : The payment provider dev name}
+                            {--full : Generate single gateway class}
+                            {--manager : Generate class for payment management}
+                            {--processor : Generate class for payment processing}';
 
     /**
      * The console command description.
@@ -32,13 +34,6 @@ class AddPaymentProvider extends Command
      * @var \Illuminate\Filesystem\Filesystem
      */
     protected $files;
-
-    /**
-     * The name of the migration class to be generated.
-     *
-     * @var string
-     */
-    protected $className;
 
     /**
      * The payment provider attributes to be saved.
@@ -70,104 +65,96 @@ class AddPaymentProvider extends Command
     {
         $this->setProperties();
 
-        $migrationPath = $this->getMigrationPath();
+        $studlySlug = Str::studly($this->slug);
 
-        $this->ensureMigrationDoesntAlreadyExist($migrationPath);
+        if ($this->option('full') || !($this->option('manager') || $this->option('processor'))) {
+            $this->putFile(
+                app_path("Services/Payment/{$studlySlug}PaymentGateway.php"),
+                $this->makeFile(__DIR__ . '/../stubs/payment-gateway-service.stub', ['name' => $studlySlug])
+            );
+        }
 
-        $this->files->put(
-            $this->getMigrationFilePath($migrationPath),
-            $this->getMigrationFileContents($this->getStubFile(), $this->getStubVariables())
-        );
+        if ($this->option('manager')) {
+            $this->putFile(
+                app_path("Services/Payment/{$studlySlug}PaymentManager.php"),
+                $this->makeFile(__DIR__ . '/../stubs/payment-manager-service.stub', ['name' => $studlySlug])
+            );
+        }
 
-        $this->info('The migration to add ' . $this->name . ' payment provider has been generated.');
+        if ($this->option('processor')) {
+            $this->putFile(
+                app_path("Services/Payment/{$studlySlug}PaymentProcessor.php"),
+                $this->makeFile(__DIR__ . '/../stubs/payment-processor-service.stub', ['name' => $studlySlug])
+            );
+        }
 
-        if ($this->confirm('Would you like to run your migration?', true)) {
-            $this->call('migrate', ['--force']);
+        $migrationClass = "Add{$studlySlug}PaymentProvider";
+        $migrationPath = database_path('migrations');
+
+        if ($this->classExists($migrationClass, $migrationPath)) {
+            $this->info('Skipping the migration because ' . $this->name . ' payment provider already exists.');
+        } else {
+            $this->putFile(
+                $this->generateMigrationFilePath($migrationClass, $migrationPath),
+                $this->makeFile(
+                    __DIR__ . '/../stubs/payment-provider-migration.stub',
+                    [
+                        'class' => $migrationClass,
+                        'name' => $this->name,
+                        'slug' => $this->slug,
+                    ]
+                )
+            );
+
+            $this->info('The migration to add ' . $this->name . ' payment provider has been generated.');
+
+            if ($this->confirm('Would you like to run your migration?', true)) {
+                $this->call('migrate', ['--force']);
+            }
         }
     }
 
     /**
-     * Format the payment type's properties.
+     * Format the payment provider's properties.
      *
      * @return void
      */
     protected function setProperties()
     {
-        $this->name = trim($this->argument('type'));
+        $this->name = trim($this->argument('provider'));
         $this->slug = PaymentProvider::getSlug($this->option('slug') ?? $this->name);
-
-        $this->className = $this->getClassName();
     }
 
     /**
-     * Get the class name of a migration name.
+     * Ensure that the given class doesn't exist in the provided directory.
      *
-     * @return string
+     * @param  string  $class
+     * @param  string  $directory
+     * @return boolean
      */
-    protected function getClassName()
+    protected function classExists($class, $directory)
     {
-        return 'Add' . Str::studly($this->slug) . 'PaymentProvider';
-    }
+        $files = $this->files->glob($directory.'/*.php');
 
-    /**
-     * Get the user's migrations directory.
-     *
-     * @return string
-     */
-    protected function getMigrationPath()
-    {
-        return $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'migrations';
-    }
-
-    /**
-     * Ensure that a migration with the given name doesn't already exist.
-     *
-     * @param  string  $name
-     * @param  string  $migrationPath
-     * @return void
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function ensureMigrationDoesntAlreadyExist($migrationPath)
-    {
-        if (! empty($migrationPath)) {
-            $migrationFiles = $this->files->glob($migrationPath.'/*.php');
-
-            foreach ($migrationFiles as $migrationFile) {
-                $this->files->requireOnce($migrationFile);
-            }
+        foreach ($files as $file) {
+            $this->files->requireOnce($file);
         }
 
-        if (class_exists($this->className)) {
-            throw new InvalidArgumentException("{$this->className}::class already exists.");
-        }
+        return class_exists($class);
     }
 
     /**
-     * Get the full migration path and file name.
+     * Get the contents of the file.
      *
-     * @param string $migrationPath
-     * @return void
+     * @param string $stub
+     * @param array $data
+     * @return string
      */
-    protected function getMigrationFilePath($migrationPath)
+    protected function makeFile($stub, $data)
     {
-        $fileName = now()->format('Y_m_d_His') . '_' . Str::snake($this->className) . '.php';
+        $file = file_get_contents($stub);
 
-        return $migrationPath . DIRECTORY_SEPARATOR . $fileName;
-    }
-
-    /**
-     * Get the contents of the migration file.
-     *
-     * @param string $stubFile
-     * @param array $stubVariables
-     * @return void
-     */
-    protected function getMigrationFileContents($stubFile, $stubVariables)
-    {
-        $file = file_get_contents($stubFile);
-
-        foreach ($stubVariables as $search => $replace)
+        foreach ($data as $search => $replace)
         {
             $file = Str::replace('{{ ' . $search . ' }}', $replace, $file);
         }
@@ -176,26 +163,31 @@ class AddPaymentProvider extends Command
     }
 
     /**
-     * Get the stub file's full path.
+     * Put the given file in the specified path.
      *
-     * @return string
+     * @param string $path
+     * @param string $file
+     * @return void
      */
-    protected function getStubFile()
+    protected function putFile($path, $file)
     {
-        return __DIR__ . '/../stubs/payment-provider-migration.stub';
+        $directory = collect(explode('/', $path, -1))->join('/');
+        $this->files->ensureDirectoryExists($directory);
+
+        $this->files->put($path, $file);
     }
 
     /**
-     * Get the variables to fill the stub file.
+     * Generate the full migration file path.
      *
-     * @return array
+     * @param string $migrationClass
+     * @param string $migrationPath
+     * @return string
      */
-    protected function getStubVariables()
+    protected function generateMigrationFilePath($class, $path)
     {
-        return [
-            'class' => $this->className,
-            'name' => $this->name,
-            'slug' => $this->slug,
-        ];
+        $fileName = now()->format('Y_m_d_His') . '_' . Str::snake($class) . '.php';
+
+        return "{$path}/{$fileName}";
     }
 }
