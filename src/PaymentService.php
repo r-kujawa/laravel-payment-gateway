@@ -3,21 +3,20 @@
 namespace rkujawa\LaravelPaymentGateway;
 
 use Exception;
+use Illuminate\Support\Str;
 use rkujawa\LaravelPaymentGateway\Traits\SimulateAttributes;
 
 class PaymentService
 {
     use SimulateAttributes;
 
-    const FULL = 'full';
-    const PROCESSOR = 'processor';
     const MANAGER = 'manager';
-
-    protected $service = 'full';
+    const PROCESSOR = 'processor';
 
     private $provider;
     private $merchant;
-    private $gateway;
+
+    private $gateway = [];
 
     /**
      * Fluent provider setter.
@@ -62,7 +61,7 @@ class PaymentService
 
         $this->provider = $provider;
 
-        $this->gateway = null;
+        $this->gateway = [];
         $this->merchant = null;
     }
 
@@ -131,7 +130,7 @@ class PaymentService
 
         $this->merchant = $merchant;
 
-        $this->gateway = null;
+        $this->gateway = [];
     }
 
     /**
@@ -141,7 +140,7 @@ class PaymentService
      */
     public function getDefaultMerchant()
     {
-        return config('payment.providers.' . $this->getProvider() . '.defaults.merchant');
+        return config('payment.providers.' . $this->getProvider() . '.merchants')[0];
     }
 
     /**
@@ -154,34 +153,66 @@ class PaymentService
     {
         return in_array(
             $merchant,
-            array_keys(config('payment.providers.' . $this->getProvider() . '.merchants'))
+            config('payment.providers.' . $this->getProvider() . '.merchants')
         );
     }
 
-    protected function getGateway()
+    protected function getManager()
     {
-        if (! isset($this->gateway)) {
-            $this->prepareGateway();
+        $this->ensureServiceIsAvailable(self::MANAGER);
+
+        if (! isset($this->gateway['manager'])) {
+            $this->gateway['manager'] = $this->makeManager();
         }
 
-        return $this->gateway;
+        return $this->gateway['manager'];
     }
 
-    /**
-     * Set the payment gateway.
-     *
-     * @return void
-     */
-    private function prepareGateway()
+    private function makeManager()
     {
-        $gateway = config('payment.providers.' . $this->getProvider() . '.class');
+        $manager = config('payment.providers.' . $this->getProvider() . '.class');
 
-        if(is_array($gateway)) {
-            $gateway = $gateway[$this->service];
+        if (is_array($manager)) {
+            $manager = $manager['manager'] ?? null;
         }
 
-        $config = config('payment.providers.' . $this->getProvider() . '.merchants.' . $this->getMerchant());
+        if(is_null($manager)) {
+            $manager = '\\App\\Services\\Payment\\' . Str::studly($this->getProvider()) . 'PaymentManager';
+        }
 
-        $this->gateway = new $gateway($config);
+        return new $manager($this->getMerchant());
+    }
+
+    protected function getProcessor()
+    {
+        $this->ensureServiceIsAvailable(self::PROCESSOR);
+
+        if (! isset($this->gateway['processor'])) {
+            $this->gateway['processor'] = $this->makeProcessor();
+        }
+
+        return $this->gateway['processor'];
+    }
+
+    private function makeProcessor()
+    {
+        $processor = config('payment.providers.' . $this->getProvider() . '.class');
+
+        if (is_array($processor)) {
+            $processor = $processor['processor'] ?? null;
+        }
+
+        if (is_null($processor)) {
+            $processor = '\\App\\Services\\Payment\\' . Str::studly($this->getProvider()) . 'PaymentProcessor';
+        }
+
+        return new $processor($this->getMerchant());
+    }
+
+    private function ensureServiceIsAvailable($service)
+    {
+        if (isset($this->service) && $this->service !== $service) {
+            throw new Exception('The ' . $this->service . ' service does not support this action.');
+        }
     }
 }
