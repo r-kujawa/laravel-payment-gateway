@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Services\Payment;
+
+class {{ name }}PaymentGateway
+{
+    protected $client;
+
+    public function __construct($merchant = null)
+    {
+        // Set the http client.
+    }
+}

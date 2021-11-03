@@ -4,15 +4,8 @@ namespace App\Services\Payment;
 
 use rkujawa\LaravelPaymentGateway\Interfaces\PaymentManagement;
 
-class {{ name }}PaymentManager implements PaymentManagement
+class {{ name }}PaymentManager extends {{ name }}PaymentGateway implements PaymentManagement
 {
-    public $client;
-
-    public function __construct($config)
-    {
-        //
-    }
-
     /**
      * @param \rkujawa\LaravelPaymentGateway\Interfaces\BillableContract $billable
      * @param array|mixed $data

@@ -17,7 +17,6 @@ class AddPaymentProvider extends Command
     protected $signature = 'payment:add-provider
                             {provider : The payment provider name}
                             {--slug= : The payment provider dev name}
-                            {--full : Generate single gateway class}
                             {--manager : Generate class for payment management}
                             {--processor : Generate class for payment processing}';
 
@@ -67,21 +66,21 @@ class AddPaymentProvider extends Command
 
         $studlySlug = Str::studly($this->slug);
 
-        if ($this->option('full') || !($this->option('manager') || $this->option('processor'))) {
-            $this->putFile(
-                app_path("Services/Payment/{$studlySlug}PaymentGateway.php"),
-                $this->makeFile(__DIR__ . '/../stubs/payment-gateway-service.stub', ['name' => $studlySlug])
-            );
-        }
+        $this->putFile(
+            app_path("Services/Payment/{$studlySlug}PaymentGateway.php"),
+            $this->makeFile(__DIR__ . '/../stubs/payment-gateway.stub', ['name' => $studlySlug])
+        );
 
-        if ($this->option('manager')) {
+        $all = ! ($this->option('manager') || $this->option('processor'));
+
+        if ($all || $this->option('manager')) {
             $this->putFile(
                 app_path("Services/Payment/{$studlySlug}PaymentManager.php"),
                 $this->makeFile(__DIR__ . '/../stubs/payment-manager-service.stub', ['name' => $studlySlug])
             );
         }
 
-        if ($this->option('processor')) {
+        if ($all || $this->option('processor')) {
             $this->putFile(
                 app_path("Services/Payment/{$studlySlug}PaymentProcessor.php"),
                 $this->makeFile(__DIR__ . '/../stubs/payment-processor-service.stub', ['name' => $studlySlug])
