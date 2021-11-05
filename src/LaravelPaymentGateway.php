@@ -6,13 +6,6 @@ use rkujawa\LaravelPaymentGateway\Interfaces\PaymentGateway as PaymentGateway;
 
 class LaravelPaymentGateway extends PaymentService implements PaymentGateway
 {
-    protected $service;
-
-    public function __construct($service = null)
-    {
-        $this->service = $service;
-    }
-
     /**
      * @param \rkujawa\LaravelPaymentGateway\Interfaces\BillableContract $billable
      * @param array|mixed $data
