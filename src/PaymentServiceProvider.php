@@ -6,8 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentProvider;
 use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentType;
 use rkujawa\LaravelPaymentGateway\Interfaces\PaymentGateway;
-use rkujawa\LaravelPaymentGateway\Interfaces\PaymentManagement;
-use rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcessing;
+use rkujawa\LaravelPaymentGateway\Interfaces\PaymentManager;
+use rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcesser;
 
 class PaymentServiceProvider extends ServiceProvider
 {
@@ -37,11 +37,11 @@ class PaymentServiceProvider extends ServiceProvider
             return new LaravelPaymentGateway();
         });
 
-        $this->app->bind(PaymentManagement::class, function ($app) {
+        $this->app->bind(PaymentManager::class, function ($app) {
             return new LaravelPaymentGateway(PaymentService::MANAGER);
         });
 
-        $this->app->bind(PaymentProcessing::class, function ($app) {
+        $this->app->bind(PaymentProcesser::class, function ($app) {
             return new LaravelPaymentGateway(PaymentService::PROCESSOR);
         });
     }
