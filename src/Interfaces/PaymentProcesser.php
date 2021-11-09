@@ -2,7 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
-interface PaymentProcessing
+interface PaymentProcesser
 {
     /**
      * @param array|mixed $data
