@@ -41,5 +41,9 @@ class PaymentServiceProvider extends ServiceProvider
         $this->app->bind(PaymentManager::class, function ($app) {
             return new PaymentService(PaymentService::MANAGER);
         });
+
+        $this->app->singleton('PaymentService', function ($app) {
+            return new PaymentGateway(PaymentService::FULL);
+        });
     }
 }
