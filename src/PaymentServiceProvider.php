@@ -3,9 +3,11 @@
 namespace rkujawa\LaravelPaymentGateway;
 
 use Illuminate\Support\ServiceProvider;
+use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentProvider;
 use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentType;
+use rkujawa\LaravelPaymentGateway\Interfaces\PaymentGateway;
 use rkujawa\LaravelPaymentGateway\Interfaces\PaymentManager;
-use rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcessor;
+use rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcesser;
 
 class PaymentServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,7 @@ class PaymentServiceProvider extends ServiceProvider
             $this->vendorPublish();
             $this->commands([
                 AddPaymentType::class,
+                AddPaymentProvider::class,
             ]);
         }
     }
@@ -31,19 +34,19 @@ class PaymentServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(PaymentGateway::class, function ($app) {
-            return new PaymentGateway(PaymentService::FULL);
-        });
-
-        $this->app->bind(PaymentProcessor::class, function ($app) {
-            return new PaymentService(PaymentService::PROCESSOR);
+            return new LaravelPaymentGateway();
         });
 
         $this->app->bind(PaymentManager::class, function ($app) {
-            return new PaymentService(PaymentService::MANAGER);
+            return new LaravelPaymentGateway(PaymentService::MANAGER);
         });
 
-        $this->app->singleton('PaymentService', function ($app) {
-            return new PaymentGateway(PaymentService::FULL);
+        $this->app->bind(PaymentProcesser::class, function ($app) {
+            return new LaravelPaymentGateway(PaymentService::PROCESSOR);
+        });
+
+        $this->app->singleton('PaymentGateway', function ($app) {
+            return new LaravelPaymentGateway();
         });
     }
 }

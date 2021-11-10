@@ -2,7 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Interfaces;
 
-interface PaymentManagement
+interface PaymentManager
 {
     /**
      * @param \rkujawa\LaravelPaymentGateway\Interfaces\BillableContract $billable

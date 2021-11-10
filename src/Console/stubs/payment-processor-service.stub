@@ -1,28 +1,30 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\Traits;
+namespace App\Services\Payment;
 
-trait ProcessesPayments
+use rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcesser;
+
+class {{ name }}PaymentProcessor extends {{ name }}PaymentGateway implements PaymentProcesser
 {
     /**
      * @param array|mixed $data
      * @param int $amount
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcessorResponse
+     * @return \rkujawa\LaravelPaymentGateway\Interfaces\Response\PaymentTransactionContract
      */
     public function charge($data, $amount)
     {
-        return $this->gateway->charge($data, $amount);
+        //
     }
 
     /**
      * TODO: Define the transaction tables and models.
      * 
      * @param mixed $paymentTransaction
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcessorResponse
+     * @return \rkujawa\LaravelPaymentGateway\Interfaces\Response\PaymentTransactionContract
      */
     public function void($paymentTransaction)
     {
-        return $this->gateway->void($paymentTransaction);
+        //
     }
 
     /**
@@ -30,10 +32,10 @@ trait ProcessesPayments
      * 
      * @param mixed $paymentTransaction
      * @param int $amount
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcessorResponse
+     * @return \rkujawa\LaravelPaymentGateway\Interfaces\Response\PaymentTransactionContract
      */
     public function refund($paymentTransaction, $amount)
     {
-        return $this->gateway->refund($paymentTransaction, $amount);
+        //
     }
 }
