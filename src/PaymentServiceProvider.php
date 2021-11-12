@@ -29,6 +29,10 @@ class PaymentServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/config/payment.php' => config_path('payment.php'),
         ], 'payment-config');
+
+        $this->publishes([
+            __DIR__ . '/Database/migrations/2021_01_01_000000_create_base_payment_tables.php' => database_path('migrations/2021_01_01_000000_create_base_payment_tables.php'),
+        ], 'payment-migration');
     }
 
     public function register()
