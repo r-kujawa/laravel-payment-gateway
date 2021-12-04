@@ -26,7 +26,7 @@ class PaymentType extends Model
         return PaymentTypeFactory::new();
     }
 
-    public static function getSlug($name)
+    public static function slugify($name)
     {
         return preg_replace('/[^a-z0-9]+/i', '_', trim(strtolower($name)));
     }

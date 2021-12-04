@@ -76,7 +76,7 @@ class AddPaymentType extends Command
     {
         $this->name = trim($this->argument('type'));
         $this->displayName = $this->option('displayName') ?? $this->name;
-        $this->slug = PaymentType::getSlug($this->option('slug') ?? $this->name);
+        $this->slug = PaymentType::slugify($this->option('slug') ?? $this->name);
 
         $this->className = $this->getClassName();
     }

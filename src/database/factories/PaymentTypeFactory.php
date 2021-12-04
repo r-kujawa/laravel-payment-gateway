@@ -79,7 +79,7 @@ class PaymentTypeFactory extends Factory
         return [
             'name' => ucfirst($name),
             'display_name' => strtoupper($name),
-            'slug' => PaymentType::getSlug($name),
+            'slug' => PaymentType::slugify($name),
         ];
     }
 
