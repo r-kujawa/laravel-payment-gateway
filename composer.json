@@ -14,8 +14,8 @@
     "autoload": {
         "psr-4": {
             "rkujawa\\LaravelPaymentGateway\\": "src/",
-            "rkujawa\\LaravelPaymentGateway\\Database\\Factories\\": "src/database/factories",
-            "rkujawa\\LaravelPaymentGateway\\Database\\Seeders\\": "src/database/seeders"
+            "rkujawa\\LaravelPaymentGateway\\Database\\Factories\\": "src/database/factories/",
+            "rkujawa\\LaravelPaymentGateway\\Database\\Seeders\\": "src/database/seeders/"
         }
     },
     "autoload-dev": {
