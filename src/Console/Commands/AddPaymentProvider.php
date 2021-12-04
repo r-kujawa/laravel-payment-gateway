@@ -2,12 +2,15 @@
 
 namespace rkujawa\LaravelPaymentGateway\Console\Commands;
 
-use rkujawa\LaravelPaymentGateway\Console\Commands\FilesystemCommand as Command;
 use Illuminate\Support\Str;
+use rkujawa\LaravelPaymentGateway\Console\Commands\FilesystemCommand as Command;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
+use rkujawa\LaravelPaymentGateway\Traits\GeneratesMigrations;
 
 class AddPaymentProvider extends Command
 {
+    use GeneratesMigrations;
+
     /**
      * The name and signature of the console command.
      *
@@ -100,72 +103,6 @@ class AddPaymentProvider extends Command
     protected function setProperties()
     {
         $this->name = trim($this->argument('provider'));
-        $this->slug = PaymentProvider::getSlug($this->option('slug') ?? $this->name);
-    }
-
-    /**
-     * Ensure that the given class doesn't exist in the provided directory.
-     *
-     * @param  string  $class
-     * @param  string  $directory
-     * @return boolean
-     */
-    protected function classExists($class, $directory)
-    {
-        $files = $this->files->glob($directory.'/*.php');
-
-        foreach ($files as $file) {
-            $this->files->requireOnce($file);
-        }
-
-        return class_exists($class);
-    }
-
-    /**
-     * Get the contents of the file.
-     *
-     * @param string $stub
-     * @param array $data
-     * @return string
-     */
-    protected function makeFile($stub, $data)
-    {
-        $file = file_get_contents($stub);
-
-        foreach ($data as $search => $replace)
-        {
-            $file = Str::replace('{{ ' . $search . ' }}', $replace, $file);
-        }
-
-        return $file;
-    }
-
-    /**
-     * Put the given file in the specified path.
-     *
-     * @param string $path
-     * @param string $file
-     * @return void
-     */
-    protected function putFile($path, $file)
-    {
-        $directory = collect(explode('/', $path, -1))->join('/');
-        $this->files->ensureDirectoryExists($directory);
-
-        $this->files->put($path, $file);
-    }
-
-    /**
-     * Generate the full migration file path.
-     *
-     * @param string $migrationClass
-     * @param string $migrationPath
-     * @return string
-     */
-    protected function generateMigrationFilePath($class, $path)
-    {
-        $fileName = now()->format('Y_m_d_His') . '_' . Str::snake($class) . '.php';
-
-        return "{$path}/{$fileName}";
+        $this->slug = PaymentProvider::slugify($this->option('slug') ?? $this->name);
     }
 }

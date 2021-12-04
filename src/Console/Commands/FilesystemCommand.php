@@ -4,6 +4,7 @@ namespace rkujawa\LaravelPaymentGateway\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Str;
 
 class FilesystemCommand extends Command
 {
@@ -25,5 +26,57 @@ class FilesystemCommand extends Command
         parent::__construct();
 
         $this->files = $files;
+    }
+
+    /**
+     * Get the contents of the file.
+     *
+     * @param string $stub
+     * @param array $data
+     * @return string
+     */
+    protected function makeFile($stub, $data)
+    {
+        $file = file_get_contents($stub);
+
+        foreach ($data as $search => $replace)
+        {
+            $file = Str::replace('{{ ' . $search . ' }}', $replace, $file);
+        }
+
+        return $file;
+    }
+
+    /**
+     * Put the given file in the specified path.
+     *
+     * @param string $path
+     * @param string $file
+     * @return void
+     */
+    protected function putFile($path, $file)
+    {
+        $directory = collect(explode('/', $path, -1))->join('/');
+        $this->files->ensureDirectoryExists($directory);
+
+        $this->files->put($path, $file);
+    }
+
+    /**
+     * Ensure that the given class doesn't exist in the provided directory.
+     *
+     * @param  string  $class
+     * @param  string  $directory
+     * @return boolean
+     */
+    protected function classExists($class, $directory)
+    {
+        $files = $this->files->glob($directory.'/*.php');
+
+        foreach ($files as $file) {
+            $this->files->requireOnce($file);
+        }
+
+        return class_exists($class);
     }
 }
