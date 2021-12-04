@@ -2,8 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
+use rkujawa\LaravelPaymentGateway\Console\Commands\FilesystemCommand as Command;
 use Illuminate\Support\Str;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 
@@ -28,32 +27,12 @@ class AddPaymentProvider extends Command
     protected $description = 'Add a new payment provider and scaffold it\'s implementation.';
 
     /**
-     * The filesystem instance.
-     *
-     * @var \Illuminate\Filesystem\Filesystem
-     */
-    protected $files;
-
-    /**
      * The payment provider attributes to be saved.
      *
      * @var string $name
      * @var string $slug
      */
     protected $name, $slug;
-
-    /**
-     * Create a new command instance.
-     *
-     * @param \Illuminate\Filesystem\Filesystem $files
-     * @return void
-     */
-    public function __construct(Filesystem $files)
-    {
-        parent::__construct();
-
-        $this->files = $files;
-    }
 
     /**
      * Execute the console command.

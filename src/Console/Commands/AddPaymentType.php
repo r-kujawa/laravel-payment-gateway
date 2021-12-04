@@ -2,8 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
+use rkujawa\LaravelPaymentGateway\Console\Commands\FilesystemCommand as Command;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use rkujawa\LaravelPaymentGateway\Models\PaymentType;
@@ -28,13 +27,6 @@ class AddPaymentType extends Command
     protected $description = 'Add a new payment type to the database';
 
     /**
-     * The filesystem instance.
-     *
-     * @var \Illuminate\Filesystem\Filesystem
-     */
-    protected $files;
-
-    /**
      * The name of the migration class to be generated.
      *
      * @var string
@@ -49,19 +41,6 @@ class AddPaymentType extends Command
      * @var string $slug
      */
     protected $name, $displayName, $slug;
-
-    /**
-     * Create a new command instance.
-     *
-     * @param \Illuminate\Filesystem\Filesystem $files
-     * @return void
-     */
-    public function __construct(Filesystem $files)
-    {
-        parent::__construct();
-
-        $this->files = $files;
-    }
 
     /**
      * Execute the console command.
