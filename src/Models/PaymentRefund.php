@@ -4,7 +4,7 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use rkujawa\LaravelPaymentGateway\database\Factories\PaymentRefundFactory;
+use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentRefundFactory;
 use rkujawa\LaravelPaymentGateway\Traits\AmountConverter;
 
 class PaymentRefund extends Model

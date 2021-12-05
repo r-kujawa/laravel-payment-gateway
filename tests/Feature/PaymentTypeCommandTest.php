@@ -15,7 +15,7 @@ class PaymentTypeCommandTest extends TestCase
 
         $this->artisan('payment:add-type', ['type' => $paymentType->name, '--slug' => $paymentType->slug])
             ->expectsOutput('The migration to add ' . $paymentType->name . ' payment type has been generated.')
-            ->expectsConfirmation('Would you like to run your migration?')
+            ->expectsConfirmation('Would you like to run the migration?')
             ->assertExitCode(0);
 
         $this->assertDatabaseMissing('payment_types', ['slug' => $paymentType->slug]);
@@ -31,7 +31,7 @@ class PaymentTypeCommandTest extends TestCase
         $paymentType = PaymentType::factory()->make();
 
         $this->artisan('payment:add-type', ['type' => $paymentType->name, '--slug' => $paymentType->slug])
-            ->expectsConfirmation('Would you like to run your migration?', 'yes')
+            ->expectsConfirmation('Would you like to run the migration?', 'yes')
             ->assertExitCode(0);
 
         $this->assertDatabaseHas('payment_types', ['slug' => $paymentType->slug]);
@@ -43,7 +43,7 @@ class PaymentTypeCommandTest extends TestCase
         $paymentType = PaymentType::factory()->make();
 
         $this->artisan('payment:add-type', ['type' => $paymentType->name, '--slug' => $paymentType->slug])
-            ->expectsConfirmation('Would you like to run your migration?');
+            ->expectsConfirmation('Would you like to run the migration?');
 
         try {
             $this->artisan('payment:add-type', ['type' => $paymentType->name, '--slug' => $paymentType->slug])
