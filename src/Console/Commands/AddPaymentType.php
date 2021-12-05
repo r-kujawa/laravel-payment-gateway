@@ -6,9 +6,12 @@ use rkujawa\LaravelPaymentGateway\Console\Commands\FilesystemCommand as Command;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use rkujawa\LaravelPaymentGateway\Models\PaymentType;
+use rkujawa\LaravelPaymentGateway\Traits\GeneratesMigrations;
 
 class AddPaymentType extends Command
 {
+    use GeneratesMigrations;
+    
     /**
      * The name and signature of the console command.
      *
@@ -25,13 +28,6 @@ class AddPaymentType extends Command
      * @var string
      */
     protected $description = 'Add a new payment type to the database';
-
-    /**
-     * The name of the migration class to be generated.
-     *
-     * @var string
-     */
-    protected $className;
 
     /**
      * The payment type attributes to be saved.
@@ -51,18 +47,30 @@ class AddPaymentType extends Command
     {
         $this->setProperties();
 
-        $migrationPath = $this->getMigrationPath();
+        $studlySlug = Str::studly($this->slug);
 
-        $this->ensureMigrationDoesntAlreadyExist($migrationPath);
+        $migrationClass = "Add{$studlySlug}PaymentProvider";
 
-        $this->files->put(
-            $this->getMigrationFilePath($migrationPath),
-            $this->getMigrationFileContents($this->getStubFile(), $this->getStubVariables())
+        if ($this->migrationExists($migrationClass)) {
+            throw new InvalidArgumentException("{$migrationClass}::class already exists.");
+        }
+
+        $this->putFile(
+            $this->generateMigrationFilePath($migrationClass),
+            $this->makeFile(
+                __DIR__ . '/../stubs/payment-type-migration.stub',
+                [
+                    'class' => $migrationClass,
+                    'name' => $this->name,
+                    'displayName' => $this->displayName,
+                    'slug' => $this->slug,
+                ]
+            )
         );
 
         $this->info('The migration to add ' . $this->name . ' payment type has been generated.');
 
-        if ($this->confirm('Would you like to run your migration?', true)) {
+        if ($this->confirm('Would you like to run the migration?', true)) {
             $this->call('migrate', ['--force']);
         }
     }
@@ -77,108 +85,5 @@ class AddPaymentType extends Command
         $this->name = trim($this->argument('type'));
         $this->displayName = $this->option('displayName') ?? $this->name;
         $this->slug = PaymentType::slugify($this->option('slug') ?? $this->name);
-
-        $this->className = $this->getClassName();
-    }
-
-    /**
-     * Get the class name of a migration name.
-     *
-     * @return string
-     */
-    protected function getClassName()
-    {
-        return 'Add' . Str::studly($this->slug) . 'PaymentType';
-    }
-
-    /**
-     * Get the user's migrations directory.
-     *
-     * @return string
-     */
-    protected function getMigrationPath()
-    {
-        return $this->laravel->databasePath() . DIRECTORY_SEPARATOR . 'migrations';
-    }
-
-    /**
-     * Ensure that a migration with the given name doesn't already exist.
-     *
-     * @param  string  $name
-     * @param  string  $migrationPath
-     * @return void
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function ensureMigrationDoesntAlreadyExist($migrationPath)
-    {
-        if (! empty($migrationPath)) {
-            $migrationFiles = $this->files->glob($migrationPath.'/*.php');
-
-            foreach ($migrationFiles as $migrationFile) {
-                $this->files->requireOnce($migrationFile);
-            }
-        }
-
-        if (class_exists($this->className)) {
-            throw new InvalidArgumentException("{$this->className}::class already exists.");
-        }
-    }
-
-    /**
-     * Get the full migration path and file name.
-     *
-     * @param string $migrationPath
-     * @return void
-     */
-    protected function getMigrationFilePath($migrationPath)
-    {
-        $fileName = now()->format('Y_m_d_His') . '_' . Str::snake($this->className) . '.php';
-
-        return $migrationPath . DIRECTORY_SEPARATOR . $fileName;
-    }
-
-    /**
-     * Get the contents of the migration file.
-     *
-     * @param string $stubFile
-     * @param array $stubVariables
-     * @return void
-     */
-    protected function getMigrationFileContents($stubFile, $stubVariables)
-    {
-        $file = file_get_contents($stubFile);
-
-        foreach ($stubVariables as $search => $replace)
-        {
-            $file = Str::replace('{{ ' . $search . ' }}', $replace, $file);
-        }
-
-        return $file;
-    }
-
-    /**
-     * Get the stub file's full path.
-     *
-     * @return string
-     */
-    protected function getStubFile()
-    {
-        return __DIR__ . '/../stubs/payment-type-migration.stub';
-    }
-
-    /**
-     * Get the variables to fill the stub file.
-     *
-     * @return array
-     */
-    protected function getStubVariables()
-    {
-        return [
-            'class' => $this->className,
-            'name' => $this->name,
-            'displayName' => $this->displayName,
-            'slug' => $this->slug,
-        ];
     }
 }
