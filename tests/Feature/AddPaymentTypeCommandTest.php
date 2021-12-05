@@ -6,7 +6,7 @@ use Exception;
 use InvalidArgumentException;
 use rkujawa\LaravelPaymentGateway\Models\PaymentType;
 
-class PaymentTypeCommandTest extends TestCase
+class AddPaymentTypeCommandTest extends TestCase
 {
     /** @test */
     public function add_payment_type_command_makes_migration()
