@@ -61,4 +61,21 @@ class FilesystemCommand extends Command
 
         $this->files->put($path, $file);
     }
+
+    /**
+     * Check if the given class exists in the provided directory.
+     *
+     * @param  string  $class
+     * @return boolean
+     */
+    protected function classExists($class, $directory)
+    {
+        $files = $this->files->glob("{$directory}/*.php");
+
+        foreach ($files as $file) {
+            $this->files->requireOnce($file);
+        }
+
+        return class_exists($class);
+    }
 }

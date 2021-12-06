@@ -71,7 +71,7 @@ class AddPaymentProvider extends Command
 
         $migrationClass = "Add{$studlySlug}PaymentProvider";
 
-        if ($this->migrationExists($migrationClass)) {
+        if ($this->classExists($migrationClass, $this->getMigrationPath())) {
             $this->info('Skipping the migration because ' . $this->name . ' payment provider already exists.');
         } else {
             $this->putFile(
