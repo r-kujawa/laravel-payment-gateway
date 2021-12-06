@@ -88,7 +88,7 @@ class AddPaymentProvider extends Command
 
             $this->info('The migration to add ' . $this->name . ' payment provider has been generated.');
 
-            if ($this->confirm('Would you like to run your migration?', true)) {
+            if ($this->confirm('Would you like to run the migration?', true)) {
                 $this->call('migrate', ['--force']);
             }
         }
