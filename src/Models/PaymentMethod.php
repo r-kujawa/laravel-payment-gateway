@@ -12,20 +12,15 @@ class PaymentMethod extends Model
     use SoftDeletes;
     use HasFactory;
 
-    protected $fillable = [
-        'wallet_id',
-        'fallback_id',
+    protected $guarded = ['id'];
+
+    protected $hidden = [
         'token',
-        'first_name',
-        'last_name',
-        'last_digits',
         'exp_month',
         'exp_year',
-        'type',
-        'created_at',
     ];
 
-    protected $hidden = ['token'];
+    protected $appends = ['expiration_date'];
 
     /**
      * Create a new factory instance for the model.
@@ -37,14 +32,9 @@ class PaymentMethod extends Model
         return PaymentMethodFactory::new();
     }
 
-    public function getCardholderAttribute()
+    public function setLastDigitsAttribute($value)
     {
-        return $this->first_name . ' ' . $this->last_name;
-    }
-
-    public function getExpirationDateAttribute()
-    {
-        return $this->getExpirationDate();
+        $this->attributes['last_digits'] = substr(preg_replace('/[^0-9]/', '', $value), -4);
     }
 
     public function setFirstNameAttribute($value)
@@ -61,9 +51,14 @@ class PaymentMethod extends Model
         }
     }
 
-    public function getExpirationDate(string $seperator = '/')
+    public function getCardholderAttribute()
     {
-        return $this->exp_month . $seperator . $this->exp_year;
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getExpirationDateAttribute()
+    {
+        return $this->getExpirationDate();
     }
 
     public function getProviderAttribute()
@@ -79,6 +74,15 @@ class PaymentMethod extends Model
     public function transactions()
     {
         return $this->hasMany(PaymentTransaction::class);
+    }
+
+    public function getExpirationDate(string $separator = '/', $yearFirst = false)
+    {
+        if ($yearFirst) {
+            return $this->exp_year . $separator . $this->exp_month;
+        }
+
+        return $this->exp_month . $separator . $this->exp_year;
     }
 
     public static function findByToken(string $token)

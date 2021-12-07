@@ -10,12 +10,7 @@ class Wallet extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'billable_type',
-        'billable_id',
-        'payment_provider_id',
-        'token',
-    ];
+    protected $guarded = ['id'];
     
     protected $hidden = ['token'];
 

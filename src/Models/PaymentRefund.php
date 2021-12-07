@@ -14,20 +14,13 @@ class PaymentRefund extends Model
     const VOID = 'void';
     const REFUND = 'refund';
 
-    protected $fillable = [
-        'reference_id',
-        'transaction_id',
-        'amount',
-        'amount_cents',
-        'currency',
-        'type',
-        'status_code',
-        'payload',
-    ];
+    protected $guarded = ['id'];
 
     protected $casts = [
         'payload' => 'array',
     ];
+
+    protected $appends = ['amount'];
 
     public static function newFactory()
     {

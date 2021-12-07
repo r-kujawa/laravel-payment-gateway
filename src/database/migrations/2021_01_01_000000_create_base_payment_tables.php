@@ -57,7 +57,6 @@ class CreateBasePaymentTables extends Migration
             $table->foreign('type_id')->references('id')->on('payment_types');
         });
 
-        // TODO: Choose between linking payment provider direclty vs through payment_methods.
         Schema::create('payment_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedSmallInteger('provider_id');
