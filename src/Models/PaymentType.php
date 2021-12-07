@@ -10,11 +10,7 @@ class PaymentType extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'display_name',
-        'slug',
-    ];
+    protected $guarded = ['id'];
 
     /**
      * Create a new factory instance for the model.
@@ -26,18 +22,13 @@ class PaymentType extends Model
         return PaymentTypeFactory::new();
     }
 
+    public function paymentMethods()
+    {
+        return $this->hasMany(PaymentMethod::class, 'type_id');
+    }
+
     public static function slugify($name)
     {
         return preg_replace('/[^a-z0-9]+/i', '_', trim(strtolower($name)));
-    }
-
-    public function wallets()
-    {
-        return $this->hasMany(Wallet::class, 'provider_id');
-    }
-
-    public function paymentMethods()
-    {
-        return $this->hasManyThrough(PaymentMethod::class, Wallet::class);
     }
 }

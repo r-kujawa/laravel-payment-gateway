@@ -11,22 +11,14 @@ class PaymentTransaction extends Model
 {
     use HasFactory, AmountConverter;
 
-    protected $fillable = [
-        'provider_id',
-        'reference_id',
-        'amount',
-        'amount_cents',
-        'currency',
-        'payment_method_id',
-        'status_code',
-        'payload',
-        'references',
-    ];
+    protected $guarded = ['id'];
 
     protected $casts = [
         'payload' => 'array',
         'references' => 'array',
     ];
+
+    protected $appends = ['amount'];
 
     public static function newFactory()
     {
