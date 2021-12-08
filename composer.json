@@ -20,7 +20,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "rkujawa\\LaravelPaymentGateway\\Tests\\": "tests/"
+            "rkujawa\\LaravelPaymentGateway\\Tests\\": "tests/",
+            "rkujawa\\LaravelPaymentGateway\\Tests\\App\\": "tests/app/"
         }
     },
     "extra": {
