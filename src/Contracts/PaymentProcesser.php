@@ -1,13 +1,13 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\Interfaces;
+namespace rkujawa\LaravelPaymentGateway\Contracts;
 
 interface PaymentProcesser
 {
     /**
      * @param array|mixed $data
      * @param int $amount
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcessorResponse
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentProcessorResponse
      */
     public function charge($data, $amount);
 
@@ -15,7 +15,7 @@ interface PaymentProcesser
      * TODO: Define the transaction tables and models.
      * 
      * @param mixed $paymentTransaction
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcessorResponse
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentProcessorResponse
      */
     public function void($paymentTransaction);
 
@@ -24,7 +24,7 @@ interface PaymentProcesser
      * 
      * @param mixed $paymentTransaction
      * @param int $amount
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcessorResponse
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentProcessorResponse
      */
     public function refund($paymentTransaction, $amount);
 }

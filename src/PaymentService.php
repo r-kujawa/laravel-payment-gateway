@@ -173,7 +173,7 @@ class PaymentService
     /**
      * Get the payment manager service.
      *
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentManager
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManager
      */
     protected function getManager()
     {
@@ -187,7 +187,7 @@ class PaymentService
     /**
      * Get the payment processor service.
      *
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcesser
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentProcesser
      */
     protected function getProcessor()
     {

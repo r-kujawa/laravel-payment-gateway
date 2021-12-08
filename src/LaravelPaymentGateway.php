@@ -2,14 +2,14 @@
 
 namespace rkujawa\LaravelPaymentGateway;
 
-use rkujawa\LaravelPaymentGateway\Interfaces\PaymentGateway as PaymentGateway;
+use rkujawa\LaravelPaymentGateway\Contracts\PaymentGateway;
 
 class LaravelPaymentGateway extends PaymentService implements PaymentGateway
 {
     /**
-     * @param \rkujawa\LaravelPaymentGateway\Interfaces\BillableContract $billable
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\BillableContract $billable
      * @param array|mixed $data
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentManagerResponse
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
      */
     public function createPaymentMethod($billable, $data)
     {
@@ -19,7 +19,7 @@ class LaravelPaymentGateway extends PaymentService implements PaymentGateway
     /**
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
      * @param array|mixed $data
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentManagerResponse
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
      */
     public function updatePaymentMethod($paymentMethod, $data)
     {
@@ -28,7 +28,7 @@ class LaravelPaymentGateway extends PaymentService implements PaymentGateway
     
     /**
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentManagerResponse
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
      */
     public function deletePaymentMethod($paymentMethod)
     {
@@ -38,7 +38,7 @@ class LaravelPaymentGateway extends PaymentService implements PaymentGateway
     /**
      * @param array|mixed $data
      * @param int $amount
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcessorResponse
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentProcessorResponse
      */
     public function charge($data, $amount)
     {
@@ -49,7 +49,7 @@ class LaravelPaymentGateway extends PaymentService implements PaymentGateway
      * TODO: Define the transaction tables and models.
      * 
      * @param mixed $paymentTransaction
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcessorResponse
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentProcessorResponse
      */
     public function void($paymentTransaction)
     {
@@ -61,7 +61,7 @@ class LaravelPaymentGateway extends PaymentService implements PaymentGateway
      * 
      * @param mixed $paymentTransaction
      * @param int $amount
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcessorResponse
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentProcessorResponse
      */
     public function refund($paymentTransaction, $amount)
     {

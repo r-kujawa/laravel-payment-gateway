@@ -1,8 +1,8 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\Interfaces;
+namespace rkujawa\LaravelPaymentGateway\Contracts;
 
-interface BillableContract
+interface Billable
 {
     /**
      * Get the billable's identifier.
