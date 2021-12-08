@@ -5,9 +5,9 @@ namespace rkujawa\LaravelPaymentGateway;
 use Illuminate\Support\ServiceProvider;
 use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentProvider;
 use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentType;
-use rkujawa\LaravelPaymentGateway\Interfaces\PaymentGateway;
-use rkujawa\LaravelPaymentGateway\Interfaces\PaymentManager;
-use rkujawa\LaravelPaymentGateway\Interfaces\PaymentProcesser;
+use rkujawa\LaravelPaymentGateway\Contracts\PaymentGateway;
+use rkujawa\LaravelPaymentGateway\Contracts\PaymentManager;
+use rkujawa\LaravelPaymentGateway\Contracts\PaymentProcesser;
 
 class PaymentServiceProvider extends ServiceProvider
 {

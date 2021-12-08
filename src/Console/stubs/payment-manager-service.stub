@@ -2,14 +2,14 @@
 
 namespace App\Services\Payment;
 
-use rkujawa\LaravelPaymentGateway\Interfaces\PaymentManager;
+use rkujawa\LaravelPaymentGateway\Contracts\PaymentManager;
 
 class {{ name }}PaymentManager extends {{ name }}PaymentGateway implements PaymentManager
 {
     /**
-     * @param \rkujawa\LaravelPaymentGateway\Interfaces\BillableContract $billable
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\BillableContract $billable
      * @param array|mixed $data
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\Response\PaymentManagerContract
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentManagerContract
      */
     public function createPaymentMethod($billable, $data)
     {
@@ -19,7 +19,7 @@ class {{ name }}PaymentManager extends {{ name }}PaymentGateway implements Payme
     /**
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
      * @param array|mixed $data
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\Response\PaymentManagerContract
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentManagerContract
      */
     public function updatePaymentMethod($paymentMethod, $data)
     {
@@ -28,7 +28,7 @@ class {{ name }}PaymentManager extends {{ name }}PaymentGateway implements Payme
     
     /**
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
-     * @return \rkujawa\LaravelPaymentGateway\Interfaces\Response\PaymentManagerContract
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentManagerContract
      */
     public function deletePaymentMethod($paymentMethod)
     {
