@@ -5,8 +5,8 @@ namespace rkujawa\LaravelPaymentGateway\Tests\Unit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
-use rkujawa\LaravelPaymentGateway\Models\PaymentRefund;
-use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction;
+use rkujawa\LaravelPaymentGateway\Tests\App\Models\PaymentRefund;
+use rkujawa\LaravelPaymentGateway\Tests\App\Models\PaymentTransaction;
 use rkujawa\LaravelPaymentGateway\Tests\TestCase;
 
 class AmountConverterTest extends TestCase
