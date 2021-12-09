@@ -24,12 +24,12 @@ class PaymentProvider extends Model
 
     public function wallets()
     {
-        return $this->hasMany(Wallet::class, 'provider_id');
+        return $this->hasMany(config('payment.models.' . Wallet::class, Wallet::class), 'provider_id');
     }
 
     public function payment_methods()
     {
-        return $this->hasManyThrough(PaymentMethod::class, Wallet::class, 'provider_id');
+        return $this->hasManyThrough(config('payment.models.' . PaymentMethod::class, PaymentMethod::class), config('payment.models.' . Wallet::class, Wallet::class), 'provider_id');
     }
 
     public static function slugify($name)

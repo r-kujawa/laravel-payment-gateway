@@ -34,4 +34,20 @@ return [
         ],
     ],
 
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Payment Models
+    |--------------------------------------------------------------------------
+    |
+    | This option allows you to override the models to be used for managing payments.
+    | You may define your own models that extend the ones of the package in order to
+    | keep your relationships in sync with your own models.
+    |
+    */
+    // 'models' => [
+    //     \rkujawa\LaravelPaymentGateway\Models\Wallet::class => App\Models\Payment\Wallet::class,
+    //     \rkujawa\LaravelPaymentGateway\Models\PaymentMethod::class => App\Models\Payment\PaymentMethod::class,
+    // ],
+
 ];

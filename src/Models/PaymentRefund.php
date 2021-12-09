@@ -29,6 +29,6 @@ class PaymentRefund extends Model
 
     public function transaction()
     {
-        return $this->belongsTo(PaymentTransaction::class);
+        return $this->belongsTo(config('payment.models.' . PaymentTransaction::class, PaymentTransaction::class));
     }
 }

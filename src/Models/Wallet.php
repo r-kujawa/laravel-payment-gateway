@@ -31,12 +31,12 @@ class Wallet extends Model
 
     public function provider()
     {
-        return $this->belongsTo(PaymentProvider::class);
+        return $this->belongsTo(config('payment.models.' . PaymentProvider::class, PaymentProvider::class));
     }
 
     public function paymentMethods()
     {
-        return $this->hasMany(PaymentMethod::class);
+        return $this->hasMany(config('payment.models.' . PaymentMethod::class, PaymentMethod::class));
     }
 
     public static function findByToken(string $token)
