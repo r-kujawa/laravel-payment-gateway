@@ -24,7 +24,7 @@ class PaymentType extends Model
 
     public function paymentMethods()
     {
-        return $this->hasMany(PaymentMethod::class, 'type_id');
+        return $this->hasMany(config('payment.models.' . PaymentMethod::class, PaymentMethod::class), 'type_id');
     }
 
     public static function slugify($name)

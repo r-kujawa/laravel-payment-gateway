@@ -27,11 +27,11 @@ class PaymentTransaction extends Model
 
     public function paymentMethod()
     {
-        return $this->belongsTo(PaymentMethod::class);
+        return $this->belongsTo(config('payment.models.' . PaymentMethod::class, PaymentMethod::class));
     }
 
     public function provider()
     {
-        return $this->belongsTo(PaymentProvider::class);
+        return $this->belongsTo(config('payment.models.' . PaymentProvider::class, PaymentProvider::class));
     }
 }

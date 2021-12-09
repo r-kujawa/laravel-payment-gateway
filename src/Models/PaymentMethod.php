@@ -68,12 +68,12 @@ class PaymentMethod extends Model
 
     public function wallet()
     {
-        return $this->belongsTo(Wallet::class);
+        return $this->belongsTo(config('payment.models.' . Wallet::class, Wallet::class));
     }
 
     public function transactions()
     {
-        return $this->hasMany(PaymentTransaction::class);
+        return $this->hasMany(config('payment.models.' . PaymentTransaction::class, PaymentTransaction::class));
     }
 
     public function getExpirationDate(string $separator = '/', $yearFirst = false)
@@ -83,10 +83,5 @@ class PaymentMethod extends Model
         }
 
         return $this->exp_month . $separator . $this->exp_year;
-    }
-
-    public static function findByToken(string $token)
-    {
-        return self::where('token', $token)->first();
     }
 }
