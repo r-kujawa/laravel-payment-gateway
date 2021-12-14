@@ -69,8 +69,9 @@ class LaravelPaymentGateway extends PaymentService implements PaymentGateway
     }
 
     /**
-     * @param string $funcName
+     * @param string $callable
      * @param array $params
+     * 
      * @throws \Exception
      */
     public function __call($callable, $params)
@@ -83,6 +84,6 @@ class LaravelPaymentGateway extends PaymentService implements PaymentGateway
             return $this->processor->$callable(...$params);
         }
 
-        throw new \Exception(__CLASS__ . " {$callable} method not found");
+        throw new \Exception(__CLASS__ . " {$callable} method not found.");
     }
 }
