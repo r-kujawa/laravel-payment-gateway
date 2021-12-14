@@ -23,4 +23,10 @@ interface PaymentManager
      * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
      */
     public function deletePaymentMethod($paymentMethod);
+
+    /**
+     * @param string $token
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
+     */
+    public function getPaymentMethod($token);
 }

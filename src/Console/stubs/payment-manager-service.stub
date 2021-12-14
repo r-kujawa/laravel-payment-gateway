@@ -34,4 +34,13 @@ class {{ name }}PaymentManager extends {{ name }}PaymentGateway implements Payme
     {
         //
     }
+
+    /**
+     * @param string $token
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentManagerContract
+     */
+    public function getPaymentMethod($token)
+    {
+        //
+    }
 }
