@@ -12,6 +12,12 @@ interface PaymentManager
     public function createPaymentMethod($billable, $data);
 
     /**
+     * @param string $token
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
+     */
+    public function getPaymentMethod($token);
+
+    /**
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
      * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
@@ -23,10 +29,4 @@ interface PaymentManager
      * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
      */
     public function deletePaymentMethod($paymentMethod);
-
-    /**
-     * @param string $token
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
-     */
-    public function getPaymentMethod($token);
 }
