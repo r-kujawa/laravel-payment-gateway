@@ -17,6 +17,15 @@ class {{ name }}PaymentManager extends {{ name }}PaymentGateway implements Payme
     }
 
     /**
+    * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
+    * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentManagerContract
+    */
+    public function getPaymentMethod($paymentMethod)
+    {
+        //
+    }
+
+    /**
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
      * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentManagerContract
@@ -31,15 +40,6 @@ class {{ name }}PaymentManager extends {{ name }}PaymentGateway implements Payme
      * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentManagerContract
      */
     public function deletePaymentMethod($paymentMethod)
-    {
-        //
-    }
-
-    /**
-     * @param string $token
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentManagerContract
-     */
-    public function getPaymentMethod($token)
     {
         //
     }
