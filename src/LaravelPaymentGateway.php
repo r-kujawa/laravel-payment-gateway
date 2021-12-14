@@ -17,12 +17,12 @@ class LaravelPaymentGateway extends PaymentService implements PaymentGateway
     }
 
     /**
-     * @param string $token
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
      * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
      */
-    public function getPaymentMethod($token)
+    public function getPaymentMethod($paymentMethod)
     {
-        return $this->processor->getPaymentMethod();
+        return $this->processor->getPaymentMethod($paymentMethod);
     }
 
     /**
