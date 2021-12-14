@@ -71,18 +71,18 @@ class LaravelPaymentGateway extends PaymentService implements PaymentGateway
     /**
      * @param string $funcName
      * @param array $params
-     * @throws \Exception Method not found
+     * @throws \Exception
      */
-    public function __call($funcName, $params)
+    public function __call($callable, $params)
     {
-        if (method_exists($this->processor, $funcName)) {
-            return $this->processor->$funcName(...$params);
+        if (method_exists($this->manager, $callable)) {
+            return $this->manager->$callable(...$params);
         }
 
-        if (method_exists($this->manager, $funcName)) {
-            return $this->manager->$funcName(...$params);
+        if (method_exists($this->processor, $callable)) {
+            return $this->processor->$callable(...$params);
         }
 
-        throw new \Exception($funcName . ' method not found');
+        throw new \Exception(__CLASS__ . " {$callable} method not found");
     }
 }
