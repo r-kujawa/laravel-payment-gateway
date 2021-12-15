@@ -6,6 +6,10 @@
         {
             "name": "Robert Kujawa",
             "email": "bobkujawa@gmail.com"
+        },
+        {
+            "name": "Mario Avila",
+            "email": "maar01art@gmail.com"
         }
     ],
     "require-dev": {
