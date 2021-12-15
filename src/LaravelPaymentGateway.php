@@ -22,7 +22,7 @@ class LaravelPaymentGateway extends PaymentService implements PaymentGateway
      */
     public function getPaymentMethod($paymentMethod)
     {
-        return $this->processor->getPaymentMethod($paymentMethod);
+        return $this->manager->getPaymentMethod($paymentMethod);
     }
 
     /**
