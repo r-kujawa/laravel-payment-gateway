@@ -9,7 +9,7 @@ class {{ name }}PaymentManager extends {{ name }}PaymentGateway implements Payme
     /**
      * @param \rkujawa\LaravelPaymentGateway\Contracts\BillableContract $billable
      * @param array|mixed $data
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentManagerContract
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
      */
     public function createPaymentMethod($billable, $data)
     {
@@ -18,7 +18,7 @@ class {{ name }}PaymentManager extends {{ name }}PaymentGateway implements Payme
 
     /**
     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
-    * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentManagerContract
+    * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
     */
     public function getPaymentMethod($paymentMethod)
     {
@@ -28,7 +28,7 @@ class {{ name }}PaymentManager extends {{ name }}PaymentGateway implements Payme
     /**
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
      * @param array|mixed $data
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentManagerContract
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
      */
     public function updatePaymentMethod($paymentMethod, $data)
     {
@@ -37,7 +37,7 @@ class {{ name }}PaymentManager extends {{ name }}PaymentGateway implements Payme
     
     /**
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentManagerContract
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
      */
     public function deletePaymentMethod($paymentMethod)
     {
