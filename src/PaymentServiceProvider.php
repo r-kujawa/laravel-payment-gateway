@@ -50,5 +50,9 @@ class PaymentServiceProvider extends ServiceProvider
         $this->app->bind(PaymentProcesser::class, function ($app) {
             return new LaravelPaymentGateway(PaymentService::PROCESSOR);
         });
+
+        $this->app->singleton('PaymentGateway', function () {
+            return new LaravelPaymentGateway();
+        });
     }
 }
