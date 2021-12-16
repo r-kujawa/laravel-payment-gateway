@@ -9,7 +9,7 @@ class {{ name }}PaymentProcessor extends {{ name }}PaymentGateway implements Pay
     /**
      * @param array|mixed $data
      * @param int $amount
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentTransactionContract
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentProcessorResponse
      */
     public function charge($data, $amount)
     {
@@ -20,7 +20,7 @@ class {{ name }}PaymentProcessor extends {{ name }}PaymentGateway implements Pay
      * TODO: Define the transaction tables and models.
      * 
      * @param mixed $paymentTransaction
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentTransactionContract
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentProcessorResponse
      */
     public function void($paymentTransaction)
     {
@@ -32,7 +32,7 @@ class {{ name }}PaymentProcessor extends {{ name }}PaymentGateway implements Pay
      * 
      * @param mixed $paymentTransaction
      * @param int $amount
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\Response\PaymentTransactionContract
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentProcessorResponse
      */
     public function refund($paymentTransaction, $amount)
     {
