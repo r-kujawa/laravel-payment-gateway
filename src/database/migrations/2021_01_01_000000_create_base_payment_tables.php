@@ -20,6 +20,16 @@ class CreateBasePaymentTables extends Migration
             $table->timestamps();
         });
 
+        Schema::create('payment_merchants', function (Blueprint $table) {
+            $table->mediumIncrements('id');
+            $table->unsignedSmallInteger('provider_id');
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->timestamps();
+
+            $table->foreign('provider_id')->references('id')->on('payment_providers')->onDelete('cascade');
+        });
+
         Schema::create('payment_types', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name');
@@ -33,10 +43,12 @@ class CreateBasePaymentTables extends Migration
             $table->unsignedBigInteger('billable_id')->nullable();
             $table->string('billable_type')->nullable();
             $table->unsignedSmallInteger('provider_id');
+            $table->unsignedMediumInteger('merchant_id');
             $table->string('token', 255);
             $table->timestamps();
 
             $table->foreign('provider_id')->references('id')->on('payment_providers')->onDelete('cascade');
+            $table->foreign('merchant_id')->references('id')->on('payment_merchants')->onDelete('cascade');
         });
 
         // TODO: Add support for payment methods other than cards.
@@ -100,6 +112,7 @@ class CreateBasePaymentTables extends Migration
         Schema::dropIfExists('payment_methods');
         Schema::dropIfExists('payment_types');
         Schema::dropIfExists('wallets');
+        Schema::dropIfExists('payment_merchants');
         Schema::dropIfExists('payment_providers');
     }
 }
