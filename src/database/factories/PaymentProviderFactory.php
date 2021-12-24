@@ -25,7 +25,7 @@ class PaymentProviderFactory extends Factory
 
         return [
             'name' => $name,
-            'slug' => preg_replace('/[^a-z]+/i', '_', trim(strtolower($name))),
+            'slug' => PaymentProvider::slugify($name),
         ];
     }
 }
