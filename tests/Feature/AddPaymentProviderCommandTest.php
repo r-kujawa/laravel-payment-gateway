@@ -2,7 +2,6 @@
 
 namespace rkujawa\LaravelPaymentGateway\Tests;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 
