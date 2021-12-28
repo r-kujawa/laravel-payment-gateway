@@ -2,8 +2,8 @@
 
 namespace rkujawa\LaravelPaymentGateway\Console\Commands;
 
+use Illuminate\Console\Command;
 use Illuminate\Support\Str;
-use rkujawa\LaravelPaymentGateway\Console\Commands\FilesystemCommand as Command;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 use rkujawa\LaravelPaymentGateway\Traits\GeneratesMigrations;
 
@@ -80,7 +80,7 @@ class AddPaymentProvider extends Command
                     __DIR__ . '/../stubs/payment-provider-migration.stub',
                     [
                         'class' => $migrationClass,
-                        'name' => $this->name,
+                        'name' => addslashes($this->name),
                         'slug' => $this->slug,
                     ]
                 )

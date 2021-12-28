@@ -2,7 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Console\Commands;
 
-use rkujawa\LaravelPaymentGateway\Console\Commands\FilesystemCommand as Command;
+use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use rkujawa\LaravelPaymentGateway\Models\PaymentType;
@@ -61,8 +61,8 @@ class AddPaymentType extends Command
                 __DIR__ . '/../stubs/payment-type-migration.stub',
                 [
                     'class' => $migrationClass,
-                    'name' => $this->name,
-                    'displayName' => $this->displayName,
+                    'name' => addslashes($this->name),
+                    'displayName' => addslashes($this->displayName),
                     'slug' => $this->slug,
                 ]
             )

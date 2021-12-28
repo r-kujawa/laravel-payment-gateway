@@ -6,6 +6,8 @@ use Illuminate\Support\Str;
 
 trait GeneratesMigrations
 {
+    use GeneratesFiles;
+
     /**
      * Get the migration path.
      *
