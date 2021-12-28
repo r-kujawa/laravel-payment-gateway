@@ -1,31 +1,30 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\Console\Commands;
+namespace rkujawa\LaravelPaymentGateway\Traits;
 
-use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 
-class FilesystemCommand extends Command
+trait GeneratesFiles
 {
     /**
      * The filesystem instance.
      *
      * @var \Illuminate\Filesystem\Filesystem
      */
-    protected $files;
+    protected $fileSystem;
 
     /**
      * Create a new filesystem command instance.
      *
-     * @param \Illuminate\Filesystem\Filesystem $files
+     * @param \Illuminate\Filesystem\Filesystem $fileSystem
      * @return void
      */
     public function __construct(Filesystem $files)
     {
         parent::__construct();
 
-        $this->files = $files;
+        $this->fileSystem = $files;
     }
 
     /**
@@ -57,23 +56,24 @@ class FilesystemCommand extends Command
     protected function putFile($path, $file)
     {
         $directory = collect(explode('/', $path, -1))->join('/');
-        $this->files->ensureDirectoryExists($directory);
+        $this->fileSystem->ensureDirectoryExists($directory);
 
-        $this->files->put($path, $file);
+        $this->fileSystem->put($path, $file);
     }
 
     /**
      * Check if the given class exists in the provided directory.
      *
-     * @param  string  $class
+     * @param string $class
+     * @param string $directory
      * @return boolean
      */
     protected function classExists($class, $directory)
     {
-        $files = $this->files->glob("{$directory}/*.php");
+        $files = $this->fileSystem->glob("{$directory}/*.php");
 
         foreach ($files as $file) {
-            $this->files->requireOnce($file);
+            $this->fileSystem->requireOnce($file);
         }
 
         return class_exists($class);
