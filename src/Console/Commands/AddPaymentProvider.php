@@ -20,7 +20,8 @@ class AddPaymentProvider extends Command
                             {provider : The payment provider name}
                             {--slug= : The payment provider dev name}
                             {--manager : Generate class for payment management}
-                            {--processor : Generate class for payment processing}';
+                            {--processor : Generate class for payment processing}
+                            {--skip-migration : Do not run the migration}';
 
     /**
      * The console command description.
@@ -71,9 +72,7 @@ class AddPaymentProvider extends Command
 
         $migrationClass = "Add{$studlySlug}PaymentProvider";
 
-        if ($this->classExists($migrationClass, $this->getMigrationPath())) {
-            $this->info('Skipping the migration because ' . $this->name . ' payment provider already exists.');
-        } else {
+        if (! $this->classExists($migrationClass, $this->getMigrationPath())) {
             $this->putFile(
                 $this->generateMigrationFilePath($migrationClass),
                 $this->makeFile(
@@ -88,7 +87,7 @@ class AddPaymentProvider extends Command
 
             $this->info('The migration to add ' . $this->name . ' payment provider has been generated.');
 
-            if ($this->confirm('Would you like to run the migration?', true)) {
+            if ((! $this->option('skip-migration')) && $this->confirm('Would you like to run the migration?', true)) {
                 $this->call('migrate', ['--force']);
             }
         }
