@@ -3,8 +3,8 @@
 namespace rkujawa\LaravelPaymentGateway\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use rkujawa\LaravelPaymentGateway\Models\PaymentMerchant;
 use rkujawa\LaravelPaymentGateway\Models\Wallet;
-use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 
 class WalletFactory extends Factory
 {
@@ -22,12 +22,13 @@ class WalletFactory extends Factory
      */
     public function definition()
     {
-        $provider = PaymentProvider::inRandomOrder()->firstOr(function () {
-            return PaymentProvider::factory()->create();
+        $merchant = PaymentMerchant::inRandomOrder()->firstOr(function () {
+            return PaymentMerchant::factory()->create();
         });
 
         return [
-            'provider_id' => $provider->id,
+            'provider_id' => $merchant->provider->id,
+            'merchant_id' => $merchant->id,
             'token' => $this->faker->uuid(),
         ];
     }
