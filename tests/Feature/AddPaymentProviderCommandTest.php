@@ -5,7 +5,7 @@ namespace rkujawa\LaravelPaymentGateway\Tests;
 use Illuminate\Support\Str;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 
-class PaymentTypeCommandTest extends TestCase
+class AddPaymentProviderCommandTest extends TestCase
 {
     /** @test */
     public function add_payment_provider_command_makes_migration()
