@@ -24,7 +24,7 @@ class PaymentMerchant extends Model
 
     public function provider()
     {
-        return $this->belongsTo(PaymentProvider::class);
+        return $this->belongsTo(config('payment.models.' . PaymentProvider::class, PaymentProvider::class));
     }
 
     public function wallets()

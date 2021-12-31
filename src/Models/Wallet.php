@@ -34,6 +34,11 @@ class Wallet extends Model
         return $this->belongsTo(config('payment.models.' . PaymentProvider::class, PaymentProvider::class));
     }
 
+    public function merchant()
+    {
+        return $this->belongsTo(config('payment.models.' . PaymentMerchant::class, PaymentMerchant::class));
+    }
+
     public function paymentMethods()
     {
         return $this->hasMany(config('payment.models.' . PaymentMethod::class, PaymentMethod::class));

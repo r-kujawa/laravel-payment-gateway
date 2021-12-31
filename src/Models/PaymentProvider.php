@@ -22,6 +22,11 @@ class PaymentProvider extends Model
         return PaymentProviderFactory::new();
     }
 
+    public function merchants()
+    {
+        return $this->hasMany(config('payment.models.' . PaymentMerchant::class, PaymentMerchant::class));
+    }
+
     public function wallets()
     {
         return $this->hasMany(config('payment.models.' . Wallet::class, Wallet::class), 'provider_id');
