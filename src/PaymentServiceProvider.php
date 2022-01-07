@@ -33,7 +33,7 @@ class PaymentServiceProvider extends ServiceProvider
         ], 'payment-config');
 
         $this->publishes([
-            __DIR__ . '/Database/migrations/2021_01_01_000000_create_base_payment_tables.php' => database_path('migrations/2021_01_01_000000_create_base_payment_tables.php'),
+            __DIR__ . '/database/migrations/2021_01_01_000000_create_base_payment_tables.php' => database_path('migrations/2021_01_01_000000_create_base_payment_tables.php'),
         ], 'payment-migration');
     }
 
