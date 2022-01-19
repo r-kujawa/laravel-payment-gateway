@@ -3,11 +3,12 @@
 namespace rkujawa\LaravelPaymentGateway\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use rkujawa\LaravelPaymentGateway\Contracts\PaymentGateway;
 
-class PaymentGateway extends Facade
+class Payment extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'PaymentGateway';
+        return PaymentGateway::class;
     }
 }
