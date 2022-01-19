@@ -13,17 +13,10 @@ class PaymentService
     const MANAGER = 'manager';
     const PROCESSOR = 'processor';
 
-    protected $service;
-
     private $provider;
     private $merchant;
 
     private $gateway = [];
-
-    public function __construct($service = null)
-    {
-        $this->service = $service;
-    }
 
     /**
      * Fluent provider setter.
@@ -199,7 +192,7 @@ class PaymentService
     }
 
     /**
-     * Intantiate the specified payment service and set it.
+     * Instantiate the specified payment service and set it.
      *
      * @return void
      */
@@ -226,10 +219,6 @@ class PaymentService
      */
     private function ensureServiceIsValid($service, $gateway)
     {
-        if (isset($this->service) && $this->service !== $service) {
-            throw new Exception('The ' . $this->service . ' service does not support this action.');
-        }
-
         if (! class_exists($gateway)) {
             throw new Exception('The ' . $gateway . '::class does not exist, if you moved or renamed your ' . $service . ' service class, please specify it in the payment.php config.');
         }
