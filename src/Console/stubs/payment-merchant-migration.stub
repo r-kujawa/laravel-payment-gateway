@@ -13,13 +13,18 @@ class {{ class }} extends Migration
      */
     public function up()
     {
-        $provider = PaymentProvider::where('slug', '{{ provider }}')->first();
-
-        PaymentMerchant::create([
-            'provider_id' => $provider->id,
-            'name' => '{{ name }}',
+        $merchant = PaymentMerchant::create([
             'slug' => '{{ slug }}',
+            'name' => '{{ name }}',
         ]);
+
+        $providers = PaymentProvider::whereIn('slug', ['{{ providers }}'])->get();
+
+        $merchant->providers()->sync(
+            $providers->mapWithKeys(function ($provider) {
+                return [$provider->id => ['is_default' => '{{ defaultProvider }}' === $provider->slug]];
+            })->toArray()
+        );
     }
 
     /**

@@ -22,14 +22,9 @@ class PaymentMerchantFactory extends Factory
      */
     public function definition()
     {
-        $provider = PaymentProvider::inRandomOrder()->firstOr(function () {
-            return PaymentProvider::factory()->create();
-        });
-
         $name = $this->faker->unique()->company();
 
         return [
-            'provider_id' => $provider->id,
             'name' => $name,
             'slug' => PaymentMerchant::slugify($name),
         ];

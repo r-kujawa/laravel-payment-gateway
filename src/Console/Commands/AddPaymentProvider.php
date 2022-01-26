@@ -17,7 +17,7 @@ class AddPaymentProvider extends Command
      * @var string
      */
     protected $signature = 'payment:add-provider
-                            {provider : The payment provider name}
+                            {provider? : The payment provider name}
                             {--slug= : The payment provider dev name}
                             {--manager : Generate class for payment management}
                             {--processor : Generate class for payment processing}
@@ -100,7 +100,14 @@ class AddPaymentProvider extends Command
      */
     protected function setProperties()
     {
-        $this->name = trim($this->argument('provider'));
-        $this->slug = PaymentProvider::slugify($this->option('slug') ?? $this->name);
+        $this->name = trim(
+            $this->argument('provider') ?? 
+            $this->ask('What provider would you like to add?')
+        );
+
+        $this->slug = PaymentProvider::slugify(
+            $this->option('slug') ?? 
+            $this->ask("What slug would you like to use for the {$this->name} provider?", PaymentProvider::slugify($this->name))
+        );
     }
 }
