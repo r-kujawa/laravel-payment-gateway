@@ -24,7 +24,7 @@ class PaymentProvider extends Model
 
     public function merchants()
     {
-        return $this->hasMany(config('payment.models.' . PaymentMerchant::class, PaymentMerchant::class));
+        return $this->belongsToMany(config('payment.models.' . PaymentMerchant::class, PaymentMerchant::class), 'payment_merchant_provider', 'provider_id', 'merchant_id');
     }
 
     public function wallets()

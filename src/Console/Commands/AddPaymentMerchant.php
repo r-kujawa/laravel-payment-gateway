@@ -19,10 +19,9 @@ class AddPaymentMerchant extends Command
      * @var string
      */
     protected $signature = 'payment:add-merchant
-                            {merchant : The merchant name}
+                            {merchant? : The merchant name}
                             {--slug= : The merchant dev name}
-                            {provider : The merchant\'s provider slug}
-                            {--provider-name= : The merchant\'s provider name}
+                            {--skip-provider : Do not associate a provider with the merchant}
                             {--skip-migration : Do not run the migration}';
 
     /**
@@ -41,23 +40,20 @@ class AddPaymentMerchant extends Command
     protected $name, $slug;
 
     /**
+     * The merchant's provider relationships to be saved.
+     *
+     * @var string $providers
+     * @var string $defaultProvider
+     */
+    protected $providers, $defaultProvider;
+
+    /**
      * Execute the console command.
      *
      * @return void
      */
     public function handle()
     {
-        $provider = PaymentProvider::where('slug', $this->argument('provider'))->first();
-
-        if (is_null($provider)) {
-            if (is_null($this->option('provider-name'))) {
-                $this->error('Please provide the --provider-name so we can generate the migration for you.');
-                return;
-            }
-
-            $this->call('payment:add-provider', ['provider' => $this->option('provider-name'), '--slug' => $this->argument('provider'), '--skip-migration' => true]);
-        }
-
         $this->setProperties();
 
         $studlySlug = Str::studly($this->slug);
@@ -76,7 +72,8 @@ class AddPaymentMerchant extends Command
                     'class' => $migrationClass,
                     'name' => addslashes($this->name),
                     'slug' => $this->slug,
-                    'provider' => $this->argument('provider'),
+                    'providers' => $this->providers,
+                    'defaultProvider' => $this->defaultProvider,
                 ]
             )
         );
@@ -95,7 +92,32 @@ class AddPaymentMerchant extends Command
      */
     protected function setProperties()
     {
-        $this->name = trim($this->argument('merchant'));
-        $this->slug = PaymentMerchant::slugify($this->option('slug') ?? $this->name);
+        $this->name = trim(
+            $this->argument('merchant') ??
+            $this->ask('What merchant would you like to add?')
+        );
+
+        $this->slug = PaymentMerchant::slugify(
+            $this->option('slug') ?? 
+            $this->ask("What slug would you like to use for the {$this->name} merchant?", PaymentMerchant::slugify($this->name))
+        );
+
+        if ($this->option('skip-provider') || ($providers = collect(config('payment.providers', [])))->isEmpty()) {
+            $this->providers = '';
+            $this->defaultProvider = '';
+
+            return;
+        }
+
+        $selectedProviders = $this->choice(
+            "Which payment providers will the {$this->name} merchant be using? (First chosen will be default)",
+            $providers->toArray(),
+            null,
+            null,
+            true
+        );
+
+        $this->providers = collect($selectedProviders)->join("', '");
+        $this->defaultProvider = $selectedProviders[0];
     }
 }

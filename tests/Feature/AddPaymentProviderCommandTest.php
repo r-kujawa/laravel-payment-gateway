@@ -53,4 +53,31 @@ class AddPaymentProviderCommandTest extends TestCase
         $this->assertTrue(file_exists("{$servicePath}/{$studlySlug}PaymentManager.php"));
         $this->assertTrue(file_exists("{$servicePath}/{$studlySlug}PaymentProcessor.php"));
     }
+
+    /** @test */
+    public function add_payment_provider_command_will_not_prompt_to_run_migration_when_passing_skip_migration_option()
+    {
+        $paymentProvider = PaymentProvider::factory()->make();
+
+        $this->artisan('payment:add-provider', ['provider' => $paymentProvider->name, '--slug' => $paymentProvider->slug, '--skip-migration' => true])
+            ->assertExitCode(0);
+
+        $this->artisan('migrate');
+
+        $this->assertDatabaseHas('payment_providers', ['slug' => $paymentProvider->slug]);
+    }
+
+    /** @test */
+    public function add_payment_provider_command_will_prompt_for_missing_arguments()
+    {
+        $paymentProvider = PaymentProvider::factory()->make();
+
+        $this->artisan('payment:add-provider')
+            ->expectsQuestion('What provider would you like to add?', $paymentProvider->name)
+            ->expectsQuestion('What slug would you like to use for the '.$paymentProvider->name.' provider?', $paymentProvider->slug)
+            ->expectsConfirmation('Would you like to run the migration?', 'yes')
+            ->assertExitCode(0);
+        
+        $this->assertDatabaseHas('payment_providers', ['slug' => $paymentProvider->slug]);
+    }
 }

@@ -22,11 +22,19 @@ class CreateBasePaymentTables extends Migration
 
         Schema::create('payment_merchants', function (Blueprint $table) {
             $table->mediumIncrements('id');
-            $table->unsignedSmallInteger('provider_id');
             $table->string('name');
             $table->string('slug')->unique();
             $table->timestamps();
+        });
 
+        Schema::create('payment_merchant_provider', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedMediumInteger('merchant_id');
+            $table->unsignedSmallInteger('provider_id');
+            $table->boolean('is_default')->default(false);
+            $table->timestamps();
+
+            $table->foreign('merchant_id')->references('id')->on('payment_merchants')->onDelete('cascade');
             $table->foreign('provider_id')->references('id')->on('payment_providers')->onDelete('cascade');
         });
 
@@ -112,6 +120,7 @@ class CreateBasePaymentTables extends Migration
         Schema::dropIfExists('payment_methods');
         Schema::dropIfExists('payment_types');
         Schema::dropIfExists('wallets');
+        Schema::dropIfExists('payment_merchant_provider');
         Schema::dropIfExists('payment_merchants');
         Schema::dropIfExists('payment_providers');
     }
