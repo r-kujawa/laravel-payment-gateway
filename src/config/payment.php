@@ -14,26 +14,24 @@ return [
     */
     'defaults' => [
         'provider' => '',
+        'merchant' => '',
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Supported Payment Providers
+    | Payment Provider Configurations
     |--------------------------------------------------------------------------
     |
-    | This option defines the payment providers that your application supports along with
-    | their merchants. Specify the providers manually once they are ready for production.
-    | You may also specify the service class paths if they differ from the default paths
+    | Here you may specify the service class path for each provider ('path') or, 
+    | if they differ from the default paths, you may also specify the exact class
+    | path for each of the services ('processor', 'manager').
     |
     */
     'providers' => [
-        '' => [
-            'merchants' => [
-                '',
-            ],
-        ],
+        // '' => [
+        //     'path' => 'App\\Services\\Payment'
+        // ],
     ],
-
     
     /*
     |--------------------------------------------------------------------------

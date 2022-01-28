@@ -4,6 +4,8 @@ namespace rkujawa\LaravelPaymentGateway;
 
 use Exception;
 use Illuminate\Support\Str;
+use rkujawa\LaravelPaymentGateway\Models\PaymentMerchant;
+use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 use rkujawa\LaravelPaymentGateway\Traits\SimulateAttributes;
 
 class PaymentService
@@ -21,7 +23,7 @@ class PaymentService
     /**
      * Fluent provider setter.
      *
-     * @param string $provider
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentProvider|string|int $provider
      * @return \rkujawa\LaravelPaymentGateway\PaymentService
      */
     public function provider($provider)
@@ -34,7 +36,7 @@ class PaymentService
     /**
      * Get the current payment provider.
      *
-     * @return string
+     * @return \rkujawa\LaravelPaymentGateway\Models\PaymentProvider
      */
     public function getProvider()
     {
@@ -48,14 +50,12 @@ class PaymentService
     /**
      * Set the payment provider.
      *
-     * @param string $provider
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentProvider|string|int $provider
      * @return void
      */
     public function setProvider($provider)
     {
-        $this->ensureProviderIsValid($provider);
-
-        $this->provider = $provider;
+        $this->provider = $this->ensureProviderIsValid($provider);
 
         $this->gateway = [];
         $this->merchant = null;
@@ -75,26 +75,27 @@ class PaymentService
      * Verify if the payment provider is supported.
      *
      * @param string $provider
-     * @return void
+     * @return \rkujawa\LaravelPaymentGateway\Models\PaymentProvider
      * 
      * @throws \Exception
      */
     private function ensureProviderIsValid($provider)
     {
-        $validProvider = in_array(
-            $provider,
-            array_keys(config('payment.providers'))
-        );
-
-        if (! $validProvider) {
-            throw new Exception('Unsupported provider; ' . $provider . '.');
+        if (! $provider instanceof PaymentProvider) {
+            $provider = PaymentProvider::where('slug', $provider)->orWhere('id', $provider)->first();
         }
+
+        if (is_null($provider) || (! $provider->exists)) {
+            throw new Exception('Unsupported provider.');
+        }
+
+        return $provider;
     }
 
     /**
      * Fluent merchant setter.
      *
-     * @param string $merchant
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant|string|int $merchant
      * @return \rkujawa\LaravelPaymentGateway\PaymentService
      */
     public function merchant($merchant)
@@ -107,7 +108,7 @@ class PaymentService
     /**
      * Get the current merchant.
      *
-     * @return string
+     * @return \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant
      */
     public function getMerchant()
     {
@@ -121,14 +122,12 @@ class PaymentService
     /**
      * Set the specified merchant.
      *
-     * @param string $merchant
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant|string|int $merchant
      * @return void
      */
     public function setMerchant($merchant)
     {
-        $this->ensureMerchantIsValid($merchant);
-
-        $this->merchant = $merchant;
+        $this->merchant = $this->ensureMerchantIsValid($merchant);
 
         $this->gateway = [];
     }
@@ -140,27 +139,28 @@ class PaymentService
      */
     public function getDefaultMerchant()
     {
-        return config('payment.providers.' . $this->getProvider() . '.merchants')[0];
+        return config('payment.defaults.merchants');
     }
 
     /**
      * Verify if the current provider supports the specified merchant.
      *
-     * @param string $merchant
-     * @return void
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant|string|int $merchant
+     * @return \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant
      * 
      * @throws \Exception
      */
     private function ensureMerchantIsValid($merchant)
     {
-        $validMerchant = in_array(
-            $merchant,
-            config('payment.providers.' . $this->getProvider() . '.merchants')
-        );
-
-        if (! $validMerchant) {
-            throw new Exception('Unsupported merchant; ' . $merchant . ' for ' . $this->getProvider() . '.');
+        if (! $merchant instanceof PaymentMerchant) {
+            $merchant = PaymentMerchant::where('slug', $merchant)->orWhere('id', $merchant)->first();
         }
+
+        if (is_null($merchant) || (! $merchant->exists) || (! $this->getProvider()->merchants()->where('id', $merchant->id)->exists())) {
+            throw new Exception('Unsupported merchant.');
+        }
+
+        return $merchant;
     }
 
     /**
@@ -199,13 +199,14 @@ class PaymentService
     protected function setService($service)
     {
         $gateway = config(
-            'payment.providers.' . $this->getProvider() . '.' . $service,
-            '\\App\\Services\\Payment\\' . Str::studly($this->getProvider()) . 'Payment' . Str::studly($service)
+            'payment.providers.' . $this->getProvider()->slug . '.' . $service,
+            config(
+                'payment.providers.' . $this->getProvider()->slug . '.path',
+                '\\App\\Services\\Payment'
+            ) . '\\' . Str::studly($this->getProvider()->slug) . 'Payment' . Str::studly($service)
         );
 
-        $this->ensureServiceIsValid($service, $gateway);
-
-        $this->gateway[$service] = new $gateway($this->getMerchant());
+        $this->gateway[$service] = $this->ensureServiceIsValid($service, $gateway);
     }
 
     /**
@@ -213,7 +214,7 @@ class PaymentService
      *
      * @param string $service
      * @param string $gateway
-     * @return void
+     * @return mixed
      * 
      * @throws \Exception
      */
@@ -222,5 +223,7 @@ class PaymentService
         if (! class_exists($gateway)) {
             throw new Exception('The ' . $gateway . '::class does not exist, if you moved or renamed your ' . $service . ' service class, please specify it in the payment.php config.');
         }
+
+        return new $gateway($this->getMerchant());
     }
 }
