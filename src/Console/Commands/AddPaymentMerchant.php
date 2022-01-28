@@ -102,7 +102,7 @@ class AddPaymentMerchant extends Command
             $this->ask("What slug would you like to use for the {$this->name} merchant?", PaymentMerchant::slugify($this->name))
         );
 
-        if ($this->option('skip-provider') || ($providers = collect(config('payment.providers', [])))->isEmpty()) {
+        if ($this->option('skip-provider') || ($providers = PaymentProvider::all())->isEmpty()) {
             $this->providers = '';
             $this->defaultProvider = '';
 
@@ -111,7 +111,7 @@ class AddPaymentMerchant extends Command
 
         $selectedProviders = $this->choice(
             "Which payment providers will the {$this->name} merchant be using? (First chosen will be default)",
-            $providers->toArray(),
+            $providers->pluck('slug')->toArray(),
             null,
             null,
             true

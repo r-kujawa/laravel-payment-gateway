@@ -85,7 +85,7 @@ class PaymentMerchantCommandTest extends TestCase
                 '--slug' => $paymentMerchant->slug,
                 '--skip-migration' => true,
             ])
-            ->expectsOutput('The migration to add '.$paymentMerchant->name.' payment merchant has been generated.')
+            ->expectsOutput('The migration to add ' . $paymentMerchant->name . ' payment merchant has been generated.')
             ->assertExitCode(0);
         
         $this->artisan('migrate');
