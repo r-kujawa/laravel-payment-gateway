@@ -139,7 +139,7 @@ class PaymentService
      */
     public function getDefaultMerchant()
     {
-        return config('payment.defaults.merchants');
+        return config('payment.defaults.merchant');
     }
 
     /**
@@ -156,7 +156,7 @@ class PaymentService
             $merchant = PaymentMerchant::where('slug', $merchant)->orWhere('id', $merchant)->first();
         }
 
-        if (is_null($merchant) || (! $merchant->exists) || (! $this->getProvider()->merchants()->where('id', $merchant->id)->exists())) {
+        if (is_null($merchant) || (! $merchant->exists) || (! $merchant->providers()->where('slug', $this->getProvider()->slug)->exists())) {
             throw new Exception('Unsupported merchant.');
         }
 
