@@ -2,6 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Tests;
 
+use Illuminate\Filesystem\Filesystem;
 use rkujawa\LaravelPaymentGateway\PaymentServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
@@ -14,6 +15,9 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // TODO: Make this a separate function and prevent using the \Illuminate\Filesystem\Filesystem
+        (new Filesystem)->cleanDirectory(database_path('migrations'));
 
         $this->artisan('migrate');
     }
