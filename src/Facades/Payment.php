@@ -3,7 +3,7 @@
 namespace rkujawa\LaravelPaymentGateway\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use rkujawa\LaravelPaymentGateway\Contracts\PaymentGateway;
+use rkujawa\LaravelPaymentGateway\PaymentGateway;
 
 class Payment extends Facade
 {

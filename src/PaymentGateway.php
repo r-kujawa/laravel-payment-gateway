@@ -2,9 +2,9 @@
 
 namespace rkujawa\LaravelPaymentGateway;
 
-use rkujawa\LaravelPaymentGateway\Contracts\PaymentGateway;
+use rkujawa\LaravelPaymentGateway\Contracts\PaymentGateway as PaymentGatewayContract;
 
-class LaravelPaymentGateway extends PaymentService implements PaymentGateway
+class PaymentGateway extends PaymentService implements PaymentGatewayContract
 {
     /**
      * @param \rkujawa\LaravelPaymentGateway\Contracts\BillableContract $billable

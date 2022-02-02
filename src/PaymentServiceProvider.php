@@ -6,7 +6,6 @@ use Illuminate\Support\ServiceProvider;
 use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentMerchant;
 use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentProvider;
 use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentType;
-use rkujawa\LaravelPaymentGateway\Contracts\PaymentGateway;
 
 class PaymentServiceProvider extends ServiceProvider
 {
@@ -38,7 +37,7 @@ class PaymentServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(PaymentGateway::class, function ($app) {
-            return new LaravelPaymentGateway();
+            return new PaymentGateway();
         });
     }
 }
