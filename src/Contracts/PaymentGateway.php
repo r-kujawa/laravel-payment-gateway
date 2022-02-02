@@ -2,7 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Contracts;
 
-interface PaymentGateway extends PaymentManager, PaymentProcesser
+interface PaymentGateway extends PaymentManager, PaymentProcessor
 {
     
 }

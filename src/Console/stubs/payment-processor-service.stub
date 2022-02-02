@@ -2,9 +2,9 @@
 
 namespace App\Services\Payment;
 
-use rkujawa\LaravelPaymentGateway\Contracts\PaymentProcesser;
+use rkujawa\LaravelPaymentGateway\Contracts\PaymentProcessor;
 
-class {{ name }}PaymentProcessor extends {{ name }}PaymentGateway implements PaymentProcesser
+class {{ name }}PaymentProcessor extends {{ name }}PaymentGateway implements PaymentProcessor
 {
     /**
      * @param array|mixed $data
