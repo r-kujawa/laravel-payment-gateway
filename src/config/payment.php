@@ -22,7 +22,7 @@ return [
     | Payment Provider Configurations
     |--------------------------------------------------------------------------
     |
-    | Here you may specify the service class path for each provider ('path') or, 
+    | Here you may specify the service class path for each provider ('path') or,
     | if they differ from the default paths, you may also specify the exact class
     | path for each of the services ('processor', 'manager').
     |

@@ -18,7 +18,7 @@ class {{ name }}PaymentProcessor extends {{ name }}PaymentGateway implements Pay
 
     /**
      * TODO: Define the transaction tables and models.
-     * 
+     *
      * @param mixed $paymentTransaction
      * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentProcessorResponse
      */
@@ -29,7 +29,7 @@ class {{ name }}PaymentProcessor extends {{ name }}PaymentGateway implements Pay
 
     /**
      * TODO: Define the transaction tables and models.
-     * 
+     *
      * @param mixed $paymentTransaction
      * @param int $amount
      * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentProcessorResponse
