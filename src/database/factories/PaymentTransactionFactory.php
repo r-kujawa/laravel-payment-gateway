@@ -4,7 +4,6 @@ namespace rkujawa\LaravelPaymentGateway\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
-use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction;
 
 class PaymentTransactionFactory extends Factory
