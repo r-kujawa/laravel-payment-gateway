@@ -49,7 +49,7 @@ class AddPaymentType extends Command
 
         $studlySlug = Str::studly($this->slug);
 
-        $migrationClass = "Add{$studlySlug}PaymentProvider";
+        $migrationClass = "Add{$studlySlug}PaymentType";
 
         if ($this->classExists($migrationClass, $this->getMigrationPath())) {
             throw new InvalidArgumentException("{$migrationClass}::class already exists.");
