@@ -71,6 +71,11 @@ class PaymentMethod extends Model
         return $this->belongsTo(config('payment.models.' . Wallet::class, Wallet::class));
     }
 
+    public function type()
+    {
+        return $this->belongsTo(config('payment.models.' . PaymentType::class, PaymentType::class));
+    }
+
     public function transactions()
     {
         return $this->hasMany(config('payment.models.' . PaymentTransaction::class, PaymentTransaction::class));
