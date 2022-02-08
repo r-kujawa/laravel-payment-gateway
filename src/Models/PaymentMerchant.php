@@ -24,7 +24,7 @@ class PaymentMerchant extends Model
 
     public function providers()
     {
-        return $this->belongsToMany(config('payment.models.' . PaymentProvider::class, PaymentProvider::class), 'payment_merchant_provider', 'merchant_id', 'provider_id');
+        return $this->belongsToMany(config('payment.models.' . PaymentProvider::class, PaymentProvider::class), 'payment_merchant_provider', 'merchant_id', 'provider_id')->withPivot(['is_default'])->withTimestamps();
     }
 
     public function wallets()
