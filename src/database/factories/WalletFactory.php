@@ -27,11 +27,15 @@ class WalletFactory extends Factory
             return PaymentMerchant::factory()->create();
         });
 
-        $provider = $merchant->providers()->inRandomOrder()->firstOr(function () {
-            return PaymentProvider::factory()->create();
-        });
+        $provider = PaymentProvider::whereHas('merchants', function ($query) use ($merchant) {
+            $query->where('payment_merchants.id', $merchant->id);
+        })->inRandomOrder()->firstOr(function () use ($merchant) {
+            $paymentProvider = PaymentProvider::factory()->create();
 
-        $merchant->providers()->syncWithoutDetaching([$provider->id]);
+            $merchant->providers()->attach($paymentProvider->id, ['is_default' => true]);
+
+            return $paymentProvider;
+        });
 
         return [
             'provider_id' => $provider->id,
