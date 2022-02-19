@@ -13,5 +13,5 @@ Provide any other information that the reviewer and/or tester should know.
 ### **Any questions or suggestions?** :thought_balloon:
 Provide any questions or suggestions you might have about this change or future changes.
 
-### **Does this relate to any story?** :link:
-Provide a link to the stories this potentially closes and/or relates to.
+### **Does this relate to any issue?** :link:
+Provide a link to the issues this potentially closes and/or relates to.
