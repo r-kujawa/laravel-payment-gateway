@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentMethodFactory;
+use rkujawa\LaravelPaymentGateway\PaymentGateway;
 
 class PaymentMethod extends Model
 {
@@ -88,5 +89,27 @@ class PaymentMethod extends Model
         }
 
         return $this->exp_month . $separator . $this->exp_year;
+    }
+
+    public function getPaymentGatewayAttribute()
+    {
+        return (new PaymentGateway)
+            ->provider($this->wallet->provider)
+            ->merchant($this->wallet->merchant);
+    }
+
+    public function makeShowRequest()
+    {
+        return $this->paymentGateway->getPaymentMethod($this);
+    }
+
+    public function makeUpdateRequest($data)
+    {
+        return $this->paymentGateway->updatePaymentMethod($this, $data);
+    }
+
+    public function makeRemoveRequest()
+    {
+        return $this->paymentGateway->deletePaymentMethod($this);
     }
 }
