@@ -80,6 +80,7 @@ class CreateBasePaymentTables extends Migration
         Schema::create('payment_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedSmallInteger('provider_id');
+            $table->unsignedMediumInteger('merchant_id');
             $table->string('reference_id');
             $table->unsignedInteger('amount_cents');
             $table->char('currency', 3)->default('USD');
@@ -90,6 +91,7 @@ class CreateBasePaymentTables extends Migration
             $table->timestamps();
 
             $table->foreign('provider_id')->references('id')->on('payment_providers');
+            $table->foreign('merchant_id')->references('id')->on('payment_merchants');
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('set null');
         });
 
