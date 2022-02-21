@@ -34,4 +34,9 @@ class PaymentTransaction extends Model
     {
         return $this->belongsTo(config('payment.models.' . PaymentProvider::class, PaymentProvider::class));
     }
+
+    public function merchant()
+    {
+        return $this->belongsTo(config('payment.models.' . PaymentMerchant::class, PaymentMerchant::class));
+    }
 }
