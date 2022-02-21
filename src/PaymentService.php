@@ -68,6 +68,10 @@ class PaymentService
      */
     public function getDefaultProvider()
     {
+        if (isset($this->merchant) && ! is_null($provider = $this->merchant->providers()->wherePivot('is_default', true)->first())) {
+            return $provider;
+        }
+        
         return config('payment.defaults.provider');
     }
 
