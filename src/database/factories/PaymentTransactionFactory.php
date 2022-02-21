@@ -41,32 +41,32 @@ class PaymentTransactionFactory extends Factory
     public function configure()
     {
         return $this->afterMaking(function (PaymentTransaction $transaction) {
-            if (is_null($transaction->merchant_id)) {
-                $merchant = ! is_null($transaction->payment_method_id)
-                    ? $transaction->paymentMethod->wallet->merchant
-                    : PaymentMerchant::whereHas('providers', function ($query) use ($transaction) {
-                        $query->where('payment_providers.id', $transaction->provider_id);
-                    })->inRandomOrder()->firstOr(function () {
-                        return PaymentMerchant::factory()->create();
-                    });
-
-                $transaction->merchant_id = $merchant->id;
-            }
-
             if (is_null($transaction->provider_id)) {
                 $provider = ! is_null($transaction->payment_method_id)
                     ? $transaction->paymentMethod->wallet->provider
                     : PaymentProvider::whereHas('merchants', function ($query) use ($transaction) {
                         $query->where('payment_merchants.id', $transaction->merchant_id);
-                    })->inRandomOrder()->firstOr(function () use ($transaction) {
-                        $provider = PaymentProvider::factory()->create();
-            
-                        $provider->merchants()->attach($transaction->merchant_id, ['is_default' => true]);
-            
-                        return $provider;
+                    })->inRandomOrder()->firstOr(function ()  {
+                        return PaymentProvider::factory()->create();
                     });
 
                 $transaction->provider_id = $provider->id;
+            }
+
+            if (is_null($transaction->merchant_id)) {
+                $merchant = ! is_null($transaction->payment_method_id)
+                    ? $transaction->paymentMethod->wallet->merchant
+                    : PaymentMerchant::whereHas('providers', function ($query) use ($transaction) {
+                        $query->where('payment_providers.id', $transaction->provider_id);
+                    })->inRandomOrder()->firstOr(function () use ($transaction) {
+                        $merchant = PaymentMerchant::factory()->create();
+
+                        $merchant->providers()->attach($transaction->provider_id, ['is_default' => true]);
+
+                        return $merchant;
+                    });
+
+                $transaction->merchant_id = $merchant->id;
             }
         });
     }
