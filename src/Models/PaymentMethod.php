@@ -24,6 +24,13 @@ class PaymentMethod extends Model
     protected $appends = ['expiration_date'];
 
     /**
+     * The payment method's pre-configured gateway.
+     *
+     * @var \rkujawa\LaravelPaymentGateway\PaymentGateway
+     */
+    private $paymentGateway;
+
+    /**
      * Create a new factory instance for the model.
      *
      * @return \Illuminate\Database\Eloquent\Factories\Factory
@@ -91,25 +98,50 @@ class PaymentMethod extends Model
         return $this->exp_month . $separator . $this->exp_year;
     }
 
-    public function getPaymentGatewayAttribute()
+    /**
+     * Retrieve the payment method's configured gateway.
+     *
+     * @return \rkujawa\LaravelPaymentGateway\PaymentGateway
+     */
+    public function getGatewayAttribute()
     {
-        return (new PaymentGateway)
-            ->provider($this->wallet->provider)
-            ->merchant($this->wallet->merchant);
+        if (! isset($this->paymentGateway)) {
+            $this->paymentGateway = (new PaymentGateway)
+                ->provider($this->wallet->provider)
+                ->merchant($this->wallet->merchant);
+        }
+        
+        return $this->paymentGateway;
     }
 
-    public function makeShowRequest()
+    /**
+     * Request the payment method details from the provider.
+     *
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
+     */
+    public function requestDetails()
     {
-        return $this->paymentGateway->getPaymentMethod($this);
+        return $this->gateway->getPaymentMethod($this);
     }
 
-    public function makeUpdateRequest($data)
+    /**
+     * Request the provider to update the payment method's details.
+     *
+     * @param array|mixed $data
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
+     */
+    public function requestUpdate($data)
     {
-        return $this->paymentGateway->updatePaymentMethod($this, $data);
+        return $this->gateway->updatePaymentMethod($this, $data);
     }
 
-    public function makeRemoveRequest()
+    /**
+     * Request the provider to remove the payment method from their system.
+     *
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentManagerResponse
+     */
+    public function requestRemoval()
     {
-        return $this->paymentGateway->deletePaymentMethod($this);
+        return $this->gateway->deletePaymentMethod($this);
     }
 }
