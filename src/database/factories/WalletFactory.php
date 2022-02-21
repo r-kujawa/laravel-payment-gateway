@@ -23,24 +23,42 @@ class WalletFactory extends Factory
      */
     public function definition()
     {
-        $merchant = PaymentMerchant::inRandomOrder()->firstOr(function () {
-            return PaymentMerchant::factory()->create();
-        });
-
-        $provider = PaymentProvider::whereHas('merchants', function ($query) use ($merchant) {
-            $query->where('payment_merchants.id', $merchant->id);
-        })->inRandomOrder()->firstOr(function () use ($merchant) {
-            $paymentProvider = PaymentProvider::factory()->create();
-
-            $merchant->providers()->attach($paymentProvider->id, ['is_default' => true]);
-
-            return $paymentProvider;
-        });
-
         return [
-            'provider_id' => $provider->id,
-            'merchant_id' => $merchant->id,
             'token' => $this->faker->uuid(),
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return $this
+     */
+    public function configure()
+    {
+        return $this->afterMaking(function (Wallet $wallet) {
+            if (is_null($wallet->merchant_id)) {
+                $merchant = PaymentMerchant::whereHas('providers', function ($query) use ($wallet) {
+                    $query->where('payment_providers.id', $wallet->provider_id);
+                })->inRandomOrder()->firstOr(function () {
+                    return PaymentMerchant::factory()->create();
+                });
+
+                $wallet->merchant_id = $merchant->id;
+            }
+
+            if (is_null($wallet->provider_id)) {
+                $provider = PaymentProvider::whereHas('merchants', function ($query) use ($wallet) {
+                    $query->where('payment_merchants.id', $wallet->merchant_id);
+                })->inRandomOrder()->firstOr(function () use ($wallet) {
+                    $provider = PaymentProvider::factory()->create();
+        
+                    $provider->merchants()->attach($wallet->merchant_id, ['is_default' => true]);
+        
+                    return $provider;
+                });
+
+                $wallet->provider_id = $provider->id;
+            }
+        });
     }
 }
