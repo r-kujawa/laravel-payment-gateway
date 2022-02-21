@@ -23,18 +23,32 @@ class PaymentRefundFactory extends Factory
      */
     public function definition()
     {
-        $paymentTransaction = PaymentTransaction::inRandomOrder()->firstOr(function () {
-            return PaymentTransaction::factory()->create();
-        });
-
         return [
             'reference_id' => $this->faker->uuid(),
-            'transaction_id' => $paymentTransaction->id,
-            'amount_cents' => $this->faker->numberBetween(1, 999) * 100,
             'currency' => $this->faker->currencyCode(),
             'type' => $this->faker->randomElement([PaymentRefund::VOID, PaymentRefund::REFUND]),
             'status_code' => 69, // TODO: Determine the status codes.
             'payload' => [],
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return $this
+     */
+    public function configure()
+    {
+        return $this->afterMaking(function (PaymentRefund $refund) {
+            if (is_null($refund->transaction_id)) {
+                $transaction = PaymentTransaction::factory()->create();
+
+                $refund->transaction_id = $transaction->id;
+            }
+
+            if (is_null($refund->amount_cents)) {
+                $refund->amount_cents = $refund->transaction->amount_cents;
+            }
+        });
     }
 }
