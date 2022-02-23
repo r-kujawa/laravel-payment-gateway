@@ -4,5 +4,10 @@ namespace rkujawa\LaravelPaymentGateway\Contracts;
 
 interface Billable
 {
-    // TODO: Add methods like charge, refund, etc...
+    /**
+     * Get the billable's wallets.
+     *
+     * @return void
+     */
+    public function wallets();
 }

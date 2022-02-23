@@ -6,13 +6,13 @@ use rkujawa\LaravelPaymentGateway\Models\Wallet;
 
 trait Billable
 {
-    public function getBillableKey()
-    {
-        return 'id';
-    }
-
+    /**
+     * Get the billable's wallets.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
     public function wallets()
     {
-        return $this->morphMany(Wallet::class, 'billable', 'billable_type', 'billable_id', $this->getBillableKey());
+        return $this->morphMany(Wallet::class, 'billable');
     }
 }
