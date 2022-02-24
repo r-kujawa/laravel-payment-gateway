@@ -9,9 +9,9 @@ class {{ name }}PaymentGateway
     /**
      * Set the gateway $client
      *
-     * @param  \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant|null $merchant
+     * @param  \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant $merchant
      */
-    public function __construct($merchant = null)
+    public function __construct($merchant)
     {
         // Set the http client.
     }
