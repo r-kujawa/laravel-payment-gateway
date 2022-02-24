@@ -5,11 +5,10 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentRefundFactory;
-use rkujawa\LaravelPaymentGateway\Traits\AmountConverter;
 
 class PaymentRefund extends Model
 {
-    use HasFactory, AmountConverter;
+    use HasFactory;
 
     const VOID = 'void';
     const REFUND = 'refund';
@@ -19,8 +18,6 @@ class PaymentRefund extends Model
     protected $casts = [
         'payload' => 'array',
     ];
-
-    protected $appends = ['amount'];
 
     public static function newFactory()
     {
