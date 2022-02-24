@@ -43,7 +43,7 @@ class PaymentTransactionFactory extends Factory
         return $this->afterMaking(function (PaymentTransaction $transaction) {
             if (is_null($transaction->provider_id)) {
                 $provider = ! is_null($transaction->payment_method_id)
-                    ? $transaction->paymentMethod->wallet->provider
+                    ? $transaction->paymentMethod->provider
                     : PaymentProvider::whereHas('merchants', function ($query) use ($transaction) {
                         $query->where('payment_merchants.id', $transaction->merchant_id);
                     })->inRandomOrder()->firstOr(function ()  {
@@ -55,7 +55,7 @@ class PaymentTransactionFactory extends Factory
 
             if (is_null($transaction->merchant_id)) {
                 $merchant = ! is_null($transaction->payment_method_id)
-                    ? $transaction->paymentMethod->wallet->merchant
+                    ? $transaction->paymentMethod->merchant
                     : PaymentMerchant::whereHas('providers', function ($query) use ($transaction) {
                         $query->where('payment_providers.id', $transaction->provider_id);
                     })->inRandomOrder()->firstOr(function () use ($transaction) {

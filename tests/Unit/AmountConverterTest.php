@@ -5,8 +5,8 @@ namespace rkujawa\LaravelPaymentGateway\Tests\Unit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
-use rkujawa\LaravelPaymentGateway\Tests\App\Models\PaymentRefund;
-use rkujawa\LaravelPaymentGateway\Tests\App\Models\PaymentTransaction;
+use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction as PaymentTransactionModel;
+use rkujawa\LaravelPaymentGateway\Models\PaymentRefund as PaymentRefundModel;
 use rkujawa\LaravelPaymentGateway\Tests\TestCase;
 
 class AmountConverterTest extends TestCase
@@ -19,7 +19,8 @@ class AmountConverterTest extends TestCase
         $paymentMethod = PaymentMethod::factory()->create();
 
         $transaction = PaymentTransaction::create([
-            'provider_id' => $paymentMethod->provider->id,
+            'provider_id' => $paymentMethod->wallet->provider_id,
+            'merchant_id' => $paymentMethod->wallet->merchant_id,
             'reference_id' => $this->faker->uuid(),
             'amount' => 99.99,
             'currency' => 'USD',
@@ -53,4 +54,34 @@ class AmountConverterTest extends TestCase
         $this->assertEquals($refund->amount_cents, $transaction->amount_cents);
         $this->assertEquals($refund->amount, $transaction->amount);
     }
+}
+
+class PaymentTransaction extends PaymentTransactionModel
+{
+    protected $fillable = [
+        'provider_id',
+        'merchant_id',
+        'reference_id',
+        'amount_cents',
+        'amount',
+        'currency',
+        'payment_method_id',
+        'status_code',
+        'payload',
+        'references',
+    ];
+}
+
+class PaymentRefund extends PaymentRefundModel
+{
+    protected $fillable = [
+        'reference_id',
+        'transaction_id',
+        'amount_cents',
+        'amount',
+        'currency',
+        'type',
+        'status_code',
+        'payload',
+    ];
 }
