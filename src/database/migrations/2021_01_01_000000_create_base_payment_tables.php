@@ -82,7 +82,7 @@ class CreateBasePaymentTables extends Migration
             $table->unsignedSmallInteger('provider_id');
             $table->unsignedMediumInteger('merchant_id');
             $table->string('reference_id');
-            $table->unsignedInteger('amount_cents');
+            $table->unsignedInteger('amount');
             $table->char('currency', 3)->default('USD');
             $table->unsignedBigInteger('payment_method_id')->nullable();
             $table->smallInteger('status_code');
@@ -99,7 +99,7 @@ class CreateBasePaymentTables extends Migration
             $table->bigIncrements('id');
             $table->string('reference_id');
             $table->unsignedBigInteger('transaction_id');
-            $table->unsignedBigInteger('amount_cents');
+            $table->unsignedBigInteger('amount');
             $table->char('currency', 3)->default('USD');
             $table->string('type'); // void|refund
             $table->smallInteger('status_code');
