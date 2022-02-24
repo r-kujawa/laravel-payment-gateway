@@ -1,16 +1,15 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway;
+namespace rkujawa\LaravelPaymentGateway\Traits;
 
-use BadMethodCallException;
-use rkujawa\LaravelPaymentGateway\Contracts\Billable;
-use rkujawa\LaravelPaymentGateway\Contracts\PaymentRequestor;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
 use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction;
 use rkujawa\LaravelPaymentGateway\Models\Wallet;
 
-class PaymentGateway extends PaymentService implements PaymentRequestor
+trait PaymentRequests
 {
+    use ThrowsRuntimeException;
+
     /**
      * Retrieve the wallet's details from the provider.
      *
@@ -19,7 +18,7 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
      */
     public function getWallet(Wallet $wallet)
     {
-        return tap($this->gateway->getWallet($wallet))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        $this->throwRuntimeException(__FUNCTION__);
     }
 
     /**
@@ -30,7 +29,7 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
      */
     public function getPaymentMethod(PaymentMethod $paymentMethod)
     {
-        return tap($this->gateway->getPaymentMethod($paymentMethod))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        $this->throwRuntimeException(__FUNCTION__);
     }
 
     /**
@@ -42,7 +41,7 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
      */
     public function tokenizePaymentMethod(Billable $billable, $data)
     {
-        return tap($this->gateway->tokenizePaymentMethod($billable, $data))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        $this->throwRuntimeException(__FUNCTION__);
     }
 
     /**
@@ -54,7 +53,7 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
      */
     public function updatePaymentMethod(PaymentMethod $paymentMethod, $data)
     {
-        return tap($this->gateway->updatePaymentMethod($paymentMethod, $data))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        $this->throwRuntimeException(__FUNCTION__);
     }
     
     /**
@@ -65,7 +64,7 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
      */
     public function removePaymentMethod(PaymentMethod $paymentMethod)
     {
-        return tap($this->gateway->removePaymentMethod($paymentMethod))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        $this->throwRuntimeException(__FUNCTION__);
     }
 
     /**
@@ -77,7 +76,7 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
      */
     public function authorize($data, PaymentMethod $paymentMethod = null)
     {
-        return tap($this->gateway->authorize($data, $paymentMethod))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        $this->throwRuntimeException(__FUNCTION__);
     }
 
     /**
@@ -89,7 +88,7 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
      */
     public function capture(PaymentTransaction $transaction, $data = null)
     {
-        return tap($this->gateway->capture($transaction, $data))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        $this->throwRuntimeException(__FUNCTION__);
     }
 
     /**
@@ -101,44 +100,29 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
      */
     public function authorizeAndCapture($data, PaymentMethod $paymentMethod = null)
     {
-        return tap($this->gateway->authorizeAndCapture($data, $paymentMethod))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        $this->throwRuntimeException(__FUNCTION__);
     }
 
     /**
      * Void a previously authorized transaction.
      * 
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $paymentTransaction
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function void(PaymentTransaction $transaction)
+    public function void(PaymentTransaction $paymentTransaction)
     {
-        return tap($this->gateway->void($transaction))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        $this->throwRuntimeException(__FUNCTION__);
     }
 
     /**
      * Refund a previously captured transaction.
      * 
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $paymentTransaction
      * @param array|mixed|null
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function refund(PaymentTransaction $transaction, $data = null)
+    public function refund(PaymentTransaction $paymentTransaction, $data = null)
     {
-        return tap($this->gateway->refund($transaction, $data))->configure(__FUNCTION__, $this->provider, $this->merchant);
-    }
-
-    /**
-     * @param string $method
-     * @param array $params
-     * 
-     * @throws \BadMethodCallException
-     */
-    public function __call($method, $params)
-    {
-        if (! method_exists($this->gateway, $method)) {
-            throw new BadMethodCallException(__CLASS__ . "::{$method}() not found.");
-        }
-
-        return tap($this->gateway->{$method}(...$params))->configure($method, $this->provider, $this->merchant);
+        $this->throwRuntimeException(__FUNCTION__);
     }
 }
