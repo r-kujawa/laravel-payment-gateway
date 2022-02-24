@@ -74,6 +74,11 @@ class PaymentMethod extends Model
         return $this->wallet->provider;
     }
 
+    public function getMerchantAttribute()
+    {
+        return $this->wallet->merchant;
+    }
+
     public function wallet()
     {
         return $this->belongsTo(config('payment.models.' . Wallet::class, Wallet::class));
