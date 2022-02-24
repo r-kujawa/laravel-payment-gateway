@@ -50,8 +50,6 @@ class AddPaymentProviderCommandTest extends TestCase
         $servicePath = app_path('Services/Payment');
 
         $this->assertTrue(file_exists("{$servicePath}/{$studlySlug}PaymentGateway.php"));
-        $this->assertTrue(file_exists("{$servicePath}/{$studlySlug}PaymentManager.php"));
-        $this->assertTrue(file_exists("{$servicePath}/{$studlySlug}PaymentProcessor.php"));
     }
 
     /** @test */
