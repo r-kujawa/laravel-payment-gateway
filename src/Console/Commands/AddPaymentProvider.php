@@ -19,8 +19,6 @@ class AddPaymentProvider extends Command
     protected $signature = 'payment:add-provider
                             {provider? : The payment provider name}
                             {--slug= : The payment provider dev name}
-                            {--manager : Generate class for payment management}
-                            {--processor : Generate class for payment processing}
                             {--skip-migration : Do not run the migration}';
 
     /**
@@ -53,22 +51,6 @@ class AddPaymentProvider extends Command
             app_path("Services/Payment/{$studlySlug}PaymentGateway.php"),
             $this->makeFile(__DIR__ . '/../stubs/payment-gateway.stub', ['name' => $studlySlug])
         );
-
-        $all = ! ($this->option('manager') || $this->option('processor'));
-
-        if ($all || $this->option('manager')) {
-            $this->putFile(
-                app_path("Services/Payment/{$studlySlug}PaymentManager.php"),
-                $this->makeFile(__DIR__ . '/../stubs/payment-manager-service.stub', ['name' => $studlySlug])
-            );
-        }
-
-        if ($all || $this->option('processor')) {
-            $this->putFile(
-                app_path("Services/Payment/{$studlySlug}PaymentProcessor.php"),
-                $this->makeFile(__DIR__ . '/../stubs/payment-processor-service.stub', ['name' => $studlySlug])
-            );
-        }
 
         $migrationClass = "Add{$studlySlug}PaymentProvider";
 
