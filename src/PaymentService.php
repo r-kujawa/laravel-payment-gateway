@@ -95,12 +95,10 @@ class PaymentService
         return $provider;
     }
 
-    private function ensureMerchantIsSupportedByProvider($nullable = false)
+    private function ensureMerchantIsSupportedByProvider()
     {
         if ($this->merchant->providers->doesntContain('id', $this->getProvider()->id)) {
-            return $nullable
-                ? null
-                : throw new Exception('The ' . $this->getProvider()->name . ' provider does not support the ' . $this->merchant->name . ' merchant.');
+            throw new Exception('The ' . $this->getProvider()->name . ' provider does not support the ' . $this->merchant->name . ' merchant.');
         }
 
         return $this->merchant;
@@ -243,6 +241,6 @@ class PaymentService
             throw new Exception('The ' . $gateway . '::class does not exist, if you moved or renamed your ' . $service . ' service class, please specify it in the payment.php config.');
         }
 
-        return new $gateway($this->ensureMerchantIsSupportedByProvider(true));
+        return new $gateway($this->ensureMerchantIsSupportedByProvider());
     }
 }
