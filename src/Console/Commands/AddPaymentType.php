@@ -20,8 +20,7 @@ class AddPaymentType extends Command
     protected $signature = 'payment:add-type
                             {type? : The payment type name}
                             {--displayName= : The payment type pretty name}
-                            {--slug= : The payment type dev name}
-                            {--no-parent : The payment type does not have a parent type}';
+                            {--slug= : The payment type dev name}';
 
     /**
      * The console command description.
@@ -36,9 +35,8 @@ class AddPaymentType extends Command
      * @var string $name
      * @var string $displayName
      * @var string $slug
-     * @var int|null $parentId
      */
-    protected $name, $displayName, $slug, $parentId = null;
+    protected $name, $displayName, $slug;
 
     /**
      * Execute the console command.
@@ -66,7 +64,6 @@ class AddPaymentType extends Command
                     'name' => addslashes($this->name),
                     'displayName' => addslashes($this->displayName),
                     'slug' => $this->slug,
-                    'parentId' => is_null($this->parentId) ? 'null' : $this->parentId,
                 ]
             )
         );
@@ -97,18 +94,5 @@ class AddPaymentType extends Command
             $this->option('slug') ??
             $this->ask("What slug would you like to use for the {$this->name} payment type?", PaymentType::slugify($this->name))
         );
-
-        if (
-            (! $this->option('no-parent')) && 
-            ($types = PaymentType::all())->isNotEmpty() &&
-            $this->confirm("Does {$this->name} inherit an existing parent payment type?", 'yes')
-        ) {
-            $typeSlug = $this->choice(
-                "Choose {$this->name}'s parent payment type",
-                $types->pluck('slug')->toArray()
-            );
-
-            $this->parentId = $types->firstWhere('slug', $typeSlug)->id;
-        }
     }
 }

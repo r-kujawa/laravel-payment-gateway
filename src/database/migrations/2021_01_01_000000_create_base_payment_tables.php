@@ -40,13 +40,10 @@ class CreateBasePaymentTables extends Migration
 
         Schema::create('payment_types', function (Blueprint $table) {
             $table->smallIncrements('id');
-            $table->unsignedSmallInteger('parent_id')->nullable();
             $table->string('name');
             $table->string('display_name');
             $table->string('slug')->unique();
             $table->timestamps();
-
-            $table->foreign('parent_id')->references('id')->on('payment_types')->onDelete('set null');
         });
 
         Schema::create('wallets', function (Blueprint $table) {
