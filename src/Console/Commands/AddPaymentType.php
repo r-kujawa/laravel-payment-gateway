@@ -88,7 +88,7 @@ class AddPaymentType extends Command
         );
 
         $this->displayName = $this->option('displayName') ??
-            $this->ask('How would you display the payment type to the end user?', $this->name);
+            (is_null($this->argument('type')) ? $this->ask('How would you display the payment type to the end user?', $this->name) : $this->name);
 
         $this->slug = PaymentType::slugify(
             $this->option('slug') ??

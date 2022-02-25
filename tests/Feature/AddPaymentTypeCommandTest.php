@@ -43,7 +43,8 @@ class AddPaymentTypeCommandTest extends TestCase
         $paymentType = PaymentType::factory()->make();
 
         $this->artisan('payment:add-type', ['type' => $paymentType->name, '--slug' => $paymentType->slug])
-            ->expectsConfirmation('Would you like to run the migration?');
+            ->expectsConfirmation('Would you like to run the migration?')
+            ->assertExitCode(0);
 
         try {
             $this->artisan('payment:add-type', ['type' => $paymentType->name, '--slug' => $paymentType->slug])
@@ -51,5 +52,20 @@ class AddPaymentTypeCommandTest extends TestCase
         } catch (Exception $e) {
             $this->assertEquals(InvalidArgumentException::class, get_class($e));
         }
+    }
+
+    /** @test */
+    public function add_payment_type_command_prompts_for_input_when_not_provided()
+    {
+        $paymentType = PaymentType::factory()->make();
+
+        $this->artisan('payment:add-type')
+            ->expectsQuestion('What payment type would you like to add?', $paymentType->name)
+            ->expectsQuestion('How would you display the payment type to the end user?', $paymentType->display_name)
+            ->expectsQuestion("What slug would you like to use for the {$paymentType->name} payment type?", $paymentType->slug)
+            ->expectsConfirmation('Would you like to run the migration?', 'yes')
+            ->assertExitCode(0);
+
+            $this->assertDatabaseHas('payment_types', ['slug' => $paymentType->slug]);
     }
 }
