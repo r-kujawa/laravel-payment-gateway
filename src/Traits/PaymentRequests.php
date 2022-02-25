@@ -2,6 +2,7 @@
 
 namespace rkujawa\LaravelPaymentGateway\Traits;
 
+use rkujawa\LaravelPaymentGateway\Contracts\Billable;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
 use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction;
 use rkujawa\LaravelPaymentGateway\Models\Wallet;
