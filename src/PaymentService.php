@@ -83,7 +83,7 @@ class PaymentService
         if (isset($this->merchant) && ! is_null($provider = $this->merchant->providers()->wherePivot('is_default', true)->first())) {
             return $provider;
         }
-        
+
         return config('payment.defaults.provider');
     }
 
@@ -92,7 +92,7 @@ class PaymentService
      *
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentProvider|string|int $provider
      * @return \rkujawa\LaravelPaymentGateway\Models\PaymentProvider
-     * 
+     *
      * @throws \Exception
      */
     private function ensureProviderIsValid($provider)
@@ -110,11 +110,11 @@ class PaymentService
 
     private function ensureMerchantIsSupportedByProvider()
     {
-        if ($this->merchant->providers->doesntContain('id', $this->getProvider()->id)) {
-            throw new Exception('The ' . $this->getProvider()->name . ' provider does not support the ' . $this->merchant->name . ' merchant.');
+        if (! $this->getMerchant()->providers->contains('id', $this->getProvider()->id)) {
+            throw new Exception('The ' . $this->getProvider()->name . ' provider does not support the ' . $this->getMerchant()->name . ' merchant.');
         }
 
-        return $this->merchant;
+        return $this->getMerchant();
     }
 
     /**
@@ -177,7 +177,7 @@ class PaymentService
      *
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant|string|int $merchant
      * @return \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant
-     * 
+     *
      * @throws \Exception
      */
     private function ensureMerchantIsValid($merchant)
@@ -227,7 +227,7 @@ class PaymentService
      *
      * @param string $gateway
      * @return mixed
-     * 
+     *
      * @throws \Exception
      */
     private function ensureGatewayIsValid($gateway)
