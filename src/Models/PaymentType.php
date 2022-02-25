@@ -28,6 +28,16 @@ class PaymentType extends Model
     }
 
     /**
+     * Get the payment type's parent.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parent()
+    {
+        return $this->belongsTo(config('payment.models.' . PaymentType::class, PaymentType::class));
+    }
+
+    /**
      * Get the payment methods that inherit this type.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

@@ -13,6 +13,7 @@ class {{ class }} extends Migration
     public function up()
     {
         PaymentType::create([
+            'parent_id' => {{ parentId }},
             'name' => '{{ name }}',
             'display_name' => '{{ displayName }}',
             'slug' => '{{ slug }}',
