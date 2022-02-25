@@ -64,12 +64,8 @@ class CreateBasePaymentTables extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('wallet_id');
             $table->string('token', 255);
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
-            $table->char('last_digits', 4);
-            $table->char('exp_month', 2);
-            $table->char('exp_year', 4);
             $table->unsignedSmallInteger('type_id');
+            $table->json('details')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

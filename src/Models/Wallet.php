@@ -5,13 +5,15 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use rkujawa\LaravelPaymentGateway\Database\Factories\WalletFactory;
+use rkujawa\LaravelPaymentGateway\Models\Traits\WalletRequests;
 
 class Wallet extends Model
 {
     use HasFactory;
+    use WalletRequests;
 
     protected $guarded = ['id'];
-    
+
     protected $hidden = ['token'];
 
     /**
@@ -42,10 +44,5 @@ class Wallet extends Model
     public function paymentMethods()
     {
         return $this->hasMany(config('payment.models.' . PaymentMethod::class, PaymentMethod::class));
-    }
-
-    public static function findByToken(string $token)
-    {
-        return self::where('token', $token)->first();
     }
 }
