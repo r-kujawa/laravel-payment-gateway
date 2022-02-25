@@ -10,28 +10,58 @@ class PaymentTransaction extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var string[]|bool
+     */
     protected $guarded = ['id'];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
     protected $casts = [
         'payload' => 'array',
         'references' => 'array',
     ];
 
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
     public static function newFactory()
     {
         return PaymentTransactionFactory::new();
     }
 
+    /**
+     * Get the payment method used for this transaction.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function paymentMethod()
     {
         return $this->belongsTo(config('payment.models.' . PaymentMethod::class, PaymentMethod::class));
     }
 
+    /**
+     * Get the provider the transaction belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function provider()
     {
         return $this->belongsTo(config('payment.models.' . PaymentProvider::class, PaymentProvider::class));
     }
 
+    /**
+     * Get the merchant the transaction belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function merchant()
     {
         return $this->belongsTo(config('payment.models.' . PaymentMerchant::class, PaymentMerchant::class));
