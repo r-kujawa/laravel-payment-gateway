@@ -5,6 +5,7 @@ namespace rkujawa\LaravelPaymentGateway\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use rkujawa\LaravelPaymentGateway\Models\PaymentRefund;
 use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction;
+use rkujawa\LaravelPaymentGateway\PaymentStatus;
 
 class PaymentRefundFactory extends Factory
 {
@@ -25,10 +26,7 @@ class PaymentRefundFactory extends Factory
     {
         return [
             'reference_id' => $this->faker->uuid(),
-            'currency' => $this->faker->currencyCode(),
-            'type' => $this->faker->randomElement([PaymentRefund::VOID, PaymentRefund::REFUND]),
-            'status_code' => 69, // TODO: Determine the status codes.
-            'payload' => [],
+            'type' => ($refund = $this->faker->randomElement([PaymentRefund::VOID, PaymentRefund::REFUND])),
         ];
     }
 
@@ -46,8 +44,8 @@ class PaymentRefundFactory extends Factory
                 $refund->transaction_id = $transaction->id;
             }
 
-            if (is_null($refund->amount_cents)) {
-                $refund->amount_cents = $refund->transaction->amount_cents;
+            if (is_null($refund->amount)) {
+                $refund->amount = $refund->transaction->amount;
             }
         });
     }

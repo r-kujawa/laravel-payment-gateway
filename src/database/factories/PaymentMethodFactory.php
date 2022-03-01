@@ -23,16 +23,8 @@ class PaymentMethodFactory extends Factory
      */
     public function definition()
     {
-        $exp['year'] = (string) $this->faker->numberBetween(now()->year, now()->year + 11);
-        $exp['month'] = (string) $this->faker->numberBetween($exp['year'] === now()->year ? now()->month : 1, 12);
-
         return [
             'token' => $this->faker->uuid(),
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
-            'last_digits' => $this->faker->numerify('####'),
-            'exp_month' => str_pad($exp['month'], 2, '0', STR_PAD_LEFT),
-            'exp_year' => $exp['year'],
         ];
     }
 

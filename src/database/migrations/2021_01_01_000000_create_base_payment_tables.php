@@ -59,7 +59,6 @@ class CreateBasePaymentTables extends Migration
             $table->foreign('merchant_id')->references('id')->on('payment_merchants')->onDelete('cascade');
         });
 
-        // TODO: Add support for payment methods other than cards.
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('wallet_id');
@@ -81,8 +80,7 @@ class CreateBasePaymentTables extends Migration
             $table->unsignedInteger('amount');
             $table->char('currency', 3)->default('USD');
             $table->unsignedBigInteger('payment_method_id')->nullable();
-            $table->smallInteger('status_code');
-            $table->json('payload');
+            $table->unsignedSmallInteger('status_code');
             $table->json('references')->nullable();
             $table->timestamps();
 
@@ -96,10 +94,8 @@ class CreateBasePaymentTables extends Migration
             $table->string('reference_id');
             $table->unsignedBigInteger('transaction_id');
             $table->unsignedBigInteger('amount');
-            $table->char('currency', 3)->default('USD');
             $table->string('type'); // void|refund
-            $table->smallInteger('status_code');
-            $table->json('payload');
+            $table->unsignedSmallInteger('reason_code')->nullable();
             $table->timestamps();
 
             $table->foreign('transaction_id')->references('id')->on('payment_transactions')->onDelete('cascade');
