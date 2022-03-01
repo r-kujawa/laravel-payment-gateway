@@ -10,9 +10,9 @@ use rkujawa\LaravelPaymentGateway\Models\Traits\PaymentMethodRequests;
 
 class PaymentMethod extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
-    use PaymentMethodRequests;
+    use HasFactory,
+        SoftDeletes,
+        PaymentMethodRequests;
 
     /**
      * The attributes that aren't mass assignable.
