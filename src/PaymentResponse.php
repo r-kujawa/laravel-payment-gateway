@@ -87,11 +87,11 @@ abstract class PaymentResponse implements PaymentResponder
     public $merchant;
 
     /**
-     * The expected formatted data based on the $request.
+     * The expected formatted details based on the $request.
      *
      * @var 
      */
-    private $data;
+    private $details;
 
     /**
      * @param mixed $response
@@ -176,31 +176,31 @@ abstract class PaymentResponse implements PaymentResponder
     }
 
     /**
-     * Get the formatted data based on the request that was made.
+     * Get the formatted details based on the request that was made.
      *
      * @return array|mixed
      * 
      * @throws \RuntimeException
      */
-    public function getData()
+    public function getDetails()
     {
-        if (! isset($this->data)) {
-            if (is_null($callback = $this->getDataCallback())) {
-                throw new RuntimeException('Data is not set.');
+        if (! isset($this->details)) {
+            if (is_null($callback = $this->getDetailsCallback())) {
+                throw new RuntimeException('Details are not defined.');
             }
             
-            $this->data = $this->{$callback}();
+            $this->details = $this->{$callback}();
         }
 
-        return $this->data;
+        return $this->details;
     }
 
     /**
-     * Get the callback method that should be used to get the data.
+     * Get the callback method that should be used to get the response's details.
      *
      * @return string|null
      */
-    private function getDataCallback()
+    private function getDetailsCallback()
     {
         return array_merge($this->requiredResponses, $this->responses)[$this->requestMethod] ?? null;
     }
