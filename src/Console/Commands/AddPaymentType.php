@@ -20,7 +20,8 @@ class AddPaymentType extends Command
     protected $signature = 'payment:add-type
                             {type? : The payment type name}
                             {--displayName= : The payment type pretty name}
-                            {--slug= : The payment type dev name}';
+                            {--slug= : The payment type dev name}
+                            {--skip-migration : Do not run the migration}';
 
     /**
      * The console command description.
@@ -70,7 +71,7 @@ class AddPaymentType extends Command
 
         $this->info('The migration to add ' . $this->name . ' payment type has been generated.');
 
-        if ($this->confirm('Would you like to run the migration?', true)) {
+        if ((! $this->option('skip-migration')) && $this->confirm('Would you like to run the migration?', true)) {
             $this->call('migrate', ['--force']);
         }
     }
@@ -88,7 +89,7 @@ class AddPaymentType extends Command
         );
 
         $this->displayName = $this->option('displayName') ??
-            (is_null($this->argument('type')) ? $this->ask('How would you display the payment type to the end user?', $this->name) : $this->name);
+            (is_null($this->argument('type')) ? $this->ask("What display name would you like to use for the {$this->name} payment type?", $this->name) : $this->name);
 
         $this->slug = PaymentType::slugify(
             $this->option('slug') ??
