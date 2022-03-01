@@ -7,7 +7,7 @@ trait PaymentResponses
     use ThrowsRuntimeException;
 
     /**
-     * Maps data from the getWallet() response to the expected format.
+     * Maps details from the getWallet() response to the expected format.
      *
      * @return array|mixed
      */
@@ -17,7 +17,7 @@ trait PaymentResponses
     }
 
     /**
-     * Maps data from the getPaymentMethod() response to the expected format.
+     * Maps details from the getPaymentMethod() response to the expected format.
      *
      * @return array|mixed
      */
@@ -27,7 +27,7 @@ trait PaymentResponses
     }
 
     /**
-     * Maps data from the tokenizePaymentMethod() response to the expected format.
+     * Maps details from the tokenizePaymentMethod() response to the expected format.
      *
      * @return array|mixed
      */
@@ -37,7 +37,7 @@ trait PaymentResponses
     }
 
     /**
-     * Maps data from the updatePaymentMethod() response to the expected format.
+     * Maps details from the updatePaymentMethod() response to the expected format.
      *
      * @return array|mixed
      */
@@ -47,7 +47,7 @@ trait PaymentResponses
     }
     
     /**
-     * Maps data from the removePaymentMethod() response to the expected format.
+     * Maps details from the removePaymentMethod() response to the expected format.
      *
      * @return array|mixed
      */
@@ -57,7 +57,7 @@ trait PaymentResponses
     }
 
     /**
-     * Maps data from the authorize() response to the expected format.
+     * Maps details from the authorize() response to the expected format.
      *
      * @return array|mixed
      */
@@ -67,7 +67,7 @@ trait PaymentResponses
     }
 
     /**
-     * Maps data from the capture() response to the expected format.
+     * Maps details from the capture() response to the expected format.
      *
      * @return array|mixed
      */
@@ -77,7 +77,7 @@ trait PaymentResponses
     }
 
     /**
-     * Maps data from the authorizeAndCapture() response to the expected format.
+     * Maps details from the authorizeAndCapture() response to the expected format.
      *
      * @return array|mixed
      */
@@ -87,7 +87,7 @@ trait PaymentResponses
     }
 
     /**
-     * Maps data from the void() response to the expected format.
+     * Maps details from the void() response to the expected format.
      *
      * @return array|mixed
      */
@@ -97,7 +97,7 @@ trait PaymentResponses
     }
 
     /**
-     * Maps data from the refund() response to the expected format.
+     * Maps details from the refund() response to the expected format.
      *
      * @return array|mixed
      */
