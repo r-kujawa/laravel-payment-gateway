@@ -94,12 +94,12 @@ class AddPaymentMerchant extends Command
     {
         $this->name = trim(
             $this->argument('merchant') ??
-            $this->ask('What merchant would you like to add?')
+            $this->ask('What payment merchant would you like to add?')
         );
 
         $this->slug = PaymentMerchant::slugify(
             $this->option('slug') ?? 
-            $this->ask("What slug would you like to use for the {$this->name} merchant?", PaymentMerchant::slugify($this->name))
+            $this->ask("What slug would you like to use for the {$this->name} payment merchant?", PaymentMerchant::slugify($this->name))
         );
 
         if ($this->option('skip-provider') || ($providers = PaymentProvider::all())->isEmpty()) {

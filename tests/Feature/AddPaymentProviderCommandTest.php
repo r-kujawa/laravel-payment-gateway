@@ -2,49 +2,59 @@
 
 namespace rkujawa\LaravelPaymentGateway\Tests;
 
+use Exception;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 
-class AddPaymentProviderCommandTest extends TestCase
+class AddPaymentProviderCommandTest extends CommandTestCase
 {
     /** @test */
-    public function add_payment_provider_command_makes_migration()
+    public function add_payment_provider_command_will_prompt_for_missing_arguments()
     {
-        $paymentProvider = PaymentProvider::factory()->make();
+        $provider = PaymentProvider::factory()->make();
 
-        $this->artisan('payment:add-provider', ['provider' => $paymentProvider->name, '--slug' => $paymentProvider->slug])
-            ->expectsOutput('The migration to add ' . $paymentProvider->name . ' payment provider has been generated.')
-            ->expectsConfirmation('Would you like to run the migration?')
+        $this->artisan('payment:add-provider')
+            ->expectsQuestion($this->getArgumentQuestion('provider'), $provider->name)
+            ->expectsQuestion($this->getOptionQuestion('slug', 'provider', $provider->name), $provider->slug)
+            ->expectsConfirmation($this->getMigrationConfirmation(), 'yes')
             ->assertExitCode(0);
-
-        $this->assertDatabaseMissing('payment_providers', ['slug' => $paymentProvider->slug]);
-
-        $this->artisan('migrate');
-
-        $this->assertDatabaseHas('payment_providers', ['slug' => $paymentProvider->slug]);
+        
+        $this->assertDatabaseHas('payment_providers', ['slug' => $provider->slug]);
     }
 
     /** @test */
-    public function add_payment_provider_command_runs_migration_when_prompted()
+    public function add_payment_provider_command_makes_migration()
     {
-        $paymentProvider = PaymentProvider::factory()->make();
+        $provider = PaymentProvider::factory()->make();
 
-        $this->artisan('payment:add-provider', ['provider' => $paymentProvider->name, '--slug' => $paymentProvider->slug])
-            ->expectsConfirmation('Would you like to run the migration?', 'yes')
+        $this->artisan('payment:add-provider', [
+                'provider' => $provider->name,
+                '--slug' => $provider->slug,
+            ])
+            ->expectsOutput($this->getMigrationOutput('provider', $provider->name))
+            ->expectsConfirmation($this->getMigrationConfirmation())
             ->assertExitCode(0);
 
-        $this->assertDatabaseHas('payment_providers', ['slug' => $paymentProvider->slug]);
+        $this->assertDatabaseMissing('payment_providers', ['slug' => $provider->slug]);
+
+        $this->artisan('migrate');
+
+        $this->assertDatabaseHas('payment_providers', ['slug' => $provider->slug]);
     }
 
     /** @test */
     public function add_payment_provider_command_generates_gateway_implementation_files()
     {
-        $paymentProvider = PaymentProvider::factory()->make();
+        $provider = PaymentProvider::factory()->make();
 
-        $studlySlug = Str::studly($paymentProvider->slug);
+        $studlySlug = Str::studly($provider->slug);
 
-        $this->artisan('payment:add-provider', ['provider' => $paymentProvider->name, '--slug' => $paymentProvider->slug])
-            ->expectsConfirmation('Would you like to run the migration?')
+        $this->artisan('payment:add-provider', [
+                'provider' => $provider->name,
+                '--slug' => $provider->slug,
+                '--skip-migration' => true,
+            ])
             ->assertExitCode(0);
 
         $servicePath = app_path('Services/Payment');
@@ -53,29 +63,26 @@ class AddPaymentProviderCommandTest extends TestCase
     }
 
     /** @test */
-    public function add_payment_provider_command_will_not_prompt_to_run_migration_when_passing_skip_migration_option()
+    public function add_payment_provider_command_fails_if_migration_already_exists()
     {
-        $paymentProvider = PaymentProvider::factory()->make();
+        $provider = PaymentProvider::factory()->make();
 
-        $this->artisan('payment:add-provider', ['provider' => $paymentProvider->name, '--slug' => $paymentProvider->slug, '--skip-migration' => true])
+        $arguments = [
+            'provider' => $provider->name,
+            '--slug' => $provider->slug,
+            '--skip-migration' => true,
+        ];
+
+        $this->artisan('payment:add-provider', $arguments)
+            ->expectsOutput($this->getMigrationOutput('provider', $provider->name))
             ->assertExitCode(0);
 
-        $this->artisan('migrate');
-
-        $this->assertDatabaseHas('payment_providers', ['slug' => $paymentProvider->slug]);
-    }
-
-    /** @test */
-    public function add_payment_provider_command_will_prompt_for_missing_arguments()
-    {
-        $paymentProvider = PaymentProvider::factory()->make();
-
-        $this->artisan('payment:add-provider')
-            ->expectsQuestion('What provider would you like to add?', $paymentProvider->name)
-            ->expectsQuestion('What slug would you like to use for the '.$paymentProvider->name.' provider?', $paymentProvider->slug)
-            ->expectsConfirmation('Would you like to run the migration?', 'yes')
-            ->assertExitCode(0);
-        
-        $this->assertDatabaseHas('payment_providers', ['slug' => $paymentProvider->slug]);
+        try {
+            $this->artisan('payment:add-provider', $arguments)
+                ->doesntExpectOutput($this->getMigrationOutput('provider', $provider->name))
+                ->assertExitCode(0);
+        } catch (Exception $e) {
+            $this->assertEquals(InvalidArgumentException::class, get_class($e));
+        }
     }
 }
