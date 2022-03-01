@@ -7,6 +7,7 @@ use rkujawa\LaravelPaymentGateway\Models\PaymentMerchant;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction;
+use rkujawa\LaravelPaymentGateway\PaymentStatus;
 
 class PaymentTransactionFactory extends Factory
 {
@@ -26,10 +27,12 @@ class PaymentTransactionFactory extends Factory
     {
         return [
             'reference_id' => $this->faker->uuid(),
-            'amount_cents' => $this->faker->numberBetween(1, 999) * 100,
+            'amount' => $this->faker->numberBetween(1, 999) * 100,
             'currency' => $this->faker->currencyCode(),
-            'payload' => [],
-            'status_code' => 69, // TODO: Determine the status codes.
+            'status_code' => $this->faker->randomElement([
+                PaymentStatus::APPROVED,
+                PaymentStatus::PARTIALLY_APPROVED,
+            ]),
         ];
     }
 
