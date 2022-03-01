@@ -194,8 +194,8 @@ class TestPaymentResponse extends PaymentResponse
 
 class User extends Model implements Billable
 {
-    use BillableTrait;
-    use HasFactory;
+    use BillableTrait,
+        HasFactory;
     
     protected static function newFactory()
     {

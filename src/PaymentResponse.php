@@ -11,7 +11,8 @@ use RuntimeException;
 
 abstract class PaymentResponse implements PaymentResponder
 {
-    use SimulateAttributes, PaymentResponses;
+    use SimulateAttributes,
+        PaymentResponses;
 
     /**
      * Statuses in this array are considered successful.

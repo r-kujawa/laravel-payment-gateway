@@ -9,8 +9,8 @@ use rkujawa\LaravelPaymentGateway\Models\Traits\WalletRequests;
 
 class Wallet extends Model
 {
-    use HasFactory;
-    use WalletRequests;
+    use HasFactory,
+        WalletRequests;
 
     /**
      * The attributes that aren't mass assignable.
