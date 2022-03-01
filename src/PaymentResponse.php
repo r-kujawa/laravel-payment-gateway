@@ -59,11 +59,18 @@ abstract class PaymentResponse implements PaymentResponder
     protected $rawResponse;
 
     /**
+     * Additional data needed to format the response.
+     *
+     * @var mixed|null
+     */
+    protected $additionalData;
+
+    /**
      * The request method that returned this response.
      *
      * @var string
      */
-    private $request;
+    protected $requestMethod;
 
     /**
      * The provider that the $request was made towards.
@@ -88,23 +95,25 @@ abstract class PaymentResponse implements PaymentResponder
 
     /**
      * @param mixed $response
+     * @param mixed|null $additionalData
      */
-    public function __construct($response)
+    public function __construct($response, $additionalData = null)
     {
         $this->rawResponse = $response;
+        $this->additionalData = $additionalData;
     }
 
     /**
      * Configure the response based on the request.
      *
-     * @param string $request
+     * @param string $requestMethod
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentProvider $provider
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant $merchant
      * @return void
      */
-    public function configure($request, PaymentProvider $provider, PaymentMerchant $merchant)
+    public function configure($requestMethod, PaymentProvider $provider, PaymentMerchant $merchant)
     {
-        $this->request = $request;
+        $this->requestMethod = $requestMethod;
         $this->provider = $provider;
         $this->merchant = $merchant;
     }
@@ -193,6 +202,6 @@ abstract class PaymentResponse implements PaymentResponder
      */
     private function getDataCallback()
     {
-        return array_merge($this->requiredResponses, $this->responses)[$this->request] ?? null;
+        return array_merge($this->requiredResponses, $this->responses)[$this->requestMethod] ?? null;
     }
 }
