@@ -76,6 +76,11 @@ class AddPaymentProvider extends Command
             app_path("Services/Payment/{$studlySlug}PaymentGateway.php"),
             $this->makeFile(__DIR__ . '/../stubs/payment-gateway.stub', ['name' => $studlySlug])
         );
+
+        $this->putFile(
+            app_path("Services/Payment/{$studlySlug}PaymentResponse.php"),
+            $this->makeFile(__DIR__ . '/../stubs/payment-response.stub', ['name' => $studlySlug])
+        );
     }
 
     /**
