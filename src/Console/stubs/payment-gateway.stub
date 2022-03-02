@@ -2,6 +2,10 @@
 
 namespace App\Services\Payment;
 
+use rkujawa\LaravelPaymentGateway\Contracts\Billable;
+use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
+use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction;
+use rkujawa\LaravelPaymentGateway\Models\Wallet;
 use rkujawa\LaravelPaymentGateway\PaymentRequest;
 
 class {{ name }}PaymentGateway extends PaymentRequest
