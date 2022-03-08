@@ -44,8 +44,8 @@ return [
     |
     */
     // 'models' => [
-    //     \rkujawa\LaravelPaymentGateway\Models\Wallet::class => \App\Models\Payment\Wallet::class,
     //     \rkujawa\LaravelPaymentGateway\Models\PaymentMethod::class => \App\Models\Payment\PaymentMethod::class,
+    //     \rkujawa\LaravelPaymentGateway\Models\Wallet::class => \App\Models\Payment\Wallet::class,
     // ],
 
 ];

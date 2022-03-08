@@ -13,6 +13,6 @@ trait WalletRequests
      */
     public function requestDetails()
     {
-        $this->gateway->getWallet($this);
+        return $this->gateway->getWallet($this);
     }
 }

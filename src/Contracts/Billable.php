@@ -7,7 +7,7 @@ interface Billable
     /**
      * Get the billable's wallets.
      *
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Relations\Relation
      */
     public function wallets();
 }
