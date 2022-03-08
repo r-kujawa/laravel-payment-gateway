@@ -4,14 +4,11 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentRefundFactory;
+use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentTransactionEventFactory;
 
-class PaymentRefund extends Model
+class PaymentTransactionEvent extends Model
 {
     use HasFactory;
-
-    const VOID = 'void';
-    const REFUND = 'refund';
 
     /**
      * The attributes that aren't mass assignable.
@@ -21,12 +18,21 @@ class PaymentRefund extends Model
     protected $guarded = ['id'];
 
     /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'reference',
+    ];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array
      */
     protected $casts = [
-        'payload' => 'array',
+        'details' => 'array',
     ];
 
     /**
@@ -36,7 +42,7 @@ class PaymentRefund extends Model
      */
     public static function newFactory()
     {
-        return PaymentRefundFactory::new();
+        return PaymentTransactionEventFactory::new();
     }
 
     /**

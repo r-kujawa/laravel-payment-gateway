@@ -21,8 +21,13 @@ abstract class PaymentResponse implements PaymentResponder
      */
     protected $successStatuses = [
         PaymentStatus::AUTHORIZED,
-        PaymentStatus::APPROVED,
-        PaymentStatus::PARTIALLY_APPROVED,
+        PaymentStatus::CAPTURED,
+        PaymentStatus::PARTIALLY_CAPTURED,
+        PaymentStatus::SETTLED,
+        PaymentStatus::VOIDED,
+        PaymentStatus::REFUNDED,
+        PaymentStatus::PARTIALLY_REFUNDED,
+        PaymentStatus::REFUND_SETTLED,
         PaymentStatus::PENDING,
         PaymentStatus::PROCESSING_ASYNC,
     ];

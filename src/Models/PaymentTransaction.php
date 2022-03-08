@@ -18,13 +18,21 @@ class PaymentTransaction extends Model
     protected $guarded = ['id'];
 
     /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'reference',
+    ];
+
+    /**
      * The attributes that should be cast.
      *
      * @var array
      */
     protected $casts = [
-        'payload' => 'array',
-        'references' => 'array',
+        'details' => 'array',
     ];
 
     /**
@@ -65,5 +73,15 @@ class PaymentTransaction extends Model
     public function merchant()
     {
         return $this->belongsTo(config('payment.models.' . PaymentMerchant::class, PaymentMerchant::class));
+    }
+
+    /**
+     * Get the transaction's event history.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function events()
+    {
+        return $this->hasMany(config('payment.models.' . PaymentTransactionEvent::class, PaymentTransactionEvent::class));
     }
 }

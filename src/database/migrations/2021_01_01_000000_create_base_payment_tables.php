@@ -76,12 +76,13 @@ class CreateBasePaymentTables extends Migration
             $table->bigIncrements('id');
             $table->unsignedSmallInteger('provider_id');
             $table->unsignedMediumInteger('merchant_id');
-            $table->string('reference_id');
+            $table->string('reference');
             $table->unsignedInteger('amount');
             $table->char('currency', 3)->default('USD');
             $table->unsignedBigInteger('payment_method_id')->nullable();
             $table->unsignedSmallInteger('status_code');
-            $table->json('references')->nullable();
+            $table->json('details')->nullable();
+            $table->longText('payload')->nullable();
             $table->timestamps();
 
             $table->foreign('provider_id')->references('id')->on('payment_providers');
@@ -89,13 +90,14 @@ class CreateBasePaymentTables extends Migration
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('set null');
         });
 
-        Schema::create('payment_refunds', function (Blueprint $table) {
+        Schema::create('payment_transaction_events', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('reference_id');
+            $table->string('reference')->nullable();
             $table->unsignedBigInteger('transaction_id');
             $table->unsignedBigInteger('amount');
-            $table->string('type'); // void|refund
-            $table->unsignedSmallInteger('reason_code')->nullable();
+            $table->smallInteger('status_code');
+            $table->json('details')->nullable();
+            $table->longText('payload')->nullable();
             $table->timestamps();
 
             $table->foreign('transaction_id')->references('id')->on('payment_transactions')->onDelete('cascade');
@@ -109,7 +111,7 @@ class CreateBasePaymentTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_refunds');
+        Schema::dropIfExists('payment_transaction_events');
         Schema::dropIfExists('payment_transactions');
         Schema::dropIfExists('payment_methods');
         Schema::dropIfExists('payment_types');

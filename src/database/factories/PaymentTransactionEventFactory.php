@@ -1,0 +1,59 @@
+<?php
+
+namespace rkujawa\LaravelPaymentGateway\Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use rkujawa\LaravelPaymentGateway\Models\PaymentRefund;
+use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction;
+use rkujawa\LaravelPaymentGateway\Models\PaymentTransactionEvent;
+use rkujawa\LaravelPaymentGateway\PaymentStatus;
+
+class PaymentTransactionEventFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = PaymentTransactionEvent::class;
+
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'reference' => $this->faker->uuid(),
+            'status_code' => $this->faker->randomElement([
+                PaymentStatus::CAPTURED,
+                PaymentStatus::SETTLED,
+                PaymentStatus::VOIDED,
+                PaymentStatus::REFUNDED,
+                PaymentStatus::REFUND_SETTLED,
+            ]),
+        ];
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return $this
+     */
+    public function configure()
+    {
+        return $this->afterMaking(function (PaymentTransactionEvent $transactionEvent) {
+            if (is_null($transactionEvent->transaction_id)) {
+                $transaction = PaymentTransaction::factory()->create();
+
+                $transactionEvent->transaction_id = $transaction->id;
+            }
+
+            if (is_null($transactionEvent->amount)) {
+                $transactionEvent->amount = $transactionEvent->transaction->amount;
+            }
+        });
+    }
+}
