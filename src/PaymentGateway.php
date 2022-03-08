@@ -72,22 +72,22 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
      * Authorize a transaction.
      * 
      * @param array|mixed $data
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod|null $paymentMethod
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Billable|null $billable
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function authorize($data, PaymentMethod $paymentMethod = null)
+    public function authorize($data, Billable $billable = null)
     {
-        return tap($this->gateway->authorize($data, $paymentMethod))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        return tap($this->gateway->authorize($data, $billable))->configure(__FUNCTION__, $this->provider, $this->merchant);
     }
 
     /**
      * Capture a previously authorized transaction.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
-     * @param array|mixed|null $data
+     * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function capture(PaymentTransaction $transaction, $data = null)
+    public function capture(PaymentTransaction $transaction, $data = [])
     {
         return tap($this->gateway->capture($transaction, $data))->configure(__FUNCTION__, $this->provider, $this->merchant);
     }
@@ -96,33 +96,34 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
      * Request authorization for a transaction.
      * 
      * @param array|mixed $data
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod|null $paymentMethod
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Billable|null $billable
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function authorizeAndCapture($data, PaymentMethod $paymentMethod = null)
+    public function authorizeAndCapture($data, Billable $billable = null)
     {
-        return tap($this->gateway->authorizeAndCapture($data, $paymentMethod))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        return tap($this->gateway->authorizeAndCapture($data, $billable))->configure(__FUNCTION__, $this->provider, $this->merchant);
     }
 
     /**
      * Void a previously authorized transaction.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
+     * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function void(PaymentTransaction $transaction)
+    public function void(PaymentTransaction $transaction, $data = [])
     {
-        return tap($this->gateway->void($transaction))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        return tap($this->gateway->void($transaction, $data))->configure(__FUNCTION__, $this->provider, $this->merchant);
     }
 
     /**
      * Refund a previously captured transaction.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
-     * @param array|mixed|null
+     * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function refund(PaymentTransaction $transaction, $data = null)
+    public function refund(PaymentTransaction $transaction, $data = [])
     {
         return tap($this->gateway->refund($transaction, $data))->configure(__FUNCTION__, $this->provider, $this->merchant);
     }

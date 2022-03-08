@@ -88,27 +88,27 @@ class TestPaymentGateway extends PaymentRequest
         return new TestPaymentResponse([]);
     }
 
-    public function authorize($data, PaymentMethod $paymentMethod = null)
+    public function authorize($data, Billable $billable = null)
     {
         return new TestPaymentResponse([]);
     }
 
-    public function capture(PaymentTransaction $transaction, $data = null)
+    public function capture(PaymentTransaction $transaction, $data = [])
     {
         return new TestPaymentResponse([]);
     }
 
-    public function authorizeAndCapture($data, PaymentMethod $paymentMethod = null)
+    public function authorizeAndCapture($data, Billable $billable = null)
     {
         return new TestPaymentResponse([]);
     }
 
-    public function void(PaymentTransaction $paymentTransaction)
+    public function void(PaymentTransaction $paymentTransaction, $data =[])
     {
         return new TestPaymentResponse([]);
     }
 
-    public function refund(PaymentTransaction $paymentTransaction, $data = null)
+    public function refund(PaymentTransaction $paymentTransaction, $data = [])
     {
         return new TestPaymentResponse([]);
     }
