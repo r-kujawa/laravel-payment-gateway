@@ -11,6 +11,16 @@ use rkujawa\LaravelPaymentGateway\PaymentRequest;
 class {{ name }}PaymentGateway extends PaymentRequest
 {
     /**
+     * Set up the request.
+     *
+     * @return void
+     */
+    protected function setUp()
+    {
+        //
+    }
+    
+    /**
      * Retrieve the wallet's details from the provider.
      *
      * @param \rkujawa\LaravelPaymentGateway\Models\Wallet $wallet
