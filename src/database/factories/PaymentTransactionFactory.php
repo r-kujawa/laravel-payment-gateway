@@ -26,13 +26,10 @@ class PaymentTransactionFactory extends Factory
     public function definition()
     {
         return [
-            'reference_id' => $this->faker->uuid(),
+            'reference' => $this->faker->uuid(),
             'amount' => $this->faker->numberBetween(1, 999) * 100,
             'currency' => $this->faker->currencyCode(),
-            'status_code' => $this->faker->randomElement([
-                PaymentStatus::APPROVED,
-                PaymentStatus::PARTIALLY_APPROVED,
-            ]),
+            'status_code' => PaymentStatus::AUTHORIZED,
         ];
     }
 

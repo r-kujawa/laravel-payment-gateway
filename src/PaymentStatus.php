@@ -5,8 +5,13 @@ namespace rkujawa\LaravelPaymentGateway;
 class PaymentStatus
 {
     const AUTHORIZED = 200;
-    const APPROVED = 201;
-    const PARTIALLY_APPROVED = 202;
+    const CAPTURED = 201;
+    const PARTIALLY_CAPTURED = 202;
+    const SETTLED = 203;
+    const VOIDED = 210;
+    const REFUNDED = 211;
+    const PARTIALLY_REFUNDED = 212;
+    const REFUND_SETTLED = 213;
     const PENDING = 300;
     const PROCESSING_ASYNC = 301;
     const REFUSED = 400;
@@ -44,8 +49,13 @@ class PaymentStatus
      */
     public static $codes = [
         self::AUTHORIZED => 'Authorized',
-        self::APPROVED => 'Approved',
-        self::PARTIALLY_APPROVED => 'Partially approved',
+        self::CAPTURED => 'Captured',
+        self::PARTIALLY_CAPTURED => 'Partially captured',
+        self::SETTLED => 'Settled',
+        self::VOIDED => 'Voided',
+        self::REFUNDED => 'Refunded',
+        self::PARTIALLY_REFUNDED => 'Partially refunded',
+        self::REFUND_SETTLED => 'Refund settled',
         self::PENDING => 'Pending',
         self::PROCESSING_ASYNC => 'Processing asynchronously',
         self::REFUSED => 'Refused',
@@ -84,8 +94,13 @@ class PaymentStatus
      */
     public static $messages = [
         self::AUTHORIZED => 'The transaction was authorized.',
-        self::APPROVED => 'The transaction was approved.',
-        self::PARTIALLY_APPROVED => 'The transaction was partially approved.',
+        self::CAPTURED => 'The transaction was captured.',
+        self::PARTIALLY_CAPTURED => 'The transaction was partially captured.',
+        self::SETTLED => 'The transaction was settled.',
+        self::VOIDED => 'The transaction has been voided.',
+        self::REFUNDED => 'The transaction was refunded.',
+        self::PARTIALLY_REFUNDED => 'The transaction was partially refunded.',
+        self::REFUND_SETTLED => 'The refund was settled.',
         self::PENDING => 'The transaction is pending.',
         self::PROCESSING_ASYNC => 'The transaction is being completed asynchronously.',
         self::REFUSED => 'The transaction was refused.',
@@ -118,42 +133,6 @@ class PaymentStatus
     ];
 
     /**
-     * List of all supported payment response codes with their parent codes.
-     *
-     * @var array
-     */
-    public static $hierarchy = [
-        self::APPROVED => self::AUTHORIZED,
-        self::PARTIALLY_APPROVED => self::AUTHORIZED,
-        self::PROCESSING_ASYNC => self::PENDING,
-        self::DECLINED => self::REFUSED,
-        self::REFERRED => self::REFUSED,
-        self::NOT_ENOUGH_BALANCE => self::REFUSED,
-        self::BLOCKED_CARD => self::REFUSED,
-        self::RESTRICTED_CARD => self::REFUSED,
-        self::INVALID_PAYMENT_INFORMATION => self::REFUSED,
-        self::INVALID_CARD_NUMBER => self::INVALID_PAYMENT_INFORMATION,
-        self::EXPIRED_CARD => self::INVALID_PAYMENT_INFORMATION,
-        self::INVALID_SECURITY_CODE =>  self::INVALID_PAYMENT_INFORMATION,
-        self::INVALID_ADDRESS => self::INVALID_PAYMENT_INFORMATION,
-        self::FRAUD => self::REFUSED,
-        self::FAILED_FRAUD_CHECK => self::FRAUD,
-        self::ACQUIRER_SUSPECTED_FRAUD => self::FRAUD,
-        self::ISSUER_SUSPECTED_FRAUD => self::FRAUD,
-        self::INVALID_TRANSACTION => self::REFUSED,
-        self::INVALID_AMOUNT => self::INVALID_TRANSACTION,
-        self::TRANSACTION_NOT_SUPPORTED => self::INVALID_TRANSACTION,
-        self::TRANSACTION_NOT_PERMITTED => self::INVALID_TRANSACTION,
-        self::PROCESSING_ISSUE => self::REFUSED,
-        self::AUTHORIZATION_REVOKED => self::PROCESSING_ISSUE,
-        self::ACQUIRER_UNREACHABLE => self::PROCESSING_ISSUE,
-        self::ISSUER_UNREACHABLE => self::PROCESSING_ISSUE,
-        self::ACQUIRER_ERROR => self::ERROR,
-        self::ISSUER_ERROR => self::ERROR,
-        self::UNKNOWN_ERROR => self::ERROR,
-    ];
-
-    /**
      * Get the definition of the provided code.
      *
      * @param int $status
@@ -173,20 +152,5 @@ class PaymentStatus
     public static function getMessage($status)
     {
         return self::$messages[$status] ?? null;
-    }
-
-    /**
-     * Get the top level code from the code hierarchy.
-     *
-     * @param int $status
-     * @return int
-     */
-    public static function getParent($status)
-    {
-        while (array_key_exists($status, self::$hierarchy) && $status !== self::$hierarchy[$status]) {
-            $status = self::$hierarchy[$status];
-        }
-
-        return $status;
     }
 }
