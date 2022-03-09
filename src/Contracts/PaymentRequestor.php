@@ -70,15 +70,6 @@ interface PaymentRequestor
     public function capture(PaymentTransaction $transaction, $data = []);
 
     /**
-     * Request authorization for a transaction.
-     * 
-     * @param array|mixed $data
-     * @param \rkujawa\LaravelPaymentGateway\Contracts\Billable|null $billable
-     * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
-     */
-    public function authorizeAndCapture($data, Billable $billable = null);
-
-    /**
      * Void a previously authorized transaction.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $paymentTransaction

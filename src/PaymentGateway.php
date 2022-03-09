@@ -93,18 +93,6 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
     }
 
     /**
-     * Request authorization for a transaction.
-     * 
-     * @param array|mixed $data
-     * @param \rkujawa\LaravelPaymentGateway\Contracts\Billable|null $billable
-     * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
-     */
-    public function authorizeAndCapture($data, Billable $billable = null)
-    {
-        return tap($this->gateway->authorizeAndCapture($data, $billable))->configure(__FUNCTION__, $this->provider, $this->merchant);
-    }
-
-    /**
      * Void a previously authorized transaction.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction

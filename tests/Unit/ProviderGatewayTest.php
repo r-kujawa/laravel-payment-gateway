@@ -120,16 +120,6 @@ class ProviderGatewayTest extends GatewayTestCase
     }
 
     /** @test */
-    public function authorize_and_capture_method_returns_configured_response()
-    {
-        $response = Payment::authorizeAndCapture([]);
-
-        $this->assertResponseIsConfigured($response);
-
-        $this->assertEquals('authorizeAndCapture', $response->details['requestMethod']);
-    }
-
-    /** @test */
     public function void_method_returns_configured_response()
     {
         $transaction = PaymentTransaction::factory()->create([

@@ -54,13 +54,6 @@ interface PaymentResponder
     public function captureDetails();
 
     /**
-     * Maps details from the authorizeAndCapture() response to the expected format.
-     *
-     * @return array|mixed
-     */
-    public function authorizationAndCaptureDetails();
-
-    /**
      * Maps details from the void() response to the expected format.
      *
      * @return array|mixed

@@ -21,7 +21,6 @@ use rkujawa\LaravelPaymentGateway\PaymentGateway;
  * @method static \rkujawa\LaravelPaymentGateway\PaymentResponse removePaymentMethod(\rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod)
  * @method static \rkujawa\LaravelPaymentGateway\PaymentResponse authorize($data, \rkujawa\LaravelPaymentGateway\Contracts\Billable $billable = null)
  * @method static \rkujawa\LaravelPaymentGateway\PaymentResponse capture(\rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction, $data = [])
- * @method static \rkujawa\LaravelPaymentGateway\PaymentResponse authorizeAndCapture($data, \rkujawa\LaravelPaymentGateway\Contracts\Billable $billable = null)
  * @method static \rkujawa\LaravelPaymentGateway\PaymentResponse void(\rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction, $data = [])
  * @method static \rkujawa\LaravelPaymentGateway\PaymentResponse refund(\rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction, $data = [])
  * 

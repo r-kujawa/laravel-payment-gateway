@@ -98,11 +98,6 @@ class TestPaymentGateway extends PaymentRequest
         return new TestPaymentResponse([]);
     }
 
-    public function authorizeAndCapture($data, Billable $billable = null)
-    {
-        return new TestPaymentResponse([]);
-    }
-
     public function void(PaymentTransaction $paymentTransaction, $data =[])
     {
         return new TestPaymentResponse([]);
@@ -159,13 +154,6 @@ class TestPaymentResponse extends PaymentResponse
     }
 
     public function captureDetails()
-    {
-        return [
-            'requestMethod' => $this->requestMethod,
-        ];
-    }
-
-    public function authorizationAndCaptureDetails()
     {
         return [
             'requestMethod' => $this->requestMethod,
