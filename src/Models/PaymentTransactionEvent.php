@@ -46,7 +46,7 @@ class PaymentTransactionEvent extends Model
     }
 
     /**
-     * Get the refund's original transaction.
+     * Get the event's original transaction.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
