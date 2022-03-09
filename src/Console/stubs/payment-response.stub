@@ -21,7 +21,7 @@ class {{ name }}PaymentResponse extends PaymentResponse
      *
      * @return array|mixed
      */
-    public function walletDetails()
+    public function getWalletResponse()
     {
         //
     }
@@ -31,7 +31,7 @@ class {{ name }}PaymentResponse extends PaymentResponse
      *
      * @return array|mixed
      */
-    public function paymentMethodDetails()
+    public function getPaymentMethodResponse()
     {
         //
     }
@@ -41,7 +41,7 @@ class {{ name }}PaymentResponse extends PaymentResponse
      *
      * @return array|mixed
      */
-    public function tokenizationDetails()
+    public function tokenizePaymentMethodResponse()
     {
         //
     }
@@ -51,17 +51,17 @@ class {{ name }}PaymentResponse extends PaymentResponse
      *
      * @return array|mixed
      */
-    public function updatedPaymentMethodDetails()
+    public function updatePaymentMethodResponse()
     {
         //
     }
     
     /**
-     * Maps details from the removePaymentMethod() response to the expected format.
+     * Maps details from the deletePaymentMethod() response to the expected format.
      *
      * @return array|mixed
      */
-    public function extractionDetails()
+    public function deletePaymentMethodResponse()
     {
         //
     }
@@ -71,7 +71,7 @@ class {{ name }}PaymentResponse extends PaymentResponse
      *
      * @return array|mixed
      */
-    public function authorizationDetails()
+    public function authorizeResponse()
     {
         //
     }
@@ -81,7 +81,7 @@ class {{ name }}PaymentResponse extends PaymentResponse
      *
      * @return array|mixed
      */
-    public function captureDetails()
+    public function captureResponse()
     {
         //
     }
@@ -91,7 +91,7 @@ class {{ name }}PaymentResponse extends PaymentResponse
      *
      * @return array|mixed
      */
-    public function voidDetails()
+    public function voidResponse()
     {
         //
     }
@@ -101,7 +101,7 @@ class {{ name }}PaymentResponse extends PaymentResponse
      *
      * @return array|mixed
      */
-    public function refundDetails()
+    public function refundResponse()
     {
         //
     }

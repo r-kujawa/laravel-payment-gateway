@@ -7,11 +7,11 @@ trait PaymentMethodRequests
     use ConfiguresPaymentGateway;
 
     /**
-     * Request the payment method details from the provider.
+     * Fetch the payment method details from the provider.
      *
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentResponse
+     * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function requestDetails()
+    public function fetch()
     {
         return $this->gateway->getPaymentMethod($this);
     }
@@ -20,9 +20,9 @@ trait PaymentMethodRequests
      * Request the provider to update the payment method's details.
      *
      * @param array|mixed $data
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentResponse
+     * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function requestUpdate($data)
+    public function patch($data)
     {
         return $this->gateway->updatePaymentMethod($this, $data);
     }
@@ -30,21 +30,10 @@ trait PaymentMethodRequests
     /**
      * Request the provider to remove the payment method from their system.
      *
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentResponse
+     * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function requestRemoval()
+    public function disable()
     {
-        return $this->gateway->removePaymentMethod($this);
-    }
-
-    /**
-     * Request authorization for a payment.
-     *
-     * @param array|mixed $data
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentResponse
-     */
-    public function authorize($data)
-    {
-        return $this->gateway->authorize($data, $this);
+        return $this->gateway->deletePaymentMethod($this);
     }
 }

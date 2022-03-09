@@ -49,15 +49,15 @@ abstract class PaymentResponse implements PaymentResponder
      * @var array
      */
     protected $requiredResponses = [
-        'getWallet' => 'walletDetails',
-        'getPaymentMethod' => 'paymentMethodDetails',
-        'tokenizePaymentMethod' => 'tokenizationDetails',
-        'updatePaymentMethod' => 'updatedPaymentMethodDetails',
-        'removePaymentMethod' => 'extractionDetails',
-        'authorize' => 'authorizationDetails',
-        'capture' => 'captureDetails',
-        'void' => 'voidDetails',
-        'refund' => 'refundDetails',
+        'getWallet' => 'getWalletResponse',
+        'getPaymentMethod' => 'getPaymentMethodResponse',
+        'tokenizePaymentMethod' => 'tokenizePaymentMethodResponse',
+        'updatePaymentMethod' => 'updatePaymentMethodResponse',
+        'deletePaymentMethod' => 'deletePaymentMethodResponse',
+        'authorize' => 'authorizeResponse',
+        'capture' => 'captureResponse',
+        'void' => 'voidResponse',
+        'refund' => 'refundResponse',
     ];
 
     /**

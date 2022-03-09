@@ -11,7 +11,7 @@ trait PaymentResponses
      *
      * @return array|mixed
      */
-    public function walletDetails()
+    public function getWalletResponse()
     {
         $this->throwRuntimeException(__FUNCTION__);
     }
@@ -21,7 +21,7 @@ trait PaymentResponses
      *
      * @return array|mixed
      */
-    public function paymentMethodDetails()
+    public function getPaymentMethodResponse()
     {
         $this->throwRuntimeException(__FUNCTION__);
     }
@@ -31,7 +31,7 @@ trait PaymentResponses
      *
      * @return array|mixed
      */
-    public function tokenizationDetails()
+    public function tokenizePaymentMethodResponse()
     {
         $this->throwRuntimeException(__FUNCTION__);
     }
@@ -41,17 +41,17 @@ trait PaymentResponses
      *
      * @return array|mixed
      */
-    public function updatedPaymentMethodDetails()
+    public function updatePaymentMethodResponse()
     {
         $this->throwRuntimeException(__FUNCTION__);
     }
     
     /**
-     * Maps details from the removePaymentMethod() response to the expected format.
+     * Maps details from the deletePaymentMethod() response to the expected format.
      *
      * @return array|mixed
      */
-    public function extractionDetails()
+    public function deletePaymentMethodResponse()
     {
         $this->throwRuntimeException(__FUNCTION__);
     }
@@ -61,7 +61,7 @@ trait PaymentResponses
      *
      * @return array|mixed
      */
-    public function authorizationDetails()
+    public function authorizeResponse()
     {
         $this->throwRuntimeException(__FUNCTION__);
     }
@@ -71,7 +71,7 @@ trait PaymentResponses
      *
      * @return array|mixed
      */
-    public function captureDetails()
+    public function captureResponse()
     {
         $this->throwRuntimeException(__FUNCTION__);
     }
@@ -81,7 +81,7 @@ trait PaymentResponses
      *
      * @return array|mixed
      */
-    public function voidDetails()
+    public function voidResponse()
     {
         $this->throwRuntimeException(__FUNCTION__);
     }
@@ -91,7 +91,7 @@ trait PaymentResponses
      *
      * @return array|mixed
      */
-    public function refundDetails()
+    public function refundResponse()
     {
         $this->throwRuntimeException(__FUNCTION__);
     }

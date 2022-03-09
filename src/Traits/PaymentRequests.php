@@ -58,12 +58,12 @@ trait PaymentRequests
     }
     
     /**
-     * Extract the payment method from the provider.
+     * Delete the payment method at the provider.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function removePaymentMethod(PaymentMethod $paymentMethod)
+    public function deletePaymentMethod(PaymentMethod $paymentMethod)
     {
         $this->throwRuntimeException(__FUNCTION__);
     }

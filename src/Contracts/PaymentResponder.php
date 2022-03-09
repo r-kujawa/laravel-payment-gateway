@@ -9,61 +9,61 @@ interface PaymentResponder
      *
      * @return array|mixed
      */
-    public function walletDetails();
+    public function getWalletResponse();
 
     /**
      * Maps details from the getPaymentMethod() response to the expected format.
      *
      * @return array|mixed
      */
-    public function paymentMethodDetails();
+    public function getPaymentMethodResponse();
 
     /**
      * Maps details from the tokenizePaymentMethod() response to the expected format.
      *
      * @return array|mixed
      */
-    public function tokenizationDetails();
+    public function tokenizePaymentMethodResponse();
 
     /**
      * Maps details from the updatePaymentMethod() response to the expected format.
      *
      * @return array|mixed
      */
-    public function updatedPaymentMethodDetails();
+    public function updatePaymentMethodResponse();
     
     /**
-     * Maps details from the removePaymentMethod() response to the expected format.
+     * Maps details from the deletePaymentMethod() response to the expected format.
      *
      * @return array|mixed
      */
-    public function extractionDetails();
+    public function deletePaymentMethodResponse();
 
     /**
      * Maps details from the authorize() response to the expected format.
      *
      * @return array|mixed
      */
-    public function authorizationDetails();
+    public function authorizeResponse();
 
     /**
      * Maps details from the capture() response to the expected format.
      *
      * @return array|mixed
      */
-    public function captureDetails();
+    public function captureResponse();
 
     /**
      * Maps details from the void() response to the expected format.
      *
      * @return array|mixed
      */
-    public function voidDetails();
+    public function voidResponse();
 
     /**
      * Maps details from the refund() response to the expected format.
      *
      * @return array|mixed
      */
-    public function refundDetails();
+    public function refundResponse();
 }

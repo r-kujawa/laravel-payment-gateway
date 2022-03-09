@@ -83,7 +83,7 @@ class TestPaymentGateway extends PaymentRequest
         return new TestPaymentResponse([]);
     }
     
-    public function removePaymentMethod(PaymentMethod $paymentMethod)
+    public function deletePaymentMethod(PaymentMethod $paymentMethod)
     {
         return new TestPaymentResponse([]);
     }
@@ -111,63 +111,63 @@ class TestPaymentGateway extends PaymentRequest
 
 class TestPaymentResponse extends PaymentResponse
 {
-    public function walletDetails()
+    public function getWalletResponse()
     {
         return [
             'requestMethod' => $this->requestMethod,
         ];
     }
 
-    public function paymentMethodDetails()
+    public function getPaymentMethodResponse()
     {
         return [
             'requestMethod' => $this->requestMethod,
         ];
     }
 
-    public function tokenizationDetails()
+    public function tokenizePaymentMethodResponse()
     {
         return [
             'requestMethod' => $this->requestMethod,
         ];
     }
 
-    public function updatedPaymentMethodDetails()
+    public function updatePaymentMethodResponse()
     {
         return [
             'requestMethod' => $this->requestMethod,
         ];
     }
 
-    public function extractionDetails()
+    public function deletePaymentMethodResponse()
     {
         return [
             'requestMethod' => $this->requestMethod,
         ];
     }
 
-    public function authorizationDetails()
+    public function authorizeResponse()
     {
         return [
             'requestMethod' => $this->requestMethod,
         ];
     }
 
-    public function captureDetails()
+    public function captureResponse()
     {
         return [
             'requestMethod' => $this->requestMethod,
         ];
     }
 
-    public function voidDetails()
+    public function voidResponse()
     {
         return [
             'requestMethod' => $this->requestMethod,
         ];
     }
 
-    public function refundDetails()
+    public function refundResponse()
     {
         return [
             'requestMethod' => $this->requestMethod,
