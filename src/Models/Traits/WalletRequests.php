@@ -7,11 +7,11 @@ trait WalletRequests
     use ConfiguresPaymentGateway;
 
     /**
-     * Request the wallet details from the provider.
+     * Fetch the wallet details from the provider.
      *
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentResponse
+     * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function requestDetails()
+    public function fetch()
     {
         return $this->gateway->getWallet($this);
     }

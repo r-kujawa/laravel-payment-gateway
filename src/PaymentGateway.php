@@ -58,14 +58,14 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
     }
     
     /**
-     * Extract the payment method from the provider.
+     * Delete the payment method at the provider.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function removePaymentMethod(PaymentMethod $paymentMethod)
+    public function deletePaymentMethod(PaymentMethod $paymentMethod)
     {
-        return tap($this->gateway->removePaymentMethod($paymentMethod))->configure(__FUNCTION__, $this->provider, $this->merchant);
+        return tap($this->gateway->deletePaymentMethod($paymentMethod))->configure(__FUNCTION__, $this->provider, $this->merchant);
     }
 
     /**

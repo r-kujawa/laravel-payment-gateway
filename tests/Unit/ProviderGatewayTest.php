@@ -76,7 +76,7 @@ class ProviderGatewayTest extends GatewayTestCase
     }
 
     /** @test */
-    public function remove_payment_method_method_returns_configured_response()
+    public function delete_payment_method_method_returns_configured_response()
     {
         $wallet = Wallet::factory()->create([
             'provider_id' => $this->provider->id,
@@ -87,11 +87,11 @@ class ProviderGatewayTest extends GatewayTestCase
             'wallet_id' => $wallet->id,
         ]);
 
-        $response = Payment::removePaymentMethod($paymentMethod);
+        $response = Payment::deletePaymentMethod($paymentMethod);
 
         $this->assertResponseIsConfigured($response);
 
-        $this->assertEquals('removePaymentMethod', $response->details['requestMethod']);
+        $this->assertEquals('deletePaymentMethod', $response->details['requestMethod']);
     }
 
     /** @test */
