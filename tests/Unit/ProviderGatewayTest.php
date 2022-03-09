@@ -22,7 +22,7 @@ class ProviderGatewayTest extends GatewayTestCase
 
         $this->assertResponseIsConfigured($response);
 
-        $this->assertEquals('getWallet', $response->details['requestMethod']);
+        $this->assertEquals('getWallet', $response->data['requestMethod']);
     }
 
     /** @test */
@@ -41,7 +41,7 @@ class ProviderGatewayTest extends GatewayTestCase
 
         $this->assertResponseIsConfigured($response);
 
-        $this->assertEquals('getPaymentMethod', $response->details['requestMethod']);
+        $this->assertEquals('getPaymentMethod', $response->data['requestMethod']);
     }
 
     /** @test */
@@ -53,7 +53,7 @@ class ProviderGatewayTest extends GatewayTestCase
 
         $this->assertResponseIsConfigured($response);
 
-        $this->assertEquals('tokenizePaymentMethod', $response->details['requestMethod']);
+        $this->assertEquals('tokenizePaymentMethod', $response->data['requestMethod']);
     }
 
     /** @test */
@@ -72,7 +72,7 @@ class ProviderGatewayTest extends GatewayTestCase
 
         $this->assertResponseIsConfigured($response);
 
-        $this->assertEquals('updatePaymentMethod', $response->details['requestMethod']);
+        $this->assertEquals('updatePaymentMethod', $response->data['requestMethod']);
     }
 
     /** @test */
@@ -91,7 +91,7 @@ class ProviderGatewayTest extends GatewayTestCase
 
         $this->assertResponseIsConfigured($response);
 
-        $this->assertEquals('deletePaymentMethod', $response->details['requestMethod']);
+        $this->assertEquals('deletePaymentMethod', $response->data['requestMethod']);
     }
 
     /** @test */
@@ -101,7 +101,7 @@ class ProviderGatewayTest extends GatewayTestCase
 
         $this->assertResponseIsConfigured($response);
 
-        $this->assertEquals('authorize', $response->details['requestMethod']);
+        $this->assertEquals('authorize', $response->data['requestMethod']);
     }
 
     /** @test */
@@ -116,7 +116,7 @@ class ProviderGatewayTest extends GatewayTestCase
 
         $this->assertResponseIsConfigured($response);
 
-        $this->assertEquals('capture', $response->details['requestMethod']);
+        $this->assertEquals('capture', $response->data['requestMethod']);
     }
 
     /** @test */
@@ -131,7 +131,7 @@ class ProviderGatewayTest extends GatewayTestCase
 
         $this->assertResponseIsConfigured($response);
 
-        $this->assertEquals('void', $response->details['requestMethod']);
+        $this->assertEquals('void', $response->data['requestMethod']);
     }
 
     /** @test */
@@ -146,7 +146,7 @@ class ProviderGatewayTest extends GatewayTestCase
 
         $this->assertResponseIsConfigured($response);
 
-        $this->assertEquals('refund', $response->details['requestMethod']);
+        $this->assertEquals('refund', $response->data['requestMethod']);
     }
 
     /**
