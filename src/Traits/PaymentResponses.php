@@ -77,16 +77,6 @@ trait PaymentResponses
     }
 
     /**
-     * Maps details from the authorizeAndCapture() response to the expected format.
-     *
-     * @return array|mixed
-     */
-    public function authorizationAndCaptureDetails()
-    {
-        $this->throwRuntimeException(__FUNCTION__);
-    }
-
-    /**
      * Maps details from the void() response to the expected format.
      *
      * @return array|mixed

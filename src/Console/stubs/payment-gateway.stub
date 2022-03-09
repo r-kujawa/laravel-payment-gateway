@@ -102,18 +102,6 @@ class {{ name }}PaymentGateway extends PaymentRequest
     }
 
     /**
-     * Request authorization for a transaction.
-     * 
-     * @param array|mixed $data
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod|null $paymentMethod
-     * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
-     */
-    public function authorizeAndCapture($data, PaymentMethod $paymentMethod = null)
-    {
-        //
-    }
-
-    /**
      * Void a previously authorized transaction.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $paymentTransaction

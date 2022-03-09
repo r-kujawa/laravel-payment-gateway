@@ -47,15 +47,4 @@ trait PaymentMethodRequests
     {
         return $this->gateway->authorize($data, $this);
     }
-
-    /**
-     * Request authorization for a payment and capture it.
-     *
-     * @param array|mixed $data
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentResponse
-     */
-    public function authorizeAndCapture($data)
-    {
-        return $this->gateway->authorizeAndCapture($data, $this);
-    }
 }

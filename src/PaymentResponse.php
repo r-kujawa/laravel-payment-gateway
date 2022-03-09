@@ -52,7 +52,6 @@ abstract class PaymentResponse implements PaymentResponder
         'removePaymentMethod' => 'extractionDetails',
         'authorize' => 'authorizationDetails',
         'capture' => 'captureDetails',
-        'authorizeAndCapture' => 'authorizationAndCaptureDetails',
         'void' => 'voidDetails',
         'refund' => 'refundDetails',
     ];
