@@ -5,13 +5,17 @@ namespace rkujawa\LaravelPaymentGateway;
 class PaymentStatus
 {
     const AUTHORIZED = 200;
-    const CAPTURED = 201;
-    const PARTIALLY_CAPTURED = 202;
-    const SETTLED = 203;
-    const VOIDED = 210;
-    const REFUNDED = 211;
-    const PARTIALLY_REFUNDED = 212;
-    const REFUND_SETTLED = 213;
+    const APPROVED = 201;
+    const REQUESTED_CAPTURE = 202;
+    const CAPTURED = 203;
+    const PARTIALLY_CAPTURED = 204;
+    const SETTLED = 205;
+    const REQUESTED_VOID = 210;
+    const VOIDED = 211;
+    const REQUESTED_REFUND = 212;
+    const REFUNDED = 213;
+    const PARTIALLY_REFUNDED = 214;
+    const REFUND_SETTLED = 215;
     const PENDING = 300;
     const PROCESSING_ASYNC = 301;
     const REFUSED = 400;
@@ -49,10 +53,14 @@ class PaymentStatus
      */
     public static $codes = [
         self::AUTHORIZED => 'Authorized',
+        self::APPROVED => 'Approved',
+        self::REQUESTED_CAPTURE => 'Requested payment capture',
         self::CAPTURED => 'Captured',
         self::PARTIALLY_CAPTURED => 'Partially captured',
         self::SETTLED => 'Settled',
+        self::REQUESTED_VOID => 'Requested authorization void',
         self::VOIDED => 'Voided',
+        self::REQUESTED_REFUND => 'Requested payment refund',
         self::REFUNDED => 'Refunded',
         self::PARTIALLY_REFUNDED => 'Partially refunded',
         self::REFUND_SETTLED => 'Refund settled',
@@ -94,10 +102,14 @@ class PaymentStatus
      */
     public static $messages = [
         self::AUTHORIZED => 'The transaction was authorized.',
+        self::APPROVED => 'The authorization was approved.',
+        self::REQUESTED_CAPTURE => 'A request to capture the payment has been made.',
         self::CAPTURED => 'The transaction was captured.',
         self::PARTIALLY_CAPTURED => 'The transaction was partially captured.',
         self::SETTLED => 'The transaction was settled.',
+        self::REQUESTED_VOID => 'A request to void an authorization has been made.',
         self::VOIDED => 'The transaction has been voided.',
+        self::REQUESTED_REFUND => 'A request to refund a payment has been made.',
         self::REFUNDED => 'The transaction was refunded.',
         self::PARTIALLY_REFUNDED => 'The transaction was partially refunded.',
         self::REFUND_SETTLED => 'The refund was settled.',
