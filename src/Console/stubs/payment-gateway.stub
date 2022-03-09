@@ -93,10 +93,10 @@ class {{ name }}PaymentGateway extends PaymentRequest
      * Capture a previously authorized transaction.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
-     * @param array|mixed|null $data
+     * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function capture(PaymentTransaction $transaction, $data = null)
+    public function capture(PaymentTransaction $transaction, $data = [])
     {
         //
     }
@@ -105,9 +105,10 @@ class {{ name }}PaymentGateway extends PaymentRequest
      * Void a previously authorized transaction.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $paymentTransaction
+     * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function void(PaymentTransaction $paymentTransaction)
+    public function void(PaymentTransaction $transaction, $data = [])
     {
         //
     }
@@ -116,10 +117,10 @@ class {{ name }}PaymentGateway extends PaymentRequest
      * Refund a previously captured transaction.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $paymentTransaction
-     * @param array|mixed|null
+     * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function refund(PaymentTransaction $paymentTransaction, $data = null)
+    public function refund(PaymentTransaction $transaction, $data = [])
     {
         //
     }

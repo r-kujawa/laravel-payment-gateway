@@ -82,6 +82,6 @@ class PaymentTransaction extends Model
      */
     public function events()
     {
-        return $this->hasMany(config('payment.models.' . PaymentTransactionEvent::class, PaymentTransactionEvent::class));
+        return $this->hasMany(config('payment.models.' . PaymentTransactionEvent::class, PaymentTransactionEvent::class), 'transaction_id');
     }
 }
