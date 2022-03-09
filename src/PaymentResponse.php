@@ -68,11 +68,11 @@ abstract class PaymentResponse implements PaymentResponder
     protected $rawResponse;
 
     /**
-     * Additional data needed to format the response.
+     * Additional information needed to format the response.
      *
-     * @var mixed|null
+     * @var array|mixed
      */
-    protected $additionalData;
+    protected $additionalInformation = [];
 
     /**
      * The request method that returned this response.
@@ -96,20 +96,20 @@ abstract class PaymentResponse implements PaymentResponder
     public $merchant;
 
     /**
-     * The expected formatted details based on the $request.
+     * The expected formatted data based on the $request.
      *
      * @var 
      */
-    private $details;
+    private $data;
 
     /**
      * @param mixed $response
-     * @param mixed|null $additionalData
+     * @param array|mixed $additionalInformation
      */
-    public function __construct($response, $additionalData = null)
+    public function __construct($response, $additionalInformation = [])
     {
         $this->rawResponse = $response;
-        $this->additionalData = $additionalData;
+        $this->additionalInformation = $additionalInformation;
     }
 
     /**
@@ -130,11 +130,21 @@ abstract class PaymentResponse implements PaymentResponder
     /**
      * Get the provider's raw response.
      * 
-     * @return array
+     * @return mixed
+     */
+    public function getRawResponse()
+    {
+        return $this->rawResponse;
+    }
+
+    /**
+     * Alias for the getRawResponse function.
+     * 
+     * @return mixed
      */
     public function getRaw()
     {
-        return $this->rawResponse;
+        return $this->getRawResponse();
     }
 
     /**
@@ -191,17 +201,17 @@ abstract class PaymentResponse implements PaymentResponder
      * 
      * @throws \RuntimeException
      */
-    public function getDetails()
+    public function getData()
     {
-        if (! isset($this->details)) {
-            if (is_null($callback = $this->getDetailsCallback())) {
+        if (! isset($this->data)) {
+            if (is_null($callback = $this->getDataCallback())) {
                 throw new RuntimeException('Details are not defined.');
             }
             
-            $this->details = $this->{$callback}();
+            $this->data = $this->{$callback}();
         }
 
-        return $this->details;
+        return $this->data;
     }
 
     /**
@@ -209,7 +219,7 @@ abstract class PaymentResponse implements PaymentResponder
      *
      * @return string|null
      */
-    private function getDetailsCallback()
+    private function getDataCallback()
     {
         return array_merge($this->requiredResponses, $this->responses)[$this->requestMethod] ?? null;
     }
