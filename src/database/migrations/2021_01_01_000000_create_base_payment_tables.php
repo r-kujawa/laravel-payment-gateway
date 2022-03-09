@@ -32,6 +32,7 @@ class CreateBasePaymentTables extends Migration
             $table->unsignedMediumInteger('merchant_id');
             $table->unsignedSmallInteger('provider_id');
             $table->boolean('is_default')->default(false);
+            $table->json('config')->nullable();
             $table->timestamps();
 
             $table->foreign('merchant_id')->references('id')->on('payment_merchants')->onDelete('cascade');
