@@ -53,7 +53,7 @@ class CreateBasePaymentTables extends Migration
             $table->string('billable_type')->nullable();
             $table->unsignedSmallInteger('provider_id');
             $table->unsignedMediumInteger('merchant_id');
-            $table->string('token', 255);
+            $table->string('token');
             $table->timestamps();
 
             $table->foreign('provider_id')->references('id')->on('payment_providers')->onDelete('cascade');
@@ -63,7 +63,7 @@ class CreateBasePaymentTables extends Migration
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('wallet_id');
-            $table->string('token', 255);
+            $table->string('token');
             $table->unsignedSmallInteger('type_id');
             $table->json('details')->nullable();
             $table->timestamps();
@@ -93,8 +93,8 @@ class CreateBasePaymentTables extends Migration
 
         Schema::create('payment_transaction_events', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('reference')->nullable();
             $table->unsignedBigInteger('transaction_id');
+            $table->string('reference')->nullable();
             $table->unsignedBigInteger('amount');
             $table->smallInteger('status_code');
             $table->json('details')->nullable();

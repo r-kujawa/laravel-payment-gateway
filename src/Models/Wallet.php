@@ -39,7 +39,7 @@ class Wallet extends Model
     /**
      * Get the entity model that this wallet belongs to.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function billable()
     {

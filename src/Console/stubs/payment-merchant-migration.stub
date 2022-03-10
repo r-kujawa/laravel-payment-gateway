@@ -14,8 +14,8 @@ class {{ class }} extends Migration
     public function up()
     {
         $merchant = PaymentMerchant::create([
-            'slug' => '{{ slug }}',
             'name' => '{{ name }}',
+            'slug' => '{{ slug }}',
         ]);
 
         $providers = PaymentProvider::whereIn('slug', ['{{ providers }}'])->get();

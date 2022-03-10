@@ -22,14 +22,14 @@ return [
     | Payment Provider Configurations
     |--------------------------------------------------------------------------
     |
-    | Here you may specify the service class path for each provider ('path') or,
-    | if they differ from the default paths, you may also specify the exact class
-    | path for each of the services ('processor', 'manager').
+    | Here you may provide the location of your provider's gateway implementation
+    | by specifying the 'gateway' key for each provider and mapping the class to
+    | it, you may also add any provider specific configuration you might have.
     |
     */
     'providers' => [
-        // '' => [
-        //     'path' => 'App\\Services\\Payment'
+        // 'example' => [
+        //     'gateway' => App\Services\Payment\ExamplePaymentGateway::class,
         // ],
     ],
     
