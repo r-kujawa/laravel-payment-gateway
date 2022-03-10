@@ -56,7 +56,7 @@ abstract class GatewayTestCase extends TestCase
         config([
             'payment.defaults.provider' => $this->provider->slug,
             'payment.defaults.merchant' => $this->merchant->slug,
-            'payment.providers.' . $this->provider->slug . '.path' => TestPaymentGateway::class,
+            'payment.providers.' . $this->provider->slug . '.gateway' => TestPaymentGateway::class,
         ]);
     }
 }

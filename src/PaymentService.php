@@ -215,7 +215,7 @@ class PaymentService
     protected function setGateway()
     {
         $gateway = config(
-            'payment.providers.' . $this->getProvider()->slug . '.path',
+            'payment.providers.' . $this->getProvider()->slug . '.gateway',
             '\\App\\Services\\Payment\\' . Str::studly($this->getProvider()->slug) . 'PaymentGateway'
         );
 
