@@ -29,7 +29,7 @@ return [
     */
     'providers' => [
         // 'example' => [
-        //     'gateway' => App\Services\Payment\ExamplePaymentGateway::class,
+        //     'gateway' => \App\Services\Payment\ExamplePaymentGateway::class,
         // ],
     ],
     
