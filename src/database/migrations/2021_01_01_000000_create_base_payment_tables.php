@@ -82,7 +82,6 @@ class CreateBasePaymentTables extends Migration
             $table->unsignedBigInteger('payment_method_id')->nullable();
             $table->unsignedSmallInteger('status_code');
             $table->json('details')->nullable();
-            $table->longText('payload')->nullable();
             $table->timestamps();
 
             $table->foreign('provider_id')->references('id')->on('payment_providers');
@@ -97,7 +96,6 @@ class CreateBasePaymentTables extends Migration
             $table->unsignedBigInteger('amount');
             $table->smallInteger('status_code');
             $table->json('details')->nullable();
-            $table->longText('payload')->nullable();
             $table->timestamps();
 
             $table->foreign('transaction_id')->references('id')->on('payment_transactions')->onDelete('cascade');
