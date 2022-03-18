@@ -67,7 +67,6 @@ class CreateBasePaymentTables extends Migration
             $table->unsignedSmallInteger('type_id');
             $table->json('details')->nullable();
             $table->timestamps();
-            $table->softDeletes();
 
             $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('cascade');
             $table->foreign('type_id')->references('id')->on('payment_types');
