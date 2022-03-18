@@ -33,7 +33,7 @@ class {{ name }}PaymentGateway extends PaymentRequest
 
     /**
      * Retrieve the payment method's details from the provider.
-     * 
+     *
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
@@ -44,7 +44,7 @@ class {{ name }}PaymentGateway extends PaymentRequest
 
     /**
      * Store the payment method details at the provider.
-     * 
+     *
      * @param \rkujawa\LaravelPaymentGateway\Contracts\Billable $billable
      * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
@@ -56,7 +56,7 @@ class {{ name }}PaymentGateway extends PaymentRequest
 
     /**
      * Update the payment method's details at the provider.
-     * 
+     *
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
      * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
@@ -68,7 +68,7 @@ class {{ name }}PaymentGateway extends PaymentRequest
     
     /**
      * Delete the payment method at the provider.
-     * 
+     *
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMethod $paymentMethod
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
@@ -79,19 +79,19 @@ class {{ name }}PaymentGateway extends PaymentRequest
 
     /**
      * Authorize a transaction.
-     * 
+     *
      * @param array|mixed $data
      * @param \rkujawa\LaravelPaymentGateway\Contracts\Billable|null $billable
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function authorize($data, PaymentMethod $billable = null)
+    public function authorize($data, Billable $billable = null)
     {
         //
     }
 
     /**
      * Capture a previously authorized transaction.
-     * 
+     *
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
      * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
@@ -103,7 +103,7 @@ class {{ name }}PaymentGateway extends PaymentRequest
 
     /**
      * Void a previously authorized transaction.
-     * 
+     *
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $paymentTransaction
      * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
@@ -115,7 +115,7 @@ class {{ name }}PaymentGateway extends PaymentRequest
 
     /**
      * Refund a previously captured transaction.
-     * 
+     *
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $paymentTransaction
      * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
