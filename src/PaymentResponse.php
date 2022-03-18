@@ -37,28 +37,11 @@ abstract class PaymentResponse implements PaymentResponder
     ];
 
     /**
-     * Additional responses supported by the application.
+     * Customize the response method names for your requests.
      *
      * @var array
      */
-    protected $responses = [];
-
-    /**
-     * Default responses supported by the application.
-     *
-     * @var array
-     */
-    protected $requiredResponses = [
-        'getWallet' => 'getWalletResponse',
-        'getPaymentMethod' => 'getPaymentMethodResponse',
-        'tokenizePaymentMethod' => 'tokenizePaymentMethodResponse',
-        'updatePaymentMethod' => 'updatePaymentMethodResponse',
-        'deletePaymentMethod' => 'deletePaymentMethodResponse',
-        'authorize' => 'authorizeResponse',
-        'capture' => 'captureResponse',
-        'void' => 'voidResponse',
-        'refund' => 'refundResponse',
-    ];
+    protected $responseMethods = [];
 
     /**
      * The provider's raw response.
@@ -79,7 +62,7 @@ abstract class PaymentResponse implements PaymentResponder
      *
      * @var string
      */
-    protected $requestMethod;
+    public $requestMethod;
 
     /**
      * The provider that the $request was made towards.
@@ -204,23 +187,39 @@ abstract class PaymentResponse implements PaymentResponder
     public function getData()
     {
         if (! isset($this->data)) {
-            if (is_null($callback = $this->getDataCallback())) {
-                throw new RuntimeException('Details are not defined.');
-            }
-            
-            $this->data = $this->{$callback}();
+            $this->data = $this->{$this->getResponseMethod()}();
         }
 
         return $this->data;
     }
 
     /**
-     * Get the callback method that should be used to get the response's details.
+     * Get the response method that should be used to get the response's data.
      *
-     * @return string|null
+     * @return string
      */
-    private function getDataCallback()
+    protected function getResponseMethod()
     {
-        return array_merge($this->requiredResponses, $this->responses)[$this->requestMethod] ?? null;
+        if (isset($this->requestMethod)) {
+            if (array_key_exists($this->requestMethod, $this->responseMethods)) {
+                return $this->responseMethods[$this->requestMethod];
+            }
+    
+            if (method_exists($this, $method = "{$this->requestMethod}Response")) {
+                return $method;
+            }
+        }
+
+        return 'response';
+    }
+
+    /**
+     * The generic payment request response.
+     *
+     * @return array|mixed
+     */
+    public function response()
+    {
+        return [];
     }
 }
