@@ -4,14 +4,12 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentMethodFactory;
 use rkujawa\LaravelPaymentGateway\Models\Traits\PaymentMethodRequests;
 
 class PaymentMethod extends Model
 {
     use HasFactory,
-        SoftDeletes,
         PaymentMethodRequests;
 
     /**
