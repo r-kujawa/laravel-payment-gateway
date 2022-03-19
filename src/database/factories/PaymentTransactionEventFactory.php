@@ -3,7 +3,6 @@
 namespace rkujawa\LaravelPaymentGateway\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use rkujawa\LaravelPaymentGateway\Models\PaymentRefund;
 use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction;
 use rkujawa\LaravelPaymentGateway\Models\PaymentTransactionEvent;
 use rkujawa\LaravelPaymentGateway\PaymentStatus;
@@ -13,9 +12,12 @@ class PaymentTransactionEventFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @return string
      */
-    protected $model = PaymentTransactionEvent::class;
+    public function modelName()
+    {
+        return config('payment.models.' . PaymentTransactionEvent::class, PaymentTransactionEvent::class);
+    }
 
 
     /**

@@ -4,7 +4,6 @@ namespace rkujawa\LaravelPaymentGateway\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMerchant;
-use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction;
 use rkujawa\LaravelPaymentGateway\PaymentStatus;
@@ -14,9 +13,12 @@ class PaymentTransactionFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @return string
      */
-    protected $model = PaymentTransaction::class;
+    public function modelName()
+    {
+        return config('payment.models.' . PaymentTransaction::class, PaymentTransaction::class);
+    }
 
     /**
      * Define the model's default state.
