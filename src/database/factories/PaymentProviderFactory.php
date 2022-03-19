@@ -10,9 +10,12 @@ class PaymentProviderFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @return string
      */
-    protected $model = PaymentProvider::class;
+    public function modelName()
+    {
+        return config('payment.models.' . PaymentProvider::class, PaymentProvider::class);
+    }
 
     /**
      * Define the model's default state.

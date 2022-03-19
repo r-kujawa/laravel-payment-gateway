@@ -10,9 +10,12 @@ class PaymentMerchantFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @return string
      */
-    protected $model = PaymentMerchant::class;
+    public function modelName()
+    {
+        return config('payment.models.' . PaymentMerchant::class, PaymentMerchant::class);
+    }
 
     /**
      * Define the model's default state.

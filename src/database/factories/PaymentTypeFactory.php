@@ -10,9 +10,12 @@ class PaymentTypeFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @return string
      */
-    protected $model = PaymentType::class;
+    public function modelName()
+    {
+        return config('payment.models.' . PaymentType::class, PaymentType::class);
+    }
 
     public const DEFAULTS = [
         [

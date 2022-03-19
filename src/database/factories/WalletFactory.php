@@ -12,9 +12,12 @@ class WalletFactory extends Factory
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @return string
      */
-    protected $model = Wallet::class;
+    public function modelName()
+    {
+        return config('payment.models.' . Wallet::class, Wallet::class);
+    }
 
     /**
      * Define the model's default state.
