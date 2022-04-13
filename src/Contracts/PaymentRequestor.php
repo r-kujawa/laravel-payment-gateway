@@ -72,18 +72,18 @@ interface PaymentRequestor
     /**
      * Void a previously authorized transaction.
      * 
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $paymentTransaction
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
      * @param array|mixed $data
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function void(PaymentTransaction $paymentTransaction, $data = []);
+    public function void(PaymentTransaction $transaction, $data = []);
 
     /**
      * Refund a previously captured transaction.
      * 
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $paymentTransaction
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
      * @param array|mixed
      * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
      */
-    public function refund(PaymentTransaction $paymentTransaction, $data = []);
+    public function refund(PaymentTransaction $transaction, $data = []);
 }
