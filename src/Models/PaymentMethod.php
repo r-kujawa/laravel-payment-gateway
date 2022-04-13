@@ -91,7 +91,7 @@ class PaymentMethod extends Model
     /**
      * Get the transactions that this payment method has triggered.
      *
-     * @return void \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function transactions()
     {
