@@ -6,20 +6,6 @@ use Illuminate\Filesystem\Filesystem;
 
 abstract class CommandTestCase extends TestCase
 {
-    /**
-     * Setup the test environment.
-     *
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        (new Filesystem)->cleanDirectory(database_path('migrations'));
-
-        $this->artisan('migrate');
-    }
-
     protected function getArgumentQuestion($model)
     {
         return "What payment {$model} would you like to add?";
