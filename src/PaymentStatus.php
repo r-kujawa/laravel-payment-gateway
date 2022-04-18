@@ -6,11 +6,10 @@ class PaymentStatus
 {
     const AUTHORIZED = 200;
     const APPROVED = 201;
-    const REQUESTED_CAPTURE = 202;
-    const CAPTURED = 203;
-    const PARTIALLY_CAPTURED = 204;
-    const SETTLED = 205;
-    const REQUESTED_VOID = 210;
+    const CAPTURED = 202;
+    const PARTIALLY_CAPTURED = 203;
+    const SETTLED = 204;
+    const CANCELED = 210;
     const VOIDED = 211;
     const REFUNDED = 212;
     const PARTIALLY_REFUNDED = 213;
@@ -61,11 +60,10 @@ class PaymentStatus
     public static $codes = [
         self::AUTHORIZED => 'Authorized',
         self::APPROVED => 'Approved',
-        self::REQUESTED_CAPTURE => 'Requested payment capture',
         self::CAPTURED => 'Captured',
         self::PARTIALLY_CAPTURED => 'Partially captured',
         self::SETTLED => 'Settled',
-        self::REQUESTED_VOID => 'Requested authorization void',
+        self::CANCELED => 'Requested cancelation',
         self::VOIDED => 'Voided',
         self::REFUNDED => 'Refunded',
         self::PARTIALLY_REFUNDED => 'Partially refunded',
@@ -117,11 +115,10 @@ class PaymentStatus
     public static $messages = [
         self::AUTHORIZED => 'The transaction was authorized.',
         self::APPROVED => 'The authorization was approved.',
-        self::REQUESTED_CAPTURE => 'A request to capture the payment has been made.',
-        self::CAPTURED => 'The transaction was captured.',
+        self::CAPTURED => 'The transaction is being captured.',
         self::PARTIALLY_CAPTURED => 'The transaction was partially captured.',
         self::SETTLED => 'The transaction was settled.',
-        self::REQUESTED_VOID => 'A request to void an authorization has been made.',
+        self::CANCELED => 'The transaction is being canceled.',
         self::VOIDED => 'The transaction has been voided.',
         self::REFUNDED => 'The transaction is being refunded.',
         self::PARTIALLY_REFUNDED => 'The transaction is being partially refunded.',

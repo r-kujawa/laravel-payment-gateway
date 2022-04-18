@@ -22,16 +22,16 @@ abstract class PaymentResponse implements PaymentResponder
     protected $successStatuses = [
         PaymentStatus::AUTHORIZED,
         PaymentStatus::APPROVED,
-        PaymentStatus::REQUESTED_CAPTURE,
         PaymentStatus::CAPTURED,
         PaymentStatus::PARTIALLY_CAPTURED,
         PaymentStatus::SETTLED,
-        PaymentStatus::REQUESTED_VOID,
+        PaymentStatus::CANCELED,
         PaymentStatus::VOIDED,
-        PaymentStatus::REQUESTED_REFUND,
         PaymentStatus::REFUNDED,
         PaymentStatus::PARTIALLY_REFUNDED,
         PaymentStatus::REFUND_SETTLED,
+        PaymentStatus::REFUND_FAILED,
+        PaymentStatus::REFUND_REVERSED,
         PaymentStatus::PENDING,
         PaymentStatus::PROCESSING_ASYNC,
     ];
@@ -81,7 +81,7 @@ abstract class PaymentResponse implements PaymentResponder
     /**
      * The expected formatted data based on the $request.
      *
-     * @var 
+     * @var
      */
     private $data;
 
@@ -112,7 +112,7 @@ abstract class PaymentResponse implements PaymentResponder
 
     /**
      * Get the provider's raw response.
-     * 
+     *
      * @return mixed
      */
     public function getRawResponse()
@@ -122,7 +122,7 @@ abstract class PaymentResponse implements PaymentResponder
 
     /**
      * Alias for the getRawResponse function.
-     * 
+     *
      * @return mixed
      */
     public function getRaw()
@@ -132,7 +132,7 @@ abstract class PaymentResponse implements PaymentResponder
 
     /**
      * Verify whether the request should be considered successful.
-     * 
+     *
      * @return bool
      */
     public function isSuccessful()
@@ -181,7 +181,7 @@ abstract class PaymentResponse implements PaymentResponder
      * Get the formatted details based on the request that was made.
      *
      * @return array|mixed
-     * 
+     *
      * @throws \RuntimeException
      */
     public function getData()
@@ -204,7 +204,7 @@ abstract class PaymentResponse implements PaymentResponder
             if (array_key_exists($this->requestMethod, $this->responseMethods)) {
                 return $this->responseMethods[$this->requestMethod];
             }
-    
+
             if (method_exists($this, $method = "{$this->requestMethod}Response")) {
                 return $method;
             }
