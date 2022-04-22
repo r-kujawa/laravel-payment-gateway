@@ -108,6 +108,11 @@ class PaymentService
         return $provider;
     }
 
+    /**
+     * Ensure the merchant has a relationship with the provider and return it.
+     *
+     * @return \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant
+     */
     private function ensureMerchantIsSupportedByProvider()
     {
         if (! $this->getMerchant()->providers->contains('id', $this->getProvider()->id)) {
@@ -214,10 +219,15 @@ class PaymentService
      */
     protected function setGateway()
     {
-        $gateway = config(
-            'payment.providers.' . $this->getProvider()->slug . '.gateway',
-            '\\App\\Services\\Payment\\' . Str::studly($this->getProvider()->slug) . 'PaymentGateway'
-        );
+        $gateway = config('payment.test_mode', false)
+            ? config(
+                'payment.test.gateway',
+                '\\App\\Services\\Payment\\TestPaymentGateway'
+            )
+            : config(
+                'payment.providers.' . $this->getProvider()->slug . '.gateway',
+                '\\App\\Services\\Payment\\' . Str::studly($this->getProvider()->slug) . 'PaymentGateway'
+            );
 
         $this->gateway = $this->ensureGatewayIsValid($gateway);
     }
@@ -236,6 +246,7 @@ class PaymentService
             throw new Exception('The ' . $gateway . '::class does not exist.');
         }
 
-        return new $gateway($this->ensureMerchantIsSupportedByProvider());
+        // TODO [3.x]: $param[0] should be provider & $param[1] should be merchant.
+        return new $gateway($this->ensureMerchantIsSupportedByProvider(), $this->getProvider());
     }
 }

@@ -19,6 +19,32 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Payment Test Mode
+    |--------------------------------------------------------------------------
+    |
+    | When set to true, it will pass the provider & merchant into the testing
+    | gateway so you can mock your requests as you wish. This is very
+    | usefull when you are running tests in a CI/CD environment.
+    |
+    */
+    'test_mode' => env('PAYMENT_TEST_MODE', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Payment Test Configuration
+    |--------------------------------------------------------------------------
+    |
+    | The following configurations will only be considered when test_mode
+    | is set to true. Here you may set any configurations needed in
+    | order to have your tests running smoothly.
+    |
+    */
+    'test' => [
+        'gateway' => \App\Services\Payment\TestPaymentGateway::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Payment Provider Configurations
     |--------------------------------------------------------------------------
     |
@@ -32,7 +58,7 @@ return [
         //     'gateway' => \App\Services\Payment\ExamplePaymentGateway::class,
         // ],
     ],
-    
+
     /*
     |--------------------------------------------------------------------------
     | Payment Models
