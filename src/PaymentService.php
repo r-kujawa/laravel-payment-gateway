@@ -246,7 +246,6 @@ class PaymentService
             throw new Exception('The ' . $gateway . '::class does not exist.');
         }
 
-        // TODO [3.x]: $param[0] should be provider & $param[1] should be merchant.
-        return new $gateway($this->ensureMerchantIsSupportedByProvider(), $this->getProvider());
+        return new $gateway($this->ensureMerchantIsSupportedByProvider());
     }
 }
