@@ -20,7 +20,8 @@ class AddPaymentProvider extends Command
     protected $signature = 'payment:add-provider
                             {provider? : The payment provider name}
                             {--slug= : The payment provider dev name}
-                            {--skip-migration : Do not run the migration}';
+                            {--skip-migration : Do not run the migration}
+                            {--test : Generates a gateway to be used for testing purposes}';
 
     /**
      * The console command description.
@@ -48,6 +49,44 @@ class AddPaymentProvider extends Command
 
         $studlySlug = Str::studly($this->slug);
 
+        if (! $this->option('test')) {
+            $this->generateProviderMigration($studlySlug);
+        }
+
+        $this->putFile(
+            app_path("Services/Payment/{$studlySlug}PaymentGateway.php"),
+            $this->makeFile(__DIR__ . '/../stubs/payment-gateway.stub', ['name' => $studlySlug])
+        );
+
+        $this->putFile(
+            app_path("Services/Payment/{$studlySlug}PaymentResponse.php"),
+            $this->makeFile(__DIR__ . '/../stubs/payment-response.stub', ['name' => $studlySlug])
+        );
+    }
+
+    /**
+     * Format the payment provider's properties.
+     *
+     * @return void
+     */
+    protected function setProperties()
+    {
+        $this->name = trim(
+            $this->argument('provider') ?? (
+                $this->option('test', false)
+                    ? 'Test'
+                    : $this->ask('What payment provider would you like to add?')
+            )
+        );
+
+        $this->slug = PaymentProvider::slugify(
+            $this->option('slug') ??
+            $this->ask("What slug would you like to use for the {$this->name} payment provider?", PaymentProvider::slugify($this->name))
+        );
+    }
+
+    private function generateProviderMigration($studlySlug)
+    {
         $migrationClass = "Add{$studlySlug}PaymentProvider";
 
         if ($this->classExists($migrationClass, $this->getMigrationPath())) {
@@ -71,33 +110,5 @@ class AddPaymentProvider extends Command
         if ((! $this->option('skip-migration')) && $this->confirm('Would you like to run the migration?', true)) {
             $this->call('migrate', ['--force']);
         }
-
-        $this->putFile(
-            app_path("Services/Payment/{$studlySlug}PaymentGateway.php"),
-            $this->makeFile(__DIR__ . '/../stubs/payment-gateway.stub', ['name' => $studlySlug])
-        );
-
-        $this->putFile(
-            app_path("Services/Payment/{$studlySlug}PaymentResponse.php"),
-            $this->makeFile(__DIR__ . '/../stubs/payment-response.stub', ['name' => $studlySlug])
-        );
-    }
-
-    /**
-     * Format the payment provider's properties.
-     *
-     * @return void
-     */
-    protected function setProperties()
-    {
-        $this->name = trim(
-            $this->argument('provider') ?? 
-            $this->ask('What payment provider would you like to add?')
-        );
-
-        $this->slug = PaymentProvider::slugify(
-            $this->option('slug') ?? 
-            $this->ask("What slug would you like to use for the {$this->name} payment provider?", PaymentProvider::slugify($this->name))
-        );
     }
 }
