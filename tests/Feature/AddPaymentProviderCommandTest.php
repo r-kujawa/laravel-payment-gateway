@@ -19,7 +19,7 @@ class AddPaymentProviderCommandTest extends CommandTestCase
             ->expectsQuestion($this->getOptionQuestion('slug', 'provider', $provider->name), $provider->slug)
             ->expectsConfirmation($this->getMigrationConfirmation(), 'yes')
             ->assertExitCode(0);
-        
+
         $this->assertDatabaseHas('payment_providers', ['slug' => $provider->slug]);
     }
 
@@ -85,5 +85,26 @@ class AddPaymentProviderCommandTest extends CommandTestCase
         } catch (Exception $e) {
             $this->assertEquals(InvalidArgumentException::class, get_class($e));
         }
+    }
+
+    /** @test */
+    public function add_payment_provider_command_skips_migration_when_generating_test_gateway()
+    {
+        $arguments = [
+            '--test' => true,
+        ];
+
+        $this->artisan('payment:add-provider', $arguments)
+            ->expectsQuestion($this->getOptionQuestion('slug', 'provider', 'Test'), 'test');
+
+
+        $servicePath = app_path('Services/Payment');
+
+        $this->assertTrue(file_exists("{$servicePath}/TestPaymentGateway.php"));
+        $this->assertTrue(file_exists("{$servicePath}/TestPaymentResponse.php"));
+
+        $this->artisan('migrate');
+
+        $this->assertDatabaseMissing('payment_providers', ['slug' => 'test']);
     }
 }
