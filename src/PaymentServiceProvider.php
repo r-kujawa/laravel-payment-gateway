@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentMerchant;
 use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentProvider;
 use rkujawa\LaravelPaymentGateway\Console\Commands\AddPaymentType;
+use rkujawa\LaravelPaymentGateway\Console\Commands\PaymentInstall;
 
 class PaymentServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,7 @@ class PaymentServiceProvider extends ServiceProvider
                 AddPaymentType::class,
                 AddPaymentProvider::class,
                 AddPaymentMerchant::class,
+                PaymentInstall::class,
             ]);
         }
     }

@@ -81,7 +81,7 @@ class AddPaymentMerchant extends Command
         $this->info('The migration to add ' . $this->name . ' payment merchant has been generated.');
 
         if ((! $this->option('skip-migration')) && $this->confirm('Would you like to run the migration?', true)) {
-            $this->call('migrate', ['--force']);
+            $this->call('migrate', ['--force' => true]);
         }
     }
 
@@ -98,7 +98,7 @@ class AddPaymentMerchant extends Command
         );
 
         $this->slug = PaymentMerchant::slugify(
-            $this->option('slug') ?? 
+            $this->option('slug') ??
             $this->ask("What slug would you like to use for the {$this->name} payment merchant?", PaymentMerchant::slugify($this->name))
         );
 

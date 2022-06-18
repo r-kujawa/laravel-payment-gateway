@@ -11,7 +11,7 @@ use rkujawa\LaravelPaymentGateway\Traits\GeneratesMigrations;
 class AddPaymentType extends Command
 {
     use GeneratesMigrations;
-    
+
     /**
      * The name and signature of the console command.
      *
@@ -72,7 +72,7 @@ class AddPaymentType extends Command
         $this->info('The migration to add ' . $this->name . ' payment type has been generated.');
 
         if ((! $this->option('skip-migration')) && $this->confirm('Would you like to run the migration?', true)) {
-            $this->call('migrate', ['--force']);
+            $this->call('migrate', ['--force' => true]);
         }
     }
 

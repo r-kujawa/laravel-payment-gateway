@@ -71,12 +71,15 @@ class AddPaymentProvider extends Command
      */
     protected function setProperties()
     {
+        if ($this->option('test', false)) {
+            $this->name = 'Test';
+            $this->slug = 'test';
+
+            return;
+        }
+
         $this->name = trim(
-            $this->argument('provider') ?? (
-                $this->option('test', false)
-                    ? 'Test'
-                    : $this->ask('What payment provider would you like to add?')
-            )
+            $this->argument('provider') ?? $this->ask('What payment provider would you like to add?')
         );
 
         $this->slug = PaymentProvider::slugify(
@@ -108,7 +111,7 @@ class AddPaymentProvider extends Command
         $this->info('The migration to add ' . $this->name . ' payment provider has been generated.');
 
         if ((! $this->option('skip-migration')) && $this->confirm('Would you like to run the migration?', true)) {
-            $this->call('migrate', ['--force']);
+            $this->call('migrate', ['--force' => true]);
         }
     }
 }
