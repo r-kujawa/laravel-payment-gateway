@@ -94,9 +94,7 @@ class AddPaymentProviderCommandTest extends CommandTestCase
             '--test' => true,
         ];
 
-        $this->artisan('payment:add-provider', $arguments)
-            ->expectsQuestion($this->getOptionQuestion('slug', 'provider', 'Test'), 'test');
-
+        $this->artisan('payment:add-provider', $arguments);
 
         $servicePath = app_path('Services/Payment');
 

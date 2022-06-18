@@ -31,8 +31,6 @@ abstract class GatewayTestCase extends TestCase
     {
         parent::setUp();
 
-        $this->artisan('migrate');
-
         Schema::create('users', function ($table) {
             $table->id();
             $table->string('email')->unique();
@@ -82,7 +80,7 @@ class TestPaymentGateway extends PaymentRequest
     {
         return new TestPaymentResponse([]);
     }
-    
+
     public function deletePaymentMethod(PaymentMethod $paymentMethod)
     {
         return new TestPaymentResponse([]);
@@ -184,7 +182,7 @@ class User extends Model implements Billable
 {
     use BillableTrait,
         HasFactory;
-    
+
     protected static function newFactory()
     {
         return UserFactory::new();
