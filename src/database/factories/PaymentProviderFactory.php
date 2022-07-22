@@ -3,6 +3,7 @@
 namespace rkujawa\LaravelPaymentGateway\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 
 class PaymentProviderFactory extends Factory
@@ -24,11 +25,13 @@ class PaymentProviderFactory extends Factory
      */
     public function definition()
     {
-        $name = $this->faker->unique()->company();
+        $slug = PaymentProvider::slugify($this->faker->unique()->company());
+        $studlySlug = Str::studly($slug);
 
         return [
-            'name' => $name,
-            'slug' => PaymentProvider::slugify($name),
+            'slug' => $slug,
+            'request_class' => "\App\Services\Payment\{$studlySlug}PaymentGateway",
+            'request_class' => "\App\Services\Payment\{$studlySlug}PaymentResponse",
         ];
     }
 }
