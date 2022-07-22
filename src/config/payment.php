@@ -13,6 +13,7 @@ return [
     |
     */
     'defaults' => [
+        'driver' => 'database',
         'provider' => '',
         'merchant' => '',
     ],
@@ -41,6 +42,20 @@ return [
     */
     'test' => [
         'gateway' => \App\Services\Payment\TestPaymentGateway::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Payment Service Drivers
+    |--------------------------------------------------------------------------
+    |
+    | You may register custom payment drivers and/or remove the default ones.
+    | Pleas enot that in order for the driver to be compatible it must extend
+    | the \rkujawa\LaravelPaymentGateway\PaymentServiceDriver::class.
+    |
+    */
+    'drivers' => [
+        'database' => \rkujawa\LaravelPaymentGateway\Drivers\DatabaseDriver::class,
     ],
 
     /*

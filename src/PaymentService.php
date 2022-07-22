@@ -3,9 +3,8 @@
 namespace rkujawa\LaravelPaymentGateway;
 
 use Exception;
-use Illuminate\Support\Str;
-use rkujawa\LaravelPaymentGateway\Models\PaymentMerchant;
-use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
+use rkujawa\LaravelPaymentGateway\Contracts\Merchantable;
+use rkujawa\LaravelPaymentGateway\Contracts\Providable;
 use rkujawa\LaravelPaymentGateway\Traits\SimulateAttributes;
 
 class PaymentService
@@ -13,30 +12,42 @@ class PaymentService
     use SimulateAttributes;
 
     /**
+     * The payment service driver that will handle provider & merchant configurations.
+     *
+     * @var \rkujawa\LaravelPaymentGateway\PaymentServiceDriver
+     */
+    private $driver;
+
+    /**
      * The payment provider requests will be forwarded to.
      *
-     * @var \rkujawa\LaravelPaymentGateway\Models\PaymentProvider
+     * @var \rkujawa\LaravelPaymentGateway\Contracts\Providable
      */
     private $provider;
 
     /**
      * The merchant that will be passed to the provider's gateway.
      *
-     * @var \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant
+     * @var \rkujawa\LaravelPaymentGateway\Contracts\Merchantable
      */
     private $merchant;
 
     /**
      * The gateway class where requests will be executed.
      *
-     * @var \rkujawa\LaravelPaymentGateway\Contracts\PaymentGateway
+     * @var \rkujawa\LaravelPaymentGateway\PaymentRequest
      */
     private $gateway;
+
+    public function __construct()
+    {
+        $this->driver = new (config('payment.drivers.' . config('payment.defaults.driver', 'config')));
+    }
 
     /**
      * Fluent provider setter.
      *
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentProvider|string|int $provider
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Providable|string|int $provider
      * @return \rkujawa\LaravelPaymentGateway\PaymentService
      */
     public function provider($provider)
@@ -49,7 +60,7 @@ class PaymentService
     /**
      * Get the current payment provider.
      *
-     * @return \rkujawa\LaravelPaymentGateway\Models\PaymentProvider
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\Providable
      */
     public function getProvider()
     {
@@ -63,12 +74,16 @@ class PaymentService
     /**
      * Set the payment provider.
      *
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentProvider|string|int $provider
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Providable|string|int $provider
      * @return void
      */
     public function setProvider($provider)
     {
-        $this->provider = $this->ensureProviderIsValid($provider);
+        if (is_null($provider = $this->driver->resolveProvider($provider))) {
+            throw new Exception('Invalid provider.');
+        }
+
+        $this->provider = $provider;
 
         $this->gateway = null;
     }
@@ -76,56 +91,17 @@ class PaymentService
     /**
      * Get the default payment provider.
      *
-     * @return string|int|\rkujawa\LaravelPaymentGateway\Models\PaymentProvider
+     * @return string|int|\rkujawa\LaravelPaymentGateway\Contracts\Providable
      */
     public function getDefaultProvider()
     {
-        if (isset($this->merchant) && ! is_null($provider = $this->merchant->providers()->wherePivot('is_default', true)->first())) {
-            return $provider;
-        }
-
-        return config('payment.defaults.provider');
-    }
-
-    /**
-     * Verify if the payment provider is supported.
-     *
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentProvider|string|int $provider
-     * @return \rkujawa\LaravelPaymentGateway\Models\PaymentProvider
-     *
-     * @throws \Exception
-     */
-    private function ensureProviderIsValid($provider)
-    {
-        if (! $provider instanceof PaymentProvider) {
-            $provider = PaymentProvider::where('slug', $provider)->orWhere('id', $provider)->first();
-        }
-
-        if (is_null($provider) || (! $provider->exists)) {
-            throw new Exception('Provider not found.');
-        }
-
-        return $provider;
-    }
-
-    /**
-     * Ensure the merchant has a relationship with the provider and return it.
-     *
-     * @return \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant
-     */
-    private function ensureMerchantIsSupportedByProvider()
-    {
-        if (! $this->getMerchant()->providers->contains('id', $this->getProvider()->id)) {
-            throw new Exception('The ' . $this->getProvider()->name . ' provider does not support the ' . $this->getMerchant()->name . ' merchant.');
-        }
-
-        return $this->getMerchant();
+        return $this->driver->getDefaultProvider($this->merchant);
     }
 
     /**
      * Fluent merchant setter.
      *
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant|string|int $merchant
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|string|int $merchant
      * @return \rkujawa\LaravelPaymentGateway\PaymentService
      */
     public function merchant($merchant)
@@ -138,12 +114,12 @@ class PaymentService
     /**
      * Get the current merchant.
      *
-     * @return \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant
+     * @return \rkujawa\LaravelPaymentGateway\Contracts\Merchantable
      */
     public function getMerchant()
     {
         if (! isset($this->merchant)) {
-            $this->setMerchant($this->getDefaultMerchant(), false);
+            $this->setMerchant($this->getDefaultMerchant());
         }
 
         return $this->merchant;
@@ -152,17 +128,17 @@ class PaymentService
     /**
      * Set the specified merchant.
      *
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant|string|int $merchant
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|string|int $merchant
      * @param bool $strict Make sure the merchant that is being set is supported by the current provider.
      * @return void
      */
-    public function setMerchant($merchant, $strict = true)
+    public function setMerchant($merchant)
     {
-        $this->merchant = $this->ensureMerchantIsValid($merchant);
-
-        if ($strict) {
-            $this->ensureMerchantIsSupportedByProvider();
+        if (is_null($merchant = $this->driver->resolveMerchant($merchant))) {
+            throw new Exception('Invalid merchant.');
         }
+
+        $this->merchant = $merchant;
 
         $this->gateway = null;
     }
@@ -170,38 +146,17 @@ class PaymentService
     /**
      * Get the default merchant.
      *
-     * @return string|int
+     * @return string|int|\rkujawa\LaravelPaymentGateway\Contracts\Merchantable
      */
     public function getDefaultMerchant()
     {
-        return config('payment.defaults.merchant');
-    }
-
-    /**
-     * Verify if the current provider supports the specified merchant.
-     *
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant|string|int $merchant
-     * @return \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant
-     *
-     * @throws \Exception
-     */
-    private function ensureMerchantIsValid($merchant)
-    {
-        if (! $merchant instanceof PaymentMerchant) {
-            $merchant = PaymentMerchant::where('slug', $merchant)->orWhere('id', $merchant)->first();
-        }
-
-        if (is_null($merchant) || (! $merchant->exists)) {
-            throw new Exception('Merchant not found.');
-        }
-
-        return $merchant;
+        return $this->driver->getDefaultMerchant($this->provider);
     }
 
     /**
      * Get the payment gateway service.
      *
-     * @return \rkujawa\LaravelPaymentGateway\Contracts\PaymentGateway
+     * @return \rkujawa\LaravelPaymentGateway\PaymentRequest
      */
     protected function getGateway()
     {
@@ -219,34 +174,22 @@ class PaymentService
      */
     protected function setGateway()
     {
+        $provider = $this->getProvider();
+        $merchant = $this->getMerchant();
+
+        if (! $this->driver->check($merchant, $provider)) {
+            throw new Exception('The ' . $provider->getName() . ' provider does not support the ' . $merchant->getName() . ' merchant.');
+        }
+
         $gateway = config('payment.test_mode', false)
-            ? config(
-                'payment.test.gateway',
-                '\\App\\Services\\Payment\\TestPaymentGateway'
-            )
-            : config(
-                'payment.providers.' . $this->getProvider()->slug . '.gateway',
-                '\\App\\Services\\Payment\\' . Str::studly($this->getProvider()->slug) . 'PaymentGateway'
-            );
+            ? config('payment.test.gateway', '\\App\\Services\\Payment\\TestPaymentGateway')
+            : $this->driver->resolveGatewayClass($provider);
 
-        $this->gateway = $this->ensureGatewayIsValid($gateway);
-    }
-
-    /**
-     * Verify that the requested action is legal and the gateway exists.
-     *
-     * @param string $gateway
-     * @return mixed
-     *
-     * @throws \Exception
-     */
-    private function ensureGatewayIsValid($gateway)
-    {
         if (! class_exists($gateway)) {
             throw new Exception('The ' . $gateway . '::class does not exist.');
         }
 
         // TODO [3.x]: $param[0] should be provider & $param[1] should be merchant.
-        return new $gateway($this->ensureMerchantIsSupportedByProvider(), $this->getProvider());
+        $this->gateway = new $gateway($merchant, $provider);
     }
 }

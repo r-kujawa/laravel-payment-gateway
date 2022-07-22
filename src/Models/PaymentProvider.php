@@ -4,9 +4,10 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use rkujawa\LaravelPaymentGateway\Contracts\Providable;
 use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentProviderFactory;
 
-class PaymentProvider extends Model
+class PaymentProvider extends Model implements Providable
 {
     use HasFactory;
 
@@ -25,6 +26,26 @@ class PaymentProvider extends Model
     protected static function newFactory()
     {
         return PaymentProviderFactory::new();
+    }
+
+    /**
+     * Get the provider's id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get the provider's slug.
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
     /**
