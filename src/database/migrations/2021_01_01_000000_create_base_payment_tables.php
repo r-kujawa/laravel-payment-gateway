@@ -13,31 +13,33 @@ class CreateBasePaymentTables extends Migration
      */
     public function up()
     {
-        Schema::create('payment_providers', function (Blueprint $table) {
-            $table->smallIncrements('id');
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->timestamps();
-        });
+        if (config('payment.defaults.driver') === 'database') {
+            Schema::create('payment_providers', function (Blueprint $table) {
+                $table->smallIncrements('id');
+                $table->string('slug')->unique();
+                $table->string('request_class');
+                $table->string('response_class');
+                $table->timestamps();
+            });
 
-        Schema::create('payment_merchants', function (Blueprint $table) {
-            $table->mediumIncrements('id');
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->timestamps();
-        });
+            Schema::create('payment_merchants', function (Blueprint $table) {
+                $table->mediumIncrements('id');
+                $table->string('slug')->unique();
+                $table->timestamps();
+            });
 
-        Schema::create('payment_merchant_provider', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedMediumInteger('merchant_id');
-            $table->unsignedSmallInteger('provider_id');
-            $table->boolean('is_default')->default(false);
-            $table->json('config')->nullable();
-            $table->timestamps();
+            Schema::create('payment_merchant_provider', function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedMediumInteger('merchant_id');
+                $table->unsignedSmallInteger('provider_id');
+                $table->boolean('is_default')->default(false);
+                $table->json('config')->nullable();
+                $table->timestamps();
 
-            $table->foreign('merchant_id')->references('id')->on('payment_merchants')->onDelete('cascade');
-            $table->foreign('provider_id')->references('id')->on('payment_providers')->onDelete('cascade');
-        });
+                $table->foreign('merchant_id')->references('id')->on('payment_merchants')->onDelete('cascade');
+                $table->foreign('provider_id')->references('id')->on('payment_providers')->onDelete('cascade');
+            });
+        }
 
         Schema::create('payment_types', function (Blueprint $table) {
             $table->smallIncrements('id');

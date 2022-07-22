@@ -4,9 +4,10 @@ namespace rkujawa\LaravelPaymentGateway\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use rkujawa\LaravelPaymentGateway\Contracts\Merchantable;
 use rkujawa\LaravelPaymentGateway\Database\Factories\PaymentMerchantFactory;
 
-class PaymentMerchant extends Model
+class PaymentMerchant extends Model implements Merchantable
 {
     use HasFactory;
 
@@ -25,6 +26,26 @@ class PaymentMerchant extends Model
     protected static function newFactory()
     {
         return PaymentMerchantFactory::new();
+    }
+
+    /**
+     * Get the merchant's id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get the merchant's slug.
+     *
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
     /**
