@@ -77,6 +77,16 @@ trait PaymentResponses
     }
 
     /**
+     * Maps details from the getTransaction() response to the expected format.
+     * 
+     * @return array|mixed
+     */
+    public function getTransactionResponse()
+    {
+        $this->throwRuntimeException(__FUNCTION__);
+    }
+
+    /**
      * Maps details from the void() response to the expected format.
      *
      * @return array|mixed

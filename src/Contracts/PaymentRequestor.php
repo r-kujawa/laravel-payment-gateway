@@ -70,6 +70,14 @@ interface PaymentRequestor
     public function capture(PaymentTransaction $transaction, $data = []);
 
     /**
+     * Retrieve the transaction details from the provider.
+     *
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
+     * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
+     */
+    public function getTransaction(PaymentTransaction $transaction);
+
+    /**
      * Void a previously authorized transaction.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
