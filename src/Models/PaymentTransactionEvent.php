@@ -54,24 +54,4 @@ class PaymentTransactionEvent extends Model
     {
         return $this->belongsTo(config('payment.models.' . PaymentTransaction::class, PaymentTransaction::class));
     }
-
-    /**
-     * Get the transactions event's provider.
-     *
-     * @return \rkujawa\LaravelPaymentGateway\Models\PaymentProvider
-     */
-    public function getProviderAttribute()
-    {
-        return $this->transaction->provider;
-    }
-
-    /**
-     * Get the transaction event's merchant.
-     *
-     * @return \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant
-     */
-    public function getMerchantAttribute()
-    {
-        return $this->transaction->merchant;
-    }
 }
