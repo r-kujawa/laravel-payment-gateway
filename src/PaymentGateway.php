@@ -93,6 +93,17 @@ class PaymentGateway extends PaymentService implements PaymentRequestor
     }
 
     /**
+     * Retrieve the transaction details from the provider.
+     *
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
+     * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
+     */
+    public function getTransaction(PaymentTransaction $transaction)
+    {
+        return tap($this->gateway->getTransaction($transaction))->configure(__FUNCTION__, $this->provider, $this->merchant);
+    }
+
+    /**
      * Void a previously authorized transaction.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction

@@ -98,12 +98,17 @@ class TestPaymentGateway extends PaymentRequest
         return new TestPaymentResponse([]);
     }
 
-    public function void(PaymentTransaction $paymentTransaction, $data =[])
+    public function getTransaction(PaymentTransaction $transaction)
     {
         return new TestPaymentResponse([]);
     }
 
-    public function refund(PaymentTransaction $paymentTransaction, $data = [])
+    public function void(PaymentTransaction $transaction, $data =[])
+    {
+        return new TestPaymentResponse([]);
+    }
+
+    public function refund(PaymentTransaction $transaction, $data = [])
     {
         return new TestPaymentResponse([]);
     }
@@ -154,6 +159,13 @@ class TestPaymentResponse extends PaymentResponse
     }
 
     public function captureResponse()
+    {
+        return [
+            'requestMethod' => $this->requestMethod,
+        ];
+    }
+
+    public function getTransactionResponse()
     {
         return [
             'requestMethod' => $this->requestMethod,

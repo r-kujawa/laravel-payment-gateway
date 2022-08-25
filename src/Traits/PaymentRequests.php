@@ -93,6 +93,17 @@ trait PaymentRequests
     }
 
     /**
+     * Retrieve the transaction details from the provider.
+     *
+     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $transaction
+     * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
+     */
+    public function getTransaction(PaymentTransaction $transaction)
+    {
+        $this->throwRuntimeException(__FUNCTION__);
+    }
+
+    /**
      * Void a previously authorized transaction.
      * 
      * @param \rkujawa\LaravelPaymentGateway\Models\PaymentTransaction $paymentTransaction

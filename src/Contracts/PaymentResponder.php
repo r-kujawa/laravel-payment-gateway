@@ -54,6 +54,13 @@ interface PaymentResponder
     public function captureResponse();
 
     /**
+     * Maps details from the getTransaction() response to the expected format.
+     * 
+     * @return array|mixed
+     */
+    public function getTransactionResponse();
+
+    /**
      * Maps details from the void() response to the expected format.
      *
      * @return array|mixed

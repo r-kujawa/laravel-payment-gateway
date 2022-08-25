@@ -120,6 +120,21 @@ class ProviderGatewayTest extends GatewayTestCase
     }
 
     /** @test */
+    public function get_transaction_method_returns_configured_response()
+    {
+        $transaction = PaymentTransaction::factory()->create([
+            'provider_id' => $this->provider->id,
+            'merchant_id' => $this->merchant->id,
+        ]);
+
+        $response = Payment::getTransaction($transaction);
+
+        $this->assertResponseIsConfigured($response);
+
+        $this->assertEquals('getTransaction', $response->data['requestMethod']);
+    }
+
+    /** @test */
     public function void_method_returns_configured_response()
     {
         $transaction = PaymentTransaction::factory()->create([

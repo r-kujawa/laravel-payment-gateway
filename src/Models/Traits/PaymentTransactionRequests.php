@@ -37,15 +37,4 @@ trait PaymentTransactionRequests
     {
         return $this->gateway->refund($this, $data);
     }
-
-    /**
-     * Request the provider to reverse the transaction.
-     *
-     * @param array|mixed $data
-     * @return \rkujawa\LaravelPaymentGateway\PaymentResponse
-     */
-    public function reverse($data = [])
-    {
-        return $this->gateway->reverse($this, $data);
-    }
 }
