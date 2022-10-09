@@ -50,7 +50,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | You may register custom payment drivers and/or remove the default ones.
-    | Pleas enot that in order for the driver to be compatible it must extend
+    | Please note that in order for the driver to be compatible it must extend
     | the \rkujawa\LaravelPaymentGateway\PaymentServiceDriver::class.
     |
     */
