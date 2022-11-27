@@ -24,7 +24,7 @@ class PaymentServiceProvider extends ServiceProvider
     protected function vendorPublish()
     {
         $this->publishes([
-            __DIR__ . '/config/payment.php' => config_path('payment.php'),
+            __DIR__ . '/stubs/config/payment.stub' => config_path('payment.php'),
         ], 'payment-config');
 
         $this->publishes([
@@ -37,5 +37,10 @@ class PaymentServiceProvider extends ServiceProvider
         $this->app->singleton(PaymentGateway::class, function ($app) {
             return new PaymentGateway();
         });
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/config/payment.php',
+            'payment'
+        );
     }
 }
