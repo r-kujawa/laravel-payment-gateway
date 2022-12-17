@@ -2,35 +2,36 @@
 
 namespace rkujawa\LaravelPaymentGateway;
 
+use rkujawa\LaravelPaymentGateway\Contracts\Merchantable;
 use rkujawa\LaravelPaymentGateway\Contracts\PaymentRequestor;
-use rkujawa\LaravelPaymentGateway\Models\PaymentMerchant;
-use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
+use rkujawa\LaravelPaymentGateway\Contracts\Providable;
 use rkujawa\LaravelPaymentGateway\Traits\PaymentRequests;
 
 abstract class PaymentRequest implements PaymentRequestor
 {
     use PaymentRequests;
 
-    /**
-     * The payment merchant.
-     *
-     * @var \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant
-     */
-    protected $merchant;
-
-    /**
+        /**
      * The Payment provider.
      *
-     * @var \rkujawa\LaravelPaymentGateway\Models\PaymentProvider
+     * @var \rkujawa\LaravelPaymentGateway\Contracts\Providable
      */
     protected $provider;
 
     /**
-     * @param  \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant|null $merchant
-     * @param  \rkujawa\LaravelPaymentGateway\Models\PaymentProvider|null $provider
+     * The payment merchant.
+     *
+     * @var \rkujawa\LaravelPaymentGateway\Contracts\Merchantable
      */
-    public function __construct(PaymentMerchant $merchant = null, PaymentProvider $provider = null)
+    protected $merchant;
+
+    /**
+     * @param  \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|null $merchant
+     * @param  \rkujawa\LaravelPaymentGateway\Contracts\Providable|null $provider
+     */
+    public function __construct(Merchantable $merchant = null, Providable $provider = null)
     {
+        // TODO: Can this really be null?
         $this->merchant = $merchant;
         $this->provider = $provider;
 

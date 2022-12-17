@@ -35,7 +35,7 @@ class AddPaymentTypeCommandTest extends CommandTestCase
             ->expectsOutput($this->getMigrationOutput('type', $type->name))
             ->expectsConfirmation($this->getMigrationConfirmation(), 'yes')
             ->assertExitCode(0);
-        
+
             $this->assertDatabaseHas('payment_types', ['slug' => $type->slug]);
     }
 

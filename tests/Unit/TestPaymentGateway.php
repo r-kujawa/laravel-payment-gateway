@@ -1,21 +1,23 @@
 <?php
 
-namespace rkujawa\LaravelPaymentGateway\Tests;
+namespace rkujawa\LaravelPaymentGateway\Tests\Unit;
 
 use rkujawa\LaravelPaymentGateway\Facades\Payment;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
 use rkujawa\LaravelPaymentGateway\Models\PaymentTransaction;
 use rkujawa\LaravelPaymentGateway\Models\Wallet;
 use rkujawa\LaravelPaymentGateway\PaymentResponse;
+use rkujawa\LaravelPaymentGateway\Tests\GatewayTestCase;
+use rkujawa\LaravelPaymentGateway\Tests\User;
 
-class ProviderGatewayTest extends GatewayTestCase
+class TestPaymentGateway extends GatewayTestCase
 {
     /** @test */
     public function get_wallet_method_returns_configured_response()
     {
         $wallet = Wallet::factory()->create([
-            'provider_id' => $this->provider->id,
-            'merchant_id' => $this->merchant->id,
+            'provider_id' => Payment::getProvider()->getId(),
+            'merchant_id' => Payment::getMerchant()->getId(),
         ]);
 
         $response = Payment::getWallet($wallet);
@@ -29,8 +31,8 @@ class ProviderGatewayTest extends GatewayTestCase
     public function get_payment_method_method_returns_configured_response()
     {
         $wallet = Wallet::factory()->create([
-            'provider_id' => $this->provider->id,
-            'merchant_id' => $this->merchant->id,
+            'provider_id' => Payment::getProvider()->getId(),
+            'merchant_id' => Payment::getMerchant()->getId(),
         ]);
 
         $paymentMethod = PaymentMethod::factory()->create([
@@ -60,8 +62,8 @@ class ProviderGatewayTest extends GatewayTestCase
     public function update_payment_method_method_returns_configured_response()
     {
         $wallet = Wallet::factory()->create([
-            'provider_id' => $this->provider->id,
-            'merchant_id' => $this->merchant->id,
+            'provider_id' => Payment::getProvider()->getId(),
+            'merchant_id' => Payment::getMerchant()->getId(),
         ]);
 
         $paymentMethod = PaymentMethod::factory()->create([
@@ -79,8 +81,8 @@ class ProviderGatewayTest extends GatewayTestCase
     public function delete_payment_method_method_returns_configured_response()
     {
         $wallet = Wallet::factory()->create([
-            'provider_id' => $this->provider->id,
-            'merchant_id' => $this->merchant->id,
+            'provider_id' => Payment::getProvider()->getId(),
+            'merchant_id' => Payment::getMerchant()->getId(),
         ]);
 
         $paymentMethod = PaymentMethod::factory()->create([
@@ -108,8 +110,8 @@ class ProviderGatewayTest extends GatewayTestCase
     public function capture_method_returns_configured_response()
     {
         $transaction = PaymentTransaction::factory()->create([
-            'provider_id' => $this->provider->id,
-            'merchant_id' => $this->merchant->id,
+            'provider_id' => Payment::getProvider()->getId(),
+            'merchant_id' => Payment::getMerchant()->getId(),
         ]);
 
         $response = Payment::capture($transaction);
@@ -123,8 +125,8 @@ class ProviderGatewayTest extends GatewayTestCase
     public function void_method_returns_configured_response()
     {
         $transaction = PaymentTransaction::factory()->create([
-            'provider_id' => $this->provider->id,
-            'merchant_id' => $this->merchant->id,
+            'provider_id' => Payment::getProvider()->getId(),
+            'merchant_id' => Payment::getMerchant()->getId(),
         ]);
 
         $response = Payment::void($transaction);
@@ -138,8 +140,8 @@ class ProviderGatewayTest extends GatewayTestCase
     public function refund_method_returns_configured_response()
     {
         $transaction = PaymentTransaction::factory()->create([
-            'provider_id' => $this->provider->id,
-            'merchant_id' => $this->merchant->id,
+            'provider_id' => Payment::getProvider()->getId(),
+            'merchant_id' => Payment::getMerchant()->getId(),
         ]);
 
         $response = Payment::refund($transaction);
@@ -158,7 +160,7 @@ class ProviderGatewayTest extends GatewayTestCase
      */
     protected function assertResponseIsConfigured(PaymentResponse $response)
     {
-        $this->assertEquals(Payment::getProvider()->id, $response->provider->id);
-        $this->assertEquals(Payment::getMerchant()->id, $response->merchant->id);
+        $this->assertEquals(Payment::getProvider()->getId(), $response->provider->id);
+        $this->assertEquals(Payment::getMerchant()->getId(), $response->merchant->id);
     }
 }
