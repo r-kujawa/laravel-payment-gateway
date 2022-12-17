@@ -11,8 +11,8 @@ abstract class PaymentRequest implements PaymentRequestor
 {
     use PaymentRequests;
 
-        /**
-     * The Payment provider.
+    /**
+     * The payment provider.
      *
      * @var \rkujawa\LaravelPaymentGateway\Contracts\Providable
      */
@@ -26,12 +26,11 @@ abstract class PaymentRequest implements PaymentRequestor
     protected $merchant;
 
     /**
-     * @param  \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|null $merchant
-     * @param  \rkujawa\LaravelPaymentGateway\Contracts\Providable|null $provider
+     * @param  \rkujawa\LaravelPaymentGateway\Contracts\Merchantable $merchant
+     * @param  \rkujawa\LaravelPaymentGateway\Contracts\Providable $provider
      */
-    public function __construct(Merchantable $merchant = null, Providable $provider = null)
+    public function __construct(Merchantable $merchant, Providable $provider)
     {
-        // TODO: Can this really be null?
         $this->merchant = $merchant;
         $this->provider = $provider;
 
