@@ -2,9 +2,9 @@
 
 namespace rkujawa\LaravelPaymentGateway;
 
+use rkujawa\LaravelPaymentGateway\Contracts\Merchantable;
 use rkujawa\LaravelPaymentGateway\Contracts\PaymentResponder;
-use rkujawa\LaravelPaymentGateway\Models\PaymentMerchant;
-use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
+use rkujawa\LaravelPaymentGateway\Contracts\Providable;
 use rkujawa\LaravelPaymentGateway\Traits\PaymentResponses;
 use rkujawa\LaravelPaymentGateway\Traits\SimulateAttributes;
 use RuntimeException;
@@ -53,9 +53,9 @@ abstract class PaymentResponse implements PaymentResponder
     /**
      * Additional information needed to format the response.
      *
-     * @var array|mixed
+     * @var mixed
      */
-    protected $additionalInformation = [];
+    protected $additionalInformation;
 
     /**
      * The request method that returned this response.
@@ -67,31 +67,31 @@ abstract class PaymentResponse implements PaymentResponder
     /**
      * The provider that the $request was made towards.
      *
-     * @var \rkujawa\LaravelPaymentGateway\Models\PaymentProvider
+     * @var \rkujawa\LaravelPaymentGateway\Contracts\Providable
      */
     public $provider;
 
     /**
      * The merchant that was used to make the $request.
      *
-     * @var \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant
+     * @var \rkujawa\LaravelPaymentGateway\Contracts\Merchantable
      */
     public $merchant;
 
     /**
      * The expected formatted data based on the $request.
      *
-     * @var
+     * @var mixed
      */
     private $data;
 
     /**
-     * @param mixed $response
-     * @param array|mixed $additionalInformation
+     * @param mixed $rawResponse
+     * @param mixed $additionalInformation
      */
-    public function __construct($response, $additionalInformation = [])
+    public function __construct($rawResponse, $additionalInformation = null)
     {
-        $this->rawResponse = $response;
+        $this->rawResponse = $rawResponse;
         $this->additionalInformation = $additionalInformation;
     }
 
@@ -99,11 +99,11 @@ abstract class PaymentResponse implements PaymentResponder
      * Configure the response based on the request.
      *
      * @param string $requestMethod
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentProvider $provider
-     * @param \rkujawa\LaravelPaymentGateway\Models\PaymentMerchant $merchant
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Providable $provider
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable $merchant
      * @return void
      */
-    public function configure($requestMethod, PaymentProvider $provider, PaymentMerchant $merchant)
+    public function configure(string $requestMethod, Providable $provider, Merchantable $merchant)
     {
         $this->requestMethod = $requestMethod;
         $this->provider = $provider;
@@ -160,21 +160,21 @@ abstract class PaymentResponse implements PaymentResponder
     /**
      * Get a string representation of the response's status.
      *
-     * @return string
+     * @return string|null
      */
     public function getStatus()
     {
-        return PaymentStatus::get($this->getStatusCode()) ?? 'Unknown';
+        return PaymentStatus::get($this->getStatusCode());
     }
 
     /**
      * Get a description of the response's status.
      *
-     * @return string
+     * @return string|null
      */
     public function getMessage()
     {
-        return PaymentStatus::getMessage($this->getStatusCode()) ?? '';
+        return PaymentStatus::getMessage($this->getStatusCode());
     }
 
     /**
@@ -201,8 +201,11 @@ abstract class PaymentResponse implements PaymentResponder
     protected function getResponseMethod()
     {
         if (isset($this->requestMethod)) {
-            if (array_key_exists($this->requestMethod, $this->responseMethods)) {
-                return $this->responseMethods[$this->requestMethod];
+            if (
+                array_key_exists($this->requestMethod, $this->responseMethods) &&
+                method_exists($this, $method = $this->responseMethods[$this->requestMethod])
+            ) {
+                return $method;
             }
 
             if (method_exists($this, $method = "{$this->requestMethod}Response")) {
@@ -211,15 +214,5 @@ abstract class PaymentResponse implements PaymentResponder
         }
 
         return 'response';
-    }
-
-    /**
-     * The generic payment request response.
-     *
-     * @return array|mixed
-     */
-    public function response()
-    {
-        return [];
     }
 }

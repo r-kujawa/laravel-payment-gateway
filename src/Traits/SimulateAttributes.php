@@ -6,40 +6,61 @@ use Illuminate\Support\Str;
 
 trait SimulateAttributes
 {
+    protected array $attributes = [];
+
     /**
-     * Executes when the class attribute you are trying to get is not found.
-     * Checks if a getter function is defined and excecutes, otherwise returns.
+     * Checks if a get method exists and excecutes, otherwise returns value from the $attributes array.
      *
-     * @param string $key The hidden attribute.
+     * @param string $key.
      * @return mixed
      */
     public function __get($key)
     {
-        $method = 'get' . Str::studly($key);
-
-        if (! method_exists(self::class, $method)) {
-            return;
+        if (! method_exists(self::class, $method = 'get' . Str::studly($key))) {
+            return $this->getAttribute($key);
         }
 
         return $this->$method();
     }
 
     /**
-     * Excecutes if attempting to set a value on an attribute that is not found.
-     * Checks if a setter function is defined and excecutes, otherwise returns.
+     * Checks if a set method exists and excecutes, otherwise sets value in the $attributes array.
      *
-     * @param string $key The hidden attribute.
+     * @param string $key
      * @param mixed $value
      * @return void
      */
     public function __set($key, $value): void
     {
-        $method = 'set' . Str::studly($key);
+        if (! method_exists(self::class, $method = 'set' . Str::studly($key))) {
+            $this->setAttribute($key, $value);
 
-        if (! method_exists(self::class, $method)) {
             return;
         }
 
         $this->$method($value);
+    }
+
+    /**
+     * Get an attribute from the $attributes array.
+     *
+     * @param string $key
+     * @return mixed
+     */
+    protected function getAttribute($key)
+    {
+        return $this->attributes[$key] ?? null;
+    }
+
+    /**
+     * Sets a value in the $attributes array.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    protected function setAttribute($key, $value)
+    {
+        $this->attributes[$key] = $value;
     }
 }

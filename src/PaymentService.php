@@ -3,8 +3,6 @@
 namespace rkujawa\LaravelPaymentGateway;
 
 use Exception;
-use rkujawa\LaravelPaymentGateway\Contracts\Merchantable;
-use rkujawa\LaravelPaymentGateway\Contracts\Providable;
 use rkujawa\LaravelPaymentGateway\Traits\SimulateAttributes;
 
 class PaymentService
@@ -39,9 +37,20 @@ class PaymentService
      */
     private $gateway;
 
+    /**
+     * Prepares the driver based on preference determined in config file.
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
     public function __construct()
     {
-        $this->driver = new (config('payment.drivers.' . config('payment.defaults.driver', 'config')));
+        if (! class_exists($driver = config('payment.drivers.' . config('payment.defaults.driver', 'config')))) {
+            throw new Exception('The ' . $driver . '::class does not exist.');
+        }
+
+        $this->driver = new $driver;
     }
 
     /**
@@ -76,6 +85,8 @@ class PaymentService
      *
      * @param \rkujawa\LaravelPaymentGateway\Contracts\Providable|string|int $provider
      * @return void
+     *
+     * @throws Exception
      */
     public function setProvider($provider)
     {
@@ -129,8 +140,9 @@ class PaymentService
      * Set the specified merchant.
      *
      * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|string|int $merchant
-     * @param bool $strict Make sure the merchant that is being set is supported by the current provider.
      * @return void
+     *
+     * @throws Exception
      */
     public function setMerchant($merchant)
     {
@@ -171,6 +183,8 @@ class PaymentService
      * Instantiate a new instance of the payment gateway.
      *
      * @return void
+     *
+     * @throws Exception
      */
     protected function setGateway()
     {
@@ -178,7 +192,7 @@ class PaymentService
         $merchant = $this->getMerchant();
 
         if (! $this->driver->check($merchant, $provider)) {
-            throw new Exception('The ' . $provider->getName() . ' provider does not support the ' . $merchant->getName() . ' merchant.');
+            throw new Exception("The {$merchant->getSlug()} merchant is not supported by the {$provider->getSlug()} provider.");
         }
 
         $gateway = config('payment.test_mode', false)
@@ -189,7 +203,6 @@ class PaymentService
             throw new Exception('The ' . $gateway . '::class does not exist.');
         }
 
-        // TODO [3.x]: $param[0] should be provider & $param[1] should be merchant.
         $this->gateway = new $gateway($merchant, $provider);
     }
 }

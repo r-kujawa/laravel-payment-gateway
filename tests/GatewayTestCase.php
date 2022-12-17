@@ -19,8 +19,9 @@ use rkujawa\LaravelPaymentGateway\Traits\Billable as BillableTrait;
 
 abstract class GatewayTestCase extends TestCase
 {
-    protected $provider;
-    protected $merchant;
+    protected $driver;
+    protected $provider = 'test';
+    protected $merchant = 'tester';
 
     /**
      * Setup the test environment.
@@ -31,83 +32,119 @@ abstract class GatewayTestCase extends TestCase
     {
         parent::setUp();
 
+        config([
+            'payment.defaults' => [
+                'driver' => $this->driver,
+                'provider' => $this->provider,
+                'merchant' => $this->merchant,
+            ],
+        ]);
+
+        $this->{"{$this->driver}DriverSetUp"}();
+
         Schema::create('users', function ($table) {
             $table->id();
             $table->string('email')->unique();
             $table->string('password');
             $table->timestamps();
         });
+    }
 
-        $this->provider = PaymentProvider::create([
+    protected function configDriverSetUp()
+    {
+        config([
+            'payment.providers' => [
+                $this->provider => [
+                    'id' => rand(1, 10),
+                    'slug' => $this->provider,
+                    'request_class' => FakePaymentGateway::class,
+                    'response_class' => FakePaymentResponse::class,
+                ],
+            ],
+            'payment.merchants' => [
+                $this->merchant => [
+                    'id' => rand(1, 10),
+                    'slug' => $this->merchant,
+                    'providers' => [
+                        $this->provider => [
+                            'is_default' => true,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+    }
+
+    protected function databaseDriverSetUp()
+    {
+        $this->artisan('migrate:fresh');
+
+        $provider = PaymentProvider::create([
             'name' => 'Test',
             'slug' => 'test',
+            'request_class' => FakePaymentGateway::class,
+            'response_class' => FakePaymentResponse::class,
         ]);
 
-        $this->merchant = PaymentMerchant::create([
+        $merchant = PaymentMerchant::create([
             'name' => 'Tester',
             'slug' => 'tester',
             'display_name' => 'Tester',
         ]);
 
-        $this->merchant->providers()->attach($this->provider->id, ['is_default' => true]);
-
-        config([
-            'payment.defaults.provider' => $this->provider->slug,
-            'payment.defaults.merchant' => $this->merchant->slug,
-            'payment.providers.' . $this->provider->slug . '.gateway' => TestPaymentGateway::class,
-        ]);
+        $merchant->providers()->attach($provider->id, ['is_default' => true]);
     }
 }
 
-class TestPaymentGateway extends PaymentRequest
+class FakePaymentGateway extends PaymentRequest
 {
     public function getWallet(Wallet $wallet)
     {
-        return new TestPaymentResponse([]);
+        return new FakePaymentResponse([]);
     }
 
     public function getPaymentMethod(PaymentMethod $paymentMethod)
     {
-        return new TestPaymentResponse([]);
+        return new FakePaymentResponse([]);
     }
 
     public function tokenizePaymentMethod(Billable $billable, $data)
     {
-        return new TestPaymentResponse([]);
+        return new FakePaymentResponse([]);
     }
 
     public function updatePaymentMethod(PaymentMethod $paymentMethod, $data)
     {
-        return new TestPaymentResponse([]);
+        return new FakePaymentResponse([]);
     }
 
     public function deletePaymentMethod(PaymentMethod $paymentMethod)
     {
-        return new TestPaymentResponse([]);
+        return new FakePaymentResponse([]);
     }
 
     public function authorize($data, Billable $billable = null)
     {
-        return new TestPaymentResponse([]);
+        return new FakePaymentResponse([]);
     }
 
     public function capture(PaymentTransaction $transaction, $data = [])
     {
-        return new TestPaymentResponse([]);
+        return new FakePaymentResponse([]);
     }
 
     public function void(PaymentTransaction $paymentTransaction, $data =[])
     {
-        return new TestPaymentResponse([]);
+        return new FakePaymentResponse([]);
     }
 
     public function refund(PaymentTransaction $paymentTransaction, $data = [])
     {
-        return new TestPaymentResponse([]);
+        return new FakePaymentResponse([]);
     }
 }
 
-class TestPaymentResponse extends PaymentResponse
+class FakePaymentResponse extends PaymentResponse
 {
     public function getWalletResponse()
     {
