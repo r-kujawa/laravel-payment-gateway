@@ -6,6 +6,11 @@ use Illuminate\Support\Str;
 
 trait SimulateAttributes
 {
+    /**
+     * The magic attributes array.
+     *
+     * @var array
+     */
     protected array $attributes = [];
 
     /**
