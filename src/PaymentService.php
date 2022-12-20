@@ -191,7 +191,7 @@ class PaymentService
         $provider = $this->getProvider();
         $merchant = $this->getMerchant();
 
-        if (! $this->driver->check($merchant, $provider)) {
+        if (! $this->driver->check($provider, $merchant)) {
             throw new Exception("The {$merchant->getSlug()} merchant is not supported by the {$provider->getSlug()} provider.");
         }
 
@@ -203,6 +203,6 @@ class PaymentService
             throw new Exception('The ' . $gateway . '::class does not exist.');
         }
 
-        $this->gateway = new $gateway($merchant, $provider);
+        $this->gateway = new $gateway($provider, $merchant);
     }
 }

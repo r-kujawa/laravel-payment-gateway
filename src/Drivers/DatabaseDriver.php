@@ -65,11 +65,11 @@ class DatabaseDriver extends PaymentServiceDriver
     /**
      * Verify that the merchant is compatible with the provider.
      *
-     * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable
      * @param \rkujawa\LaravelPaymentGateway\Contracts\Providable
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable
      * @return bool
      */
-    public function check($merchant, $provider)
+    public function check($provider, $merchant)
     {
         if (! $merchant->providers->contains($provider)) {
             return false;
