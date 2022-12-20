@@ -48,11 +48,11 @@ abstract class PaymentServiceDriver
     /**
      * Verify that the merchant is compatible with the provider.
      *
-     * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable
      * @param \rkujawa\LaravelPaymentGateway\Contracts\Providable
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable
      * @return bool
      */
-    abstract public function check($merchant, $provider);
+    abstract public function check($provider, $merchant);
 
     /**
      * Resolve the gateway class.

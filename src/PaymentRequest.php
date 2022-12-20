@@ -26,13 +26,13 @@ abstract class PaymentRequest implements PaymentRequestor
     protected $merchant;
 
     /**
-     * @param  \rkujawa\LaravelPaymentGateway\Contracts\Merchantable $merchant
      * @param  \rkujawa\LaravelPaymentGateway\Contracts\Providable $provider
+     * @param  \rkujawa\LaravelPaymentGateway\Contracts\Merchantable $merchant
      */
-    public function __construct(Merchantable $merchant, Providable $provider)
+    public function __construct(Providable $provider, Merchantable $merchant)
     {
-        $this->merchant = $merchant;
         $this->provider = $provider;
+        $this->merchant = $merchant;
 
         $this->setUp();
     }
