@@ -13,7 +13,6 @@ class PaymentServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->vendorPublish();
             $this->commands([
-                AddPaymentType::class,
                 AddPaymentProvider::class,
             ]);
         }
