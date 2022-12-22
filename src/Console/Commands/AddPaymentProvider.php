@@ -76,7 +76,7 @@ class AddPaymentProvider extends Command
             $this->option('id') ??
             $this->ask(
                 "How would you like to identify the {$this->name} payment provider?",
-                preg_replace('/[^a-z0-9]+/i', '_', trim(strtolower($this->name)))
+                preg_replace('/[^a-z0-9]+/i', '_', strtolower($this->name))
             );
     }
 }
