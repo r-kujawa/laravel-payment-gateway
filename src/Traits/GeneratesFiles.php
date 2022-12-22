@@ -60,22 +60,4 @@ trait GeneratesFiles
 
         $this->fileSystem->put($path, $file);
     }
-
-    /**
-     * Check if the given class exists in the provided directory.
-     *
-     * @param string $class
-     * @param string $directory
-     * @return boolean
-     */
-    protected function classExists($class, $directory)
-    {
-        $files = $this->fileSystem->glob("{$directory}/*.php");
-
-        foreach ($files as $file) {
-            $this->fileSystem->requireOnce($file);
-        }
-
-        return class_exists($class);
-    }
 }
