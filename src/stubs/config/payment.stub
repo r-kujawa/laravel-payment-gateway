@@ -42,8 +42,7 @@ return [
     */
     'providers' => [
         // 'example' => [
-        //     'id' => 1,
-        //     'slug' => 'example',
+        //     'name' => 'Example',
         //     'request_class' => \App\Services\Payment\ExamplePaymentGateway::class,
         //     'response_class' => \App\Services\Payment\ExamplePaymentResponse::class,
         // ],
@@ -61,8 +60,7 @@ return [
     */
     'merchants' => [
         // 'example' => [
-        //     'id' => 1,
-        //     'slug' => 'example',
+        //     'name' => 'Example',
         //     'providers' => [
         //         'example' => [
         //             'api_key' => '...'

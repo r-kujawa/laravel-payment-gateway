@@ -24,8 +24,11 @@ class PaymentMerchantFactory extends Factory
      */
     public function definition()
     {
+        $merchant = $this->faker->unique()->company();
+
         return [
-            'slug' => PaymentMerchant::slugify($this->faker->unique()->company()),
+            'id' => preg_replace('/[^a-z0-9]+/i', '_', strtolower($merchant)),
+            'name' => $merchant,
         ];
     }
 }

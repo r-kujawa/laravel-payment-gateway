@@ -12,7 +12,7 @@ interface Providable
     public function getId();
 
     /**
-     * Get the provider's slug.
+     * Get the provider's name.
      */
-    public function getSlug();
+    public function getName();
 }

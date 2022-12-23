@@ -12,13 +12,13 @@ class DatabaseDriver extends PaymentServiceDriver
     /**
      * Resolve the providable instance.
      *
-     * @param \rkujawa\LaravelPaymentGateway\Contracts\Providable|string|int $provider
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Providable|string $provider
      * @return \rkujawa\LaravelPaymentGateway\Contracts\Providable|null
      */
     public function resolveProvider($provider)
     {
         if (! $provider instanceof PaymentProvider) {
-            $provider = PaymentProvider::where('slug', $provider)->orWhere('id', $provider)->first();
+            $provider = PaymentProvider::where('id', $provider)->first();
         }
 
         if (is_null($provider) || (! $provider->exists)) {
@@ -29,7 +29,7 @@ class DatabaseDriver extends PaymentServiceDriver
     }
 
     /**
-     * Get the default providable identifier (slug or id).
+     * Get the default providable identifier.
      *
      * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|null $merchant
      * @return string|int
@@ -46,13 +46,13 @@ class DatabaseDriver extends PaymentServiceDriver
     /**
      * Resolve the merchantable intance.
      *
-     * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|string|int $merchant
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|string $merchant
      * @return \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|null
      */
     public function resolveMerchant($merchant)
     {
         if (! $merchant instanceof PaymentMerchant) {
-            $merchant = PaymentMerchant::where('slug', $merchant)->orWhere('id', $merchant)->first();
+            $merchant = PaymentMerchant::where('id', $merchant)->first();
         }
 
         if (is_null($merchant) || (! $merchant->exists)) {

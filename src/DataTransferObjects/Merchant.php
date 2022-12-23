@@ -24,6 +24,7 @@ class Merchant implements Merchantable
         $this->providers = (new Collection($data['providers'] ?? []))->map(function ($provider, $key) {
             if (is_array($provider)) {
                 return array_merge(
+                    ['id' => $key],
                     config('payment.providers.' . $key),
                     $provider
                 );
@@ -44,12 +45,12 @@ class Merchant implements Merchantable
     }
 
     /**
-     * Get the provider's slug.
+     * Get the provider's name.
      *
      * @return string
      */
-    public function getSlug()
+    public function getName()
     {
-        return $this->attributes['slug'];
+        return $this->attributes['name'];
     }
 }
