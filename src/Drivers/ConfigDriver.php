@@ -36,7 +36,7 @@ class ConfigDriver extends PaymentServiceDriver
     /**
      * Resolve the providable instance.
      *
-     * @param \rkujawa\LaravelPaymentGateway\Contracts\Providable|string|int $provider
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Providable|string $provider
      * @return \rkujawa\LaravelPaymentGateway\Contracts\Providable|null
      */
     public function resolveProvider($provider)
@@ -45,15 +45,15 @@ class ConfigDriver extends PaymentServiceDriver
             return $provider;
         }
 
-        if (is_null($provider = $this->providers->firstWhere(is_int($provider) ? 'id' : 'slug', $provider))) {
+        if (is_null($attributes = $this->providers->get($provider))) {
             return null;
         }
 
-        return new Provider($provider);
+        return new Provider(array_merge(['id' => $provider], $attributes));
     }
 
     /**
-     * Get the default providable identifier (slug or id).
+     * Get the default providable identifier.
      *
      * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|null $merchant
      * @return string|int
@@ -73,7 +73,7 @@ class ConfigDriver extends PaymentServiceDriver
     /**
      * Resolve the merchantable intance.
      *
-     * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|string|int $merchant
+     * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|string $merchant
      * @return \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|null
      */
     public function resolveMerchant($merchant)
@@ -82,11 +82,11 @@ class ConfigDriver extends PaymentServiceDriver
             return $merchant;
         }
 
-        if (is_null($merchant = $this->merchants->firstWhere(is_int($merchant) ? 'id' : 'slug', $merchant))) {
+        if (is_null($attributes = $this->merchants->get($merchant))) {
             return null;
         }
 
-        return new Merchant($merchant);
+        return new Merchant(array_merge(['id' => $merchant], $attributes));
     }
 
     /**

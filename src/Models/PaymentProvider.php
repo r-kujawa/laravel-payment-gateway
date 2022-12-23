@@ -12,11 +12,18 @@ class PaymentProvider extends Model implements Providable
     use HasFactory;
 
     /**
+     * Indicates if the model's ID is auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
      * The attributes that aren't mass assignable.
      *
      * @var string[]|bool
      */
-    protected $guarded = ['id'];
+    protected $guarded = [];
 
     /**
      * Create a new factory instance for the model.
@@ -39,13 +46,13 @@ class PaymentProvider extends Model implements Providable
     }
 
     /**
-     * Get the provider's slug.
+     * Get the provider's name.
      *
      * @return string
      */
-    public function getSlug()
+    public function getName()
     {
-        return $this->slug;
+        return $this->name;
     }
 
     /**
@@ -76,16 +83,5 @@ class PaymentProvider extends Model implements Providable
     public function payment_methods()
     {
         return $this->hasManyThrough(config('payment.models.' . PaymentMethod::class, PaymentMethod::class), config('payment.models.' . Wallet::class, Wallet::class), 'provider_id');
-    }
-
-    /**
-     * Generate a slug based off a string that follows a set of rules to make it valid.
-     *
-     * @param string $name
-     * @return string
-     */
-    public static function slugify($name)
-    {
-        return preg_replace('/[^a-z0-9]+/i', '_', trim(strtolower($name)));
     }
 }

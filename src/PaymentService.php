@@ -192,7 +192,7 @@ class PaymentService
         $merchant = $this->getMerchant();
 
         if (! $this->driver->check($provider, $merchant)) {
-            throw new Exception("The {$merchant->getSlug()} merchant is not supported by the {$provider->getSlug()} provider.");
+            throw new Exception("The {$merchant->getName()} merchant is not supported by the {$provider->getName()} provider.");
         }
 
         $gateway = config('payment.test_mode', false)

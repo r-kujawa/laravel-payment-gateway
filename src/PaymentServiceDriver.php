@@ -16,7 +16,7 @@ abstract class PaymentServiceDriver
     abstract public function resolveProvider($provider);
 
     /**
-     * Get the default providable identifier (slug or id).
+     * Get the default providable identifier.
      *
      * @param \rkujawa\LaravelPaymentGateway\Contracts\Merchantable|null $merchant
      * @return string|int
@@ -35,7 +35,7 @@ abstract class PaymentServiceDriver
     abstract public function resolveMerchant($merchant);
 
     /**
-     * Get the default merchantable identifier (slug or id).
+     * Get the default merchantable identifier.
      *
      * @param \rkujawa\LaravelPaymentGateway\Contracts\Providable|null $provider
      * @return string|int

@@ -25,12 +25,12 @@ class Provider implements Providable
     }
 
     /**
-     * Get the provider's slug.
+     * Get the provider's name.
      *
      * @return string
      */
-    public function getSlug()
+    public function getName()
     {
-        return $this->attributes['slug'];
+        return $this->attributes['name'];
     }
 }

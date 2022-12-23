@@ -12,14 +12,12 @@ class AddPaymentProviderCommandTest extends TestCase
     {
         $provider = PaymentProvider::factory()->make();
 
-        $name = Str::studly($provider->slug);
-
         $this->artisan('payment:add-provider')
-            ->expectsQuestion('What payment provider would you like to add?', $name)
-            ->expectsQuestion("How would you like to identify the {$name} payment provider?", $provider->slug)
+            ->expectsQuestion('What payment provider would you like to add?', $provider->name)
+            ->expectsQuestion("How would you like to identify the {$provider->name} payment provider?", $provider->id)
             ->assertExitCode(0);
 
-        $this->assertGatewayExists($provider->slug);
+        $this->assertGatewayExists($provider->id);
     }
 
     /** @test */
@@ -28,12 +26,12 @@ class AddPaymentProviderCommandTest extends TestCase
         $provider = PaymentProvider::factory()->make();
 
         $this->artisan('payment:add-provider', [
-                'provider' => Str::studly($provider->slug),
-                '--id' => $provider->slug,
+                'provider' => $provider->name,
+                '--id' => $provider->id,
             ])
             ->assertExitCode(0);
 
-        $this->assertGatewayExists($provider->slug);
+        $this->assertGatewayExists($provider->id);
     }
 
     /** @test */

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use rkujawa\LaravelPaymentGateway\Contracts\Billable;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMerchant;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMethod;
@@ -55,16 +56,14 @@ abstract class GatewayTestCase extends TestCase
         config([
             'payment.providers' => [
                 $this->provider => [
-                    'id' => rand(1, 10),
-                    'slug' => $this->provider,
+                    'name' => Str::headline($this->provider),
                     'request_class' => FakePaymentGateway::class,
                     'response_class' => FakePaymentResponse::class,
                 ],
             ],
             'payment.merchants' => [
                 $this->merchant => [
-                    'id' => rand(1, 10),
-                    'slug' => $this->merchant,
+                    'name' => Str::headline($this->merchant),
                     'providers' => [
                         $this->provider => [
                             'is_default' => true,
@@ -80,16 +79,15 @@ abstract class GatewayTestCase extends TestCase
         $this->artisan('migrate:fresh');
 
         $provider = PaymentProvider::create([
+            'id' => 'test',
             'name' => 'Test',
-            'slug' => 'test',
             'request_class' => FakePaymentGateway::class,
             'response_class' => FakePaymentResponse::class,
         ]);
 
         $merchant = PaymentMerchant::create([
+            'id' => 'tester',
             'name' => 'Tester',
-            'slug' => 'tester',
-            'display_name' => 'Tester',
         ]);
 
         $merchant->providers()->attach($provider->id, ['is_default' => true]);

@@ -25,13 +25,15 @@ class PaymentProviderFactory extends Factory
      */
     public function definition()
     {
-        $slug = PaymentProvider::slugify($this->faker->unique()->company());
-        $studlySlug = Str::studly($slug);
+        $provider = $this->faker->unique()->company();
+        $id = preg_replace('/[^a-z0-9]+/i', '_', strtolower($provider));
+        $studlyProvider = Str::studly($id);
 
         return [
-            'slug' => $slug,
-            'request_class' => "\App\Services\Payment\{$studlySlug}PaymentGateway",
-            'request_class' => "\App\Services\Payment\{$studlySlug}PaymentResponse",
+            'id' => $id,
+            'name' => $provider,
+            'request_class' => "\App\Services\Payment\{$studlyProvider}PaymentGateway",
+            'request_class' => "\App\Services\Payment\{$studlyProvider}PaymentResponse",
         ];
     }
 }

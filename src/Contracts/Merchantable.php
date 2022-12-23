@@ -12,9 +12,9 @@ interface Merchantable
     public function getId();
 
     /**
-     * Get the merchant's slug.
+     * Get the merchant's name.
      *
      * @return string
      */
-    public function getSlug();
+    public function getName();
 }
