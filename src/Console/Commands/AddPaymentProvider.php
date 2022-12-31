@@ -18,7 +18,7 @@ class AddPaymentProvider extends Command
     protected $signature = 'payment:add-provider
                             {provider? : The payment provider name}
                             {--id= : The payment provider identifier}
-                            {--test : Generates a gateway to be used for testing purposes}';
+                            {--fake : Generates a gateway to be used for testing purposes}';
 
     /**
      * The console command description.
@@ -64,12 +64,15 @@ class AddPaymentProvider extends Command
      */
     protected function setProperties()
     {
+        if ($this->option('fake', false)) {
+            $this->name = 'Fake';
+            $this->id = 'fake';
+
+            return;
+        }
+
         $this->name = trim(
-            $this->argument('provider') ?? (
-                $this->option('test', false)
-                    ? 'Test'
-                    : $this->ask('What payment provider would you like to add?')
-            )
+            $this->argument('provider') ?? $this->ask('What payment provider would you like to add?')
         );
 
         $this->id =
