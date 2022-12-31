@@ -35,18 +35,16 @@ class AddPaymentProviderCommandTest extends TestCase
     }
 
     /** @test */
-    public function add_payment_provider_command_with_test_argument_generates_test_gateway()
+    public function add_payment_provider_command_with_fake_argument_generates_fake_gateway()
     {
         $arguments = [
-            '--test' => true,
+            '--fake' => true,
         ];
 
         $this->artisan('payment:add-provider', $arguments)
-            ->expectsQuestion('How would you like to identify the Test payment provider?', 'test')
             ->assertExitCode(0);
 
-
-        $this->assertGatewayExists('test');
+        $this->assertGatewayExists('fake');
     }
 
     private function assertGatewayExists(string $id)
