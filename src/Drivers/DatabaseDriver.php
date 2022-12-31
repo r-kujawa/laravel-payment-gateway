@@ -18,7 +18,7 @@ class DatabaseDriver extends PaymentServiceDriver
     public function resolveProvider($provider)
     {
         if (! $provider instanceof PaymentProvider) {
-            $provider = PaymentProvider::where('id', $provider)->first();
+            $provider = PaymentProvider::find($provider);
         }
 
         if (is_null($provider) || (! $provider->exists)) {
@@ -52,7 +52,7 @@ class DatabaseDriver extends PaymentServiceDriver
     public function resolveMerchant($merchant)
     {
         if (! $merchant instanceof PaymentMerchant) {
-            $merchant = PaymentMerchant::where('id', $merchant)->first();
+            $merchant = PaymentMerchant::find($merchant);
         }
 
         if (is_null($merchant) || (! $merchant->exists)) {
