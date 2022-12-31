@@ -13,7 +13,9 @@ class CreateBasePaymentTables extends Migration
      */
     public function up()
     {
-        if (config('payment.defaults.driver') === 'database') {
+        $usingDatabaseDriver = config('payment.defaults.driver') === 'database';
+
+        if ($usingDatabaseDriver) {
             Schema::create('payment_providers', function (Blueprint $table) {
                 $table->string('id')->primary();
                 $table->string('name');
@@ -36,8 +38,8 @@ class CreateBasePaymentTables extends Migration
                 $table->json('config')->nullable();
                 $table->timestamps();
 
-                $table->foreign('merchant_id')->references('id')->on('payment_merchants')->onDelete('cascade');
-                $table->foreign('provider_id')->references('id')->on('payment_providers')->onDelete('cascade');
+                $table->foreign('merchant_id')->references('id')->on('payment_merchants')->onUpdate('cascade')->onDelete('cascade');
+                $table->foreign('provider_id')->references('id')->on('payment_providers')->onUpdate('cascade')->onDelete('cascade');
             });
         }
 
@@ -49,17 +51,19 @@ class CreateBasePaymentTables extends Migration
             $table->timestamps();
         });
 
-        Schema::create('wallets', function (Blueprint $table) {
+        Schema::create('wallets', function (Blueprint $table) use ($usingDatabaseDriver) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('billable_id')->nullable();
             $table->string('billable_type')->nullable();
-            $table->unsignedSmallInteger('provider_id');
-            $table->unsignedMediumInteger('merchant_id');
+            $table->string('provider_id');
+            $table->string('merchant_id');
             $table->string('token');
             $table->timestamps();
 
-            $table->foreign('provider_id')->references('id')->on('payment_providers')->onDelete('cascade');
-            $table->foreign('merchant_id')->references('id')->on('payment_merchants')->onDelete('cascade');
+            if ($usingDatabaseDriver) {
+                $table->foreign('provider_id')->references('id')->on('payment_providers')->onUpdate('cascade')->onDelete('cascade');
+                $table->foreign('merchant_id')->references('id')->on('payment_merchants')->onUpdate('cascade')->onDelete('cascade');
+            }
         });
 
         Schema::create('payment_methods', function (Blueprint $table) {
@@ -74,10 +78,10 @@ class CreateBasePaymentTables extends Migration
             $table->foreign('type_id')->references('id')->on('payment_types');
         });
 
-        Schema::create('payment_transactions', function (Blueprint $table) {
+        Schema::create('payment_transactions', function (Blueprint $table) use ($usingDatabaseDriver) {
             $table->bigIncrements('id');
-            $table->unsignedSmallInteger('provider_id');
-            $table->unsignedMediumInteger('merchant_id');
+            $table->string('provider_id');
+            $table->string('merchant_id');
             $table->string('reference');
             $table->unsignedInteger('amount');
             $table->char('currency', 3)->default('USD');
@@ -86,8 +90,11 @@ class CreateBasePaymentTables extends Migration
             $table->json('details')->nullable();
             $table->timestamps();
 
-            $table->foreign('provider_id')->references('id')->on('payment_providers');
-            $table->foreign('merchant_id')->references('id')->on('payment_merchants');
+            if ($usingDatabaseDriver) {
+                $table->foreign('provider_id')->references('id')->on('payment_providers')->onUpdate('cascade')->onDelete('set null');
+                $table->foreign('merchant_id')->references('id')->on('payment_merchants')->onUpdate('cascade')->onDelete('set null');
+            }
+
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('set null');
         });
 
