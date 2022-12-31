@@ -19,53 +19,43 @@ class PaymentTypeFactory extends Factory
 
     public const DEFAULTS = [
         [
-            'name' => 'Visa',
-            'display_name' => 'VISA',
+            'name' => 'VISA',
             'slug' => 'visa',
         ],
         [
-            'name' => 'Mastercard',
-            'display_name' => 'MasterCard',
+            'name' => 'MasterCard',
             'slug' => 'mastercard',
         ],
         [
-            'name' => 'American Express',
-            'display_name' => 'AMEX',
+            'name' => 'AMEX',
             'slug' => 'amex',
         ],
         [
             'name' => 'Alipay',
-            'display_name' => 'Alipay',
             'slug' => 'alipay',
         ],
         [
             'name' => 'Apple Pay',
-            'display_name' => 'Apple Pay',
             'slug' => 'apple_pay',
         ],
         [
             'name' => 'Google Pay',
-            'display_name' => 'Google Pay',
             'slug' => 'google_pay',
         ],
         [
             'name' => 'JCB',
-            'display_name' => 'JCB',
             'slug' => 'jcb',
         ],
         [
             'name' => 'Diners Club',
-            'display_name' => 'Diners Club',
             'slug' => 'diners_club',
         ],
         [
             'name' => 'Discover',
-            'display_name' => 'Discover',
             'slug' => 'discover',
         ],
         [
-            'name' => 'Paypal',
-            'display_name' => 'PayPal',
+            'name' => 'PayPal',
             'slug' => 'paypal',
         ],
     ];
@@ -81,7 +71,6 @@ class PaymentTypeFactory extends Factory
 
         return [
             'name' => ucfirst($name),
-            'display_name' => strtoupper($name),
             'slug' => PaymentType::slugify($name),
         ];
     }

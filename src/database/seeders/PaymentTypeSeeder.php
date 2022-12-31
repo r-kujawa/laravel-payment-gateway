@@ -17,7 +17,6 @@ class PaymentTypeSeeder extends Seeder
                 ],
                 [
                     'name' => $paymentType['name'],
-                    'display_name' => $paymentType['display_name'],
                 ]
             );
         }
