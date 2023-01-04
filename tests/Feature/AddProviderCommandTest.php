@@ -5,7 +5,7 @@ namespace rkujawa\LaravelPaymentGateway\Tests;
 use Illuminate\Support\Str;
 use rkujawa\LaravelPaymentGateway\Models\PaymentProvider;
 
-class AddPaymentProviderCommandTest extends TestCase
+class AddProviderCommandTest extends TestCase
 {
     /** @test */
     public function add_payment_provider_command_will_prompt_for_missing_arguments()
@@ -15,6 +15,7 @@ class AddPaymentProviderCommandTest extends TestCase
         $this->artisan('payment:add-provider')
             ->expectsQuestion('What payment provider would you like to add?', $provider->name)
             ->expectsQuestion("How would you like to identify the {$provider->name} payment provider?", $provider->id)
+            ->expectsOutput("{$provider->name} payment gateway generated successfully!")
             ->assertExitCode(0);
 
         $this->assertGatewayExists($provider->id);
@@ -29,6 +30,7 @@ class AddPaymentProviderCommandTest extends TestCase
                 'provider' => $provider->name,
                 '--id' => $provider->id,
             ])
+            ->expectsOutput("{$provider->name} payment gateway generated successfully!")
             ->assertExitCode(0);
 
         $this->assertGatewayExists($provider->id);
@@ -42,6 +44,7 @@ class AddPaymentProviderCommandTest extends TestCase
         ];
 
         $this->artisan('payment:add-provider', $arguments)
+            ->expectsOutput('Fake payment gateway generated successfully!')
             ->assertExitCode(0);
 
         $this->assertGatewayExists('fake');
