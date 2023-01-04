@@ -5,10 +5,11 @@ namespace rkujawa\LaravelPaymentGateway\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use rkujawa\LaravelPaymentGateway\Traits\GeneratesFiles;
+use rkujawa\LaravelPaymentGateway\Traits\Questionable;
 
-class AddPaymentProvider extends Command
+class AddProvider extends Command
 {
-    use GeneratesFiles;
+    use Questionable, GeneratesFiles;
 
     /**
      * The name and signature of the console command.
@@ -38,23 +39,13 @@ class AddPaymentProvider extends Command
     /**
      * Execute the console command.
      *
-     * @return void
+     * @return array
      */
     public function handle()
     {
         $this->setProperties();
 
-        $provider = Str::studly($this->id);
-
-        $this->putFile(
-            app_path("Services/Payment/{$provider}PaymentGateway.php"),
-            $this->makeFile(__DIR__ . '/../stubs/payment-gateway.stub', ['name' => $provider])
-        );
-
-        $this->putFile(
-            app_path("Services/Payment/{$provider}PaymentResponse.php"),
-            $this->makeFile(__DIR__ . '/../stubs/payment-response.stub', ['name' => $provider])
-        );
+        $this->generateProvider();
     }
 
     /**
@@ -71,15 +62,25 @@ class AddPaymentProvider extends Command
             return;
         }
 
-        $this->name = trim(
-            $this->argument('provider') ?? $this->ask('What payment provider would you like to add?')
+        $this->name = trim($this->argument('provider') ?? $this->askName('provider'));
+
+        $this->id = $this->option('id') ?? $this->askId('provider', $this->name);
+    }
+
+    protected function generateProvider()
+    {
+        $provider = Str::studly($this->id);
+
+        $this->putFile(
+            app_path("Services/Payment/{$provider}PaymentGateway.php"),
+            $this->makeFile(__DIR__ . '/../stubs/payment-gateway.stub', ['name' => $provider])
         );
 
-        $this->id =
-            $this->option('id') ??
-            $this->ask(
-                "How would you like to identify the {$this->name} payment provider?",
-                preg_replace('/[^a-z0-9]+/i', '_', strtolower($this->name))
-            );
+        $this->putFile(
+            app_path("Services/Payment/{$provider}PaymentResponse.php"),
+            $this->makeFile(__DIR__ . '/../stubs/payment-response.stub', ['name' => $provider])
+        );
+
+        $this->info("{$this->name} payment gateway generated successfully!");
     }
 }
