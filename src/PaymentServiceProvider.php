@@ -4,6 +4,7 @@ namespace rkujawa\LaravelPaymentGateway;
 
 use Illuminate\Support\ServiceProvider;
 use rkujawa\LaravelPaymentGateway\Console\Commands\AddProvider;
+use rkujawa\LaravelPaymentGateway\Console\Commands\Install;
 
 class PaymentServiceProvider extends ServiceProvider
 {
@@ -13,16 +14,13 @@ class PaymentServiceProvider extends ServiceProvider
             $this->vendorPublish();
             $this->commands([
                 AddProvider::class,
+                Install::class,
             ]);
         }
     }
 
     protected function vendorPublish()
     {
-        $this->publishes([
-            __DIR__ . '/stubs/config/payment.stub' => config_path('payment.php'),
-        ], 'payment-config');
-
         $this->publishes([
             __DIR__ . '/database/migrations/2021_01_01_000000_create_base_payment_tables.php' => database_path('migrations/' . now()->format('Y_m_d_His') . '_create_base_payment_tables.php'),
         ], 'payment-migration');
