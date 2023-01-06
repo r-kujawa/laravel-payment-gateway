@@ -55,14 +55,7 @@ return [
     |
     */
     'merchants' => [
-        // 'example' => [
-        //     'name' => 'Example',
-        //     'providers' => [
-        //         'example' => [
-        //             'api_key' => '...'
-        //         ],
-        //     ],
-        // ],
+{{ merchants }}
     ],
 
     /*
