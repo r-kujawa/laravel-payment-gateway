@@ -25,6 +25,12 @@ class Install extends Command
      */
     protected $description = 'Install and configure payments within the application.';
 
+    protected $providers;
+
+    protected $merchants;
+
+    protected $config = [];
+
     /**
      * Execute the console command.
      *
@@ -34,12 +40,32 @@ class Install extends Command
     {
         $this->call('vendor:publish', ['--provider' => 'rkujawa\LaravelPaymentGateway\PaymentServiceProvider']);
 
+        $this->installProviders();
+
+        $this->installMerchants();
+
+        $this->putFile(
+            config_path('payment.php'),
+            $this->makeFile(
+                __DIR__ . '/../../stubs/config/payment.stub',
+                [
+                    'provider' => $this->config['defaults']['provider'],
+                    'providers' => $this->config['providers'],
+                    'merchant' => $this->config['defaults']['merchant'],
+                    'merchants' => $this->config['merchants'],
+                ]
+            )
+        );
+    }
+
+    protected function installProviders()
+    {
         $this->call('payment:add-provider', ['--fake' => true]);
 
-        $providers = collect([]);
+        $this->providers = collect([]);
 
         do {
-            $providers->push([
+            $this->providers->push([
                 'name' => $name = $this->askName('provider'),
                 'id' => $id = $this->askId('provider', $name),
                 'provider' => Str::studly($id),
@@ -48,19 +74,48 @@ class Install extends Command
             $this->call('payment:add-provider', ['provider' => $name, '--id' => $id]);
         } while ($this->confirm('Would you like to add another payment provider?', false));
 
-        $defaultProvider = $this->choice('Which provider will be used as default?', $providers->pluck('id')->all());
+        $this->config['providers'] = $this->providers->reduce(function ($config, $provider) {
+            return $config . $this->makeFile(__DIR__ . '/../../stubs/config/provider.stub', $provider);
+        }, "");
 
-        $this->putFile(
-            config_path('payment.php'),
-            $this->makeFile(
-                __DIR__ . '/../../stubs/config/payment.stub',
-                [
-                    'provider' => $defaultProvider,
-                    'providers' => $providers->reduce(function ($config, $provider) {
-                        return $config . $this->makeFile(__DIR__ . '/../../stubs/config/provider.stub', $provider);
-                    }, ""),
-                ]
-            )
-        );
+        $this->config['defaults']['provider'] = $this->providers->count() > 1
+            ? $this->choice('Which provider will be used as default?', $this->providers->pluck('id')->all())
+            : $this->providers->first()['id'];
+    }
+
+    protected function installMerchants()
+    {
+        $this->merchants = collect([]);
+
+        do {
+            $merchant = [
+                'name' => $name = $this->askName('merchant'),
+                'id' => $this->askId('merchant', $name),
+            ];
+
+            $providers = $this->providers->count() > 1
+                ? $this->choice(
+                    "Which providers will be processing payments for the {$name} merchant? (default first)",
+                    $this->providers->pluck('id')->all(),
+                    null,
+                    null,
+                    true
+                )
+                : [$this->providers->first()['id']];
+
+            $merchant['providers'] = collect($providers)->reduce(function ($config, $provider, $index) use ($providers) {
+                return $config . $this->makeFile(__DIR__ . '/../../stubs/config/merchant-providers.stub', ['id' => $provider]) . ($index < count($providers) - 1 ? "\n" : "");
+            }, "");
+
+            $this->merchants->push($merchant);
+        } while ($this->confirm('Would you like to add another payment merchant?', false));
+
+        $this->config['merchants'] = $this->merchants->reduce(function ($config, $merchant) {
+            return $config . $this->makeFile(__DIR__ . '/../../stubs/config/merchant.stub', $merchant);
+        }, "");
+
+        $this->config['defaults']['merchant'] = $this->merchants->count() > 1
+            ? $this->choice('Which merchant will be used as default?', $this->merchants->pluck('id')->all())
+            : $this->merchants->first()['id'];
     }
 }
