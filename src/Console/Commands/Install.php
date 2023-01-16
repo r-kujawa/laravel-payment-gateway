@@ -25,10 +25,25 @@ class Install extends Command
      */
     protected $description = 'Install and configure payments within the application.';
 
+    /**
+     * The collected providers.
+     *
+     * @var \Illuminate\Support\Collection
+     */
     protected $providers;
 
+    /**
+     * The collected merchants.
+     *
+     * @var \Illuminate\Support\Collection
+     */
     protected $merchants;
 
+    /**
+     * The config to be set.
+     *
+     * @var array
+     */
     protected $config = [];
 
     /**
@@ -58,6 +73,11 @@ class Install extends Command
         );
     }
 
+    /**
+     * Query provider information, generate payment gateways & set the config for chosen providers.
+     *
+     * @return void
+     */
     protected function installProviders()
     {
         $this->call('payment:add-provider', ['--fake' => true]);
@@ -83,6 +103,11 @@ class Install extends Command
             : $this->providers->first()['id'];
     }
 
+    /**
+     * Query merchant information & set the config for chosen merchants.
+     *
+     * @return void
+     */
     protected function installMerchants()
     {
         $this->merchants = collect([]);

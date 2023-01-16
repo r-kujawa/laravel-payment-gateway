@@ -39,7 +39,7 @@ class AddProvider extends Command
     /**
      * Execute the console command.
      *
-     * @return array
+     * @return void
      */
     public function handle()
     {
