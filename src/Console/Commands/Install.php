@@ -71,6 +71,8 @@ class Install extends Command
                 ]
             )
         );
+
+        $this->info('The payment config has been successfully generated.');
     }
 
     /**
