@@ -53,7 +53,9 @@ class Install extends Command
      */
     public function handle()
     {
-        $this->call('vendor:publish', ['--provider' => 'rkujawa\LaravelPaymentGateway\PaymentServiceProvider']);
+        if (! class_exists('CreateBasePaymentTables')) {
+            $this->call('vendor:publish', ['--provider' => 'rkujawa\LaravelPaymentGateway\PaymentServiceProvider', '--tag' => 'migrations']);
+        }
 
         $this->installProviders();
 

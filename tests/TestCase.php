@@ -2,11 +2,13 @@
 
 namespace rkujawa\LaravelPaymentGateway\Tests;
 
-use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use rkujawa\LaravelPaymentGateway\PaymentServiceProvider;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
+    use RefreshDatabase;
+
     /**
      * Setup the test environment.
      *
@@ -15,12 +17,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        (new Filesystem)->cleanDirectory(database_path('migrations'));
-
-        $this->artisan('vendor:publish', ['--tag' => 'payment-migration']);
-
-        $this->artisan('migrate');
     }
 
     protected function getPackageProviders($app)
@@ -37,5 +33,19 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             'driver' => 'sqlite',
             'database' => ':memory:',
         ]);
+    }
+
+    /**
+     * Perform any work that should take place once the database has finished refreshing.
+     *
+     * @return void
+     */
+    protected function afterRefreshingDatabase()
+    {
+        if (! class_exists('CreateBasePaymentTables')) {
+            $this->artisan('vendor:publish', ['--provider' => 'rkujawa\LaravelPaymentGateway\PaymentServiceProvider', '--tag' => 'migrations']);
+
+            $this->artisan('migrate');
+        }
     }
 }
