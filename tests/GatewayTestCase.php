@@ -33,14 +33,6 @@ abstract class GatewayTestCase extends TestCase
     {
         parent::setUp();
 
-        config([
-            'payment.defaults' => [
-                'driver' => $this->driver,
-                'provider' => $this->provider,
-                'merchant' => $this->merchant,
-            ],
-        ]);
-
         $this->{"{$this->driver}DriverSetUp"}();
 
         Schema::create('users', function ($table) {
@@ -49,6 +41,17 @@ abstract class GatewayTestCase extends TestCase
             $table->string('password');
             $table->timestamps();
         });
+    }
+
+    protected function getEnvironmentSetUp($app)
+    {
+        parent::getEnvironmentSetUp($app);
+
+        $app['config']->set('payment.defaults', [
+            'driver' => $this->driver,
+            'provider' => $this->provider,
+            'merchant' => $this->merchant,
+        ]);
     }
 
     protected function configDriverSetUp()
@@ -76,8 +79,6 @@ abstract class GatewayTestCase extends TestCase
 
     protected function databaseDriverSetUp()
     {
-        $this->artisan('migrate:fresh');
-
         $provider = PaymentProvider::create([
             'id' => 'test',
             'name' => 'Test',
