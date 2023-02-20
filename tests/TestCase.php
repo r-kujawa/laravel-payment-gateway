@@ -48,4 +48,16 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             $this->artisan('migrate');
         }
     }
+
+    /**
+     * Clean up the testing environment before the next test.
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        $this->artisan('config:clear');
+
+        parent::tearDown();
+    }
 }
