@@ -3,6 +3,7 @@
 namespace rkujawa\LaravelPaymentGateway\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use rkujawa\LaravelPaymentGateway\Models\PaymentMerchant;
 
 class PaymentMerchantFactory extends Factory
@@ -24,7 +25,7 @@ class PaymentMerchantFactory extends Factory
      */
     public function definition()
     {
-        $merchant = $this->faker->unique()->company();
+        $merchant = Str::remove(['\'', ','], $this->faker->unique()->company());
 
         return [
             'id' => preg_replace('/[^a-z0-9]+/i', '_', strtolower($merchant)),

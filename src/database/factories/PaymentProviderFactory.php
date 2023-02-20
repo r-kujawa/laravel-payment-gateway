@@ -25,7 +25,7 @@ class PaymentProviderFactory extends Factory
      */
     public function definition()
     {
-        $provider = $this->faker->unique()->company();
+        $provider = Str::remove(['\'', ','], $this->faker->unique()->company());
         $id = preg_replace('/[^a-z0-9]+/i', '_', strtolower($provider));
         $studlyProvider = Str::studly($id);
 
