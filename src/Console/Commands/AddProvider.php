@@ -67,6 +67,11 @@ class AddProvider extends Command
         $this->id = $this->option('id') ?? $this->askId('provider', $this->name);
     }
 
+    /**
+     * Generated the provider gateway files.
+     *
+     * @return void
+     */
     protected function generateProvider()
     {
         $provider = Str::studly($this->id);
