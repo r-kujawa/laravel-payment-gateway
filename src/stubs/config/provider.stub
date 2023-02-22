@@ -1,4 +1,4 @@
-        
+
         '{{ id }}' => [
             'name' => '{{ name }}',
             'request_class' => \App\Services\Payment\{{ provider }}PaymentGateway::class,
