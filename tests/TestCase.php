@@ -3,21 +3,12 @@
 namespace rkujawa\LaravelPaymentGateway\Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use rkujawa\LaravelPaymentGateway\PaymentServiceProvider;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
-    use RefreshDatabase;
-
-    /**
-     * Setup the test environment.
-     *
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
+    use RefreshDatabase, WithFaker;
 
     protected function getPackageProviders($app)
     {
@@ -47,17 +38,5 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
             $this->artisan('migrate');
         }
-    }
-
-    /**
-     * Clean up the testing environment before the next test.
-     *
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        $this->artisan('config:clear');
-
-        parent::tearDown();
     }
 }
